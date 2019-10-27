@@ -7,18 +7,13 @@ Planet::Planet(float radius, int colorType, int pointsNum) {
 	_points = new vec4[_pointsNum];
 	_colors = new vec4[_pointsNum];
 
-	vec4 color;
-
-	if (colorType == 1) color = vec4(0.4f, 0.56f, 0.8f,1.0f); //²HÂÅ
-	else if(colorType == 2)  color = vec4(0.7f, 0.4f, 0.8f, 1.0f);  //²Hºñ
-	else if (colorType == 3) color = vec4(0.4f, 0.7f, 0.68f, 1.0f); //²Hµµ
-	else color = vec4(0.84f, 0.85f, 0.61f, 1.0f); //²HÂÅµµ
+	
 
 	for (int i = 0; i < _pointsNum; i++) {
 		_points[i].x = radius * cosf(M_PI*2.0f*i / _pointsNum); //2©ç­¼¥H¸ÓÂI¤À¤§Á`ÂI
 		_points[i].y = radius * sinf(M_PI*2.0f*i / _pointsNum);
 		_points[i].w = 1.0f;
-		_colors[i] = color;
+		_colors[i] = SetColor(colorType);
 	}
 
 	CreateBufferObject();
@@ -28,6 +23,17 @@ Planet::Planet(float radius, int colorType, int pointsNum) {
 Planet::~Planet() {
 	delete[] _points;
 	delete[] _colors;
+}
+
+vec4 Planet::SetColor(int type) {
+	vec4 color;
+
+	if (type == 1) color = vec4(0.4f, 0.56f, 0.8f, 1.0f); //²HÂÅ
+	else if (type == 2)  color = vec4(0.7f, 0.4f, 0.8f, 1.0f);  //²Hºñ
+	else if (type == 3) color = vec4(0.4f, 0.7f, 0.68f, 1.0f); //²Hµµ
+	else color = vec4(0.84f, 0.85f, 0.61f, 1.0f); //²HÂÅµµ
+
+	return color;
 }
 
 void Planet::CreateBufferObject() {

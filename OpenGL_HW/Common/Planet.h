@@ -33,8 +33,8 @@ public:
 	void SetProjectionMatrix(mat4 &mat);
 	void SetTRSMatrix(mat4 &mat);
 	void AutoTranslate(float dt);
-	//vec4 SetColor(int colorType);
-	//void SetVShaderName(char* vsh);
+	vec4 SetColor(int colorType);
+	/*void SetVShaderName(char* vsh);*/
 
 	void Draw();
 };
