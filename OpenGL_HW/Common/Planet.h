@@ -14,7 +14,7 @@ private:
 	GLuint _uiProgram;
 	GLuint _uiModelView, _uiProjection;
 
-	//char *_vsh;
+	char *_vsh;
 
 	mat4 _mxView, _mxProjection;
 	mat4 _mxMVFinal, _mxTRS;
@@ -34,7 +34,7 @@ public:
 	void SetTRSMatrix(mat4 &mat);
 	void AutoTranslate(float dt);
 	vec4 SetColor(int colorType);
-	/*void SetVShaderName(char* vsh);*/
+	void SetVShaderName(char* vsh);
 
 	void Draw();
 };

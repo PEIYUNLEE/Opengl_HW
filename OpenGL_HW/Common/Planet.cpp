@@ -8,7 +8,6 @@ Planet::Planet(float radius, int colorType, int pointsNum) {
 	_colors = new vec4[_pointsNum];
 
 	
-
 	for (int i = 0; i < _pointsNum; i++) {
 		_points[i].x = radius * cosf(M_PI*2.0f*i / _pointsNum); //2拍乘以該點分之總點
 		_points[i].y = radius * sinf(M_PI*2.0f*i / _pointsNum);
@@ -21,8 +20,9 @@ Planet::Planet(float radius, int colorType, int pointsNum) {
 }
 
 Planet::~Planet() {
-	delete[] _points;
-	delete[] _colors;
+	delete [] _points;
+	delete [] _colors;
+	delete [] _vsh;
 }
 
 vec4 Planet::SetColor(int type) {
@@ -48,9 +48,18 @@ void Planet::CreateBufferObject() {
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(*_points)*_pointsNum, *_points);
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(*_points)*_pointsNum, sizeof(*_colors)*_pointsNum, *_colors);
 }
+
+void Planet::SetVShaderName(char* vsh) {
+	int *pix = new int;
+	*pix = strlen(vsh)+1;
+	_vsh = new char[*pix];
+	memcpy(_vsh,vsh,*pix);
+	delete pix;
+}
+
 void Planet::SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle) {
 
-	if (uiShaderHandle == MAX_UNSIGNED_INT) _uiProgram = InitShader("vsPlanet2.glsl", "fsVtxColor.glsl");
+	if (uiShaderHandle == MAX_UNSIGNED_INT) _uiProgram = InitShader(_vsh, "fsVtxColor.glsl");
 	else _uiProgram = uiShaderHandle;
 
 	GLuint vPosition = glGetAttribLocation(_uiProgram, "vPosition");

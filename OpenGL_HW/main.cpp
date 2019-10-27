@@ -17,7 +17,7 @@ void init(void)
 	//g_pBoat = new PBoat;
 
 	g_mxProjection = Ortho(-2.0f, 2.0f, -2.0f, 2.0f, -2.0f, 2.0f);
-
+	g_planet->SetVShaderName("vsPlanet2.glsl");
 	g_planet->SetShader(g_mxModelView, g_mxProjection);
 	//g_pBoat->SetShader(g_mxModelView, g_mxProjection);
 
