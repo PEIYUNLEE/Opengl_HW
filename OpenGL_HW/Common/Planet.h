@@ -24,7 +24,7 @@ private:
 
 	void CreateBufferObject();
 public:
-	Planet(float radius = 0.8f,int colorType = 1, int pointsNum = 500);
+	Planet(float radius = 0.8f, int colorType = 1, int pointsNum = 500);
 	~Planet();
 
 	void SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
