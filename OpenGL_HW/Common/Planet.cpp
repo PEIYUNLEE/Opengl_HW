@@ -18,7 +18,7 @@ Planet::Planet(float radius, int colorType, int pointsNum) {
 		_points[i].x = radius * cosf(M_PI*2.0f*i / _pointsNum); //2拍乘以該點分之總點
 		_points[i].y = radius * sinf(M_PI*2.0f*i / _pointsNum);
 		_points[i].w = 1.0f;
-		_colors[i] = vec4(0.4f, 0.56f, 0.8f, 1.0f);
+		_colors[i] = color;
 	}
 
 	CreateBufferObject();
@@ -42,10 +42,9 @@ void Planet::CreateBufferObject() {
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(*_points)*_pointsNum, *_points);
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(*_points)*_pointsNum, sizeof(*_colors)*_pointsNum, *_colors);
 }
-
 void Planet::SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle) {
 
-	if (uiShaderHandle == MAX_UNSIGNED_INT) _uiProgram = InitShader("vsPlanet1.glsl", "fsVtxColor.glsl");
+	if (uiShaderHandle == MAX_UNSIGNED_INT) _uiProgram = InitShader("vsPlanet2.glsl", "fsVtxColor.glsl");
 	else _uiProgram = uiShaderHandle;
 
 	GLuint vPosition = glGetAttribLocation(_uiProgram, "vPosition");

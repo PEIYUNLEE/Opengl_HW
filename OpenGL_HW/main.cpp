@@ -12,7 +12,8 @@ void IdleProcess();
 
 void init(void)
 {
-	g_planet = new Planet(0.75f,1);
+	g_planet = new Planet(0.5f, 2);
+	//g_planet = new Planet(0.75f,1);
 	//g_pBoat = new PBoat;
 
 	g_mxProjection = Ortho(-2.0f, 2.0f, -2.0f, 2.0f, -2.0f, 2.0f);

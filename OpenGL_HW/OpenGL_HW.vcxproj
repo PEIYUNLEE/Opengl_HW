@@ -159,6 +159,7 @@
     <None Include="fsVtxColor.glsl" />
     <None Include="vsPlanet1.glsl" />
     <None Include="vsPlanet2.glsl" />
+    <None Include="vsPlanet3.glsl" />
     <None Include="vsVtxColor.glsl" />
   </ItemGroup>
   <ItemGroup>
