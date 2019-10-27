@@ -9,7 +9,7 @@ uniform mat4 Projection;
 void main()
 {
 	float tx=-1.25f;
-	float ty=2.5f;
+	float ty=3.5f;
 
 	mat4 tm = mat4(   1.0, 0.0, 0.0, 0.0,
 					  0.0, 1.0, 0.0, 0.0,

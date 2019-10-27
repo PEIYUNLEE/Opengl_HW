@@ -1,8 +1,10 @@
 #include "Planet.h"
 
-Planet::Planet(float radius, int colorType, int pointsNum) {
+Planet::Planet(float radius, int colorType,float fspeed, float fduration, int pointsNum) {
 
 	_pointsNum = pointsNum;
+	_fspeed = fspeed;
+	_fduration = fduration;
 
 	_points = new vec4[_pointsNum];
 	_colors = new vec4[_pointsNum];
@@ -81,17 +83,16 @@ void Planet::SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle) 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-float g_Tottime = 0.0;
+//float g_Tottime = 0.0;
 GLfloat tx = 0.0f;
 GLfloat ty = 0.0f;
 
 void Planet::AutoTranslate(float dt) {
 	mat4 mxTra;
 
-	g_Tottime += dt;
-	if (g_Tottime >= 10.0)g_Tottime -= 10.0f;
-
-	ty = g_Tottime*-1.0f;
+	_ftottime += dt;
+	if (_ftottime >= _fduration) _ftottime -= _fduration;
+	ty = _ftottime*_fspeed;
 	mxTra = Translate(tx, ty,0.0f);
 
 	SetTRSMatrix(mxTra);

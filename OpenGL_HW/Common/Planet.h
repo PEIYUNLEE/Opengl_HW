@@ -22,9 +22,13 @@ private:
 	bool  _bUpdateMV;
 	bool  _bUpdateProj;
 
+	float _fduration;
+	float _fspeed;
+	float _ftottime;
+
 	void CreateBufferObject();
 public:
-	Planet(float radius = 0.8f, int colorType = 1, int pointsNum = 500);
+	Planet(float radius = 0.8f, int colorType = 1,float fspeed=-0.5f,float fduration=10.0f, int pointsNum = 500);
 	~Planet();
 
 	void SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
