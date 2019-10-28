@@ -2,7 +2,7 @@
 
 Planet::Planet(float radius, int colorType,float fspeed, float fduration, int pointsNum) {
 
-	_pointsNum = pointsNum;
+	_pointsNum = pointsNum+(pointsNum+1) + (pointsNum + 1);
 	_fspeed = fspeed;
 	_fduration = fduration;
 
@@ -10,9 +10,23 @@ Planet::Planet(float radius, int colorType,float fspeed, float fduration, int po
 	_colors = new vec4[_pointsNum];
 
 	
-	for (int i = 0; i < _pointsNum; i++) {
-		_points[i].x = radius * cosf(M_PI*2.0f*i / _pointsNum); //2拍乘以該點分之總點
-		_points[i].y = radius * sinf(M_PI*2.0f*i / _pointsNum);
+	for (int i = 0; i < pointsNum; i++) {
+		_points[i].x = radius * cosf(M_PI*2.0f*i / pointsNum); //2拍乘以該點分之總點
+		_points[i].y = radius * sinf(M_PI*2.0f*i / pointsNum);
+		_points[i].w = 1.0f;
+		_colors[i] = SetColor(colorType);
+	}
+
+	for (int i = pointsNum; i < pointsNum*2 + 1; i++) {
+		_points[i].x = (radius + 0.05f) * cosf(M_PI*2.0f*(i- pointsNum) / pointsNum); //2拍乘以該點分之總點
+		_points[i].y = (radius + 0.05f) * sinf(M_PI*2.0f*(i - pointsNum) / pointsNum);
+		_points[i].w = 1.0f;
+		_colors[i] = SetColor(colorType);
+	}
+
+	for (int i = pointsNum*2 + 1; i < _pointsNum; i++) {
+		_points[i].x = (radius + 0.125f) * cosf(M_PI*2.0f*(i- (pointsNum * 2 + 1)) / pointsNum); //2拍乘以該點分之總點
+		_points[i].y = (radius + 0.125f) * sinf(M_PI*2.0f*(i - (pointsNum * 2 + 1)) / pointsNum);
 		_points[i].w = 1.0f;
 		_colors[i] = SetColor(colorType);
 	}
@@ -115,5 +129,7 @@ void Planet::Draw() {
 	}
 	glUniformMatrix4fv(_uiModelView, 1, GL_TRUE, _mxMVFinal);
 
-	glDrawArrays(GL_TRIANGLE_FAN, 0, _pointsNum);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 500);
+	glDrawArrays(GL_LINE_LOOP, 500, 501);
+	glDrawArrays(GL_LINE_LOOP, 1001, 501);
 }
