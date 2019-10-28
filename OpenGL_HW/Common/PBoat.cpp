@@ -21,22 +21,38 @@ PBoat::PBoat() {
 	_points[11] = vec4(-0.150f, 0.16f, 0.0, 1.0f);
 
 	//cBRSide
-	_colors[0] = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	_colors[1] = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	_colors[2] = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	_colors[0] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
+	_colors[1] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
+	_colors[2] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
 
 	//cBLSide
-	_colors[3] = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	_colors[4] = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	_colors[5] = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	_colors[3] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
+	_colors[4] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
+	_colors[5] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
 
 	//cBBody
-	_colors[6] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	_colors[7] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	_colors[8] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	_colors[9] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	_colors[10] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	_colors[11] = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	_colors[6] = vec4(0.94f, 0.94f, 0.94f, 1.0f);
+	_colors[7] = vec4(0.94f, 0.94f, 0.94f, 1.0f);
+	_colors[8] = vec4(0.94f, 0.94f, 0.94f, 1.0f);
+	_colors[9] = vec4(0.94f, 0.94f, 0.94f, 1.0f);
+	_colors[10] = vec4(0.94f, 0.94f, 0.94f, 1.0f);
+	_colors[11] = vec4(0.94f, 0.94f, 0.94f, 1.0f);
+
+	//pBCenter
+	for (int i = 12; i < BTOTPOINT_NUM- BTPOINT_NUM; i++) {
+		_points[i].x = 0.07f * cosf(M_PI*2.0f*(i-12) / BCPOINT_NUM); //2拍乘以該點分之總點
+		_points[i].y = 0.07f * sinf(M_PI*2.0f*(i-12) / BCPOINT_NUM)-0.02f;
+		_points[i].w = 1.0f;
+		_colors[i] = vec4(0.0667f, 0.1333f, 0.2392f, 1.0f);
+	}
+
+	////pBTop
+	//for (int i = BTOTPOINT_NUM - BTPOINT_NUM; i < BTOTPOINT_NUM + 12; i++) {
+	//	_points[i].x = 0.15f * cosf(M_PI*2.0f*(i - 12) / BTPOINT_NUM); //2拍乘以該點分之總點
+	//	_points[i].y = 0.15f * sinf(M_PI*2.0f*(i - 12) / BTPOINT_NUM) + 0.18f;
+	//	_points[i].w = 1.0f;
+	//	_colors[i] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
+	//}
 
 	CreateBufferObject();
 }
@@ -85,5 +101,7 @@ void PBoat::Draw() {
 
 	glUniformMatrix4fv(_uiModelView, 1, GL_TRUE, _mxMVFinal);
 
-	glDrawArrays(GL_TRIANGLES, 0, BPOINT_NUM);
+	glDrawArrays(GL_TRIANGLES, 0, BBPOINT_NUM);
+	glDrawArrays(GL_TRIANGLE_FAN, BBPOINT_NUM, BCPOINT_NUM);
+	//glDrawArrays(GL_TRIANGLE_FAN, BBPOINT_NUM, BTPOINT_NUM);
 }

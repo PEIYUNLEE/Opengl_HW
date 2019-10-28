@@ -78,7 +78,7 @@ void Win_Keyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
 	case 033:
-		delete g_planet;
+		delete [] g_planet;
 		delete g_pBoat;
 		exit(EXIT_SUCCESS);
 		break;
