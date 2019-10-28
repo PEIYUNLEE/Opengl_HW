@@ -4,7 +4,7 @@
 #define BCPOINT_NUM 20 //center circle
 #define BTPOINT_NUM 10 //top circle
 #define BPPOINT_NUM 20 //©ßª«½u
-#define BTOTPOINT_NUM BBPOINT_NUM+BCPOINT_NUM+BTPOINT_NUM+BPPOINT_NUM
+#define BTOTPOINT_NUM BBPOINT_NUM+BCPOINT_NUM+BTPOINT_NUM+BPPOINT_NUM+1
 
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;

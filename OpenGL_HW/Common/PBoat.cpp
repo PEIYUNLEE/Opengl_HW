@@ -55,7 +55,7 @@ PBoat::PBoat() {
 	}
 
 	//pBFire Yellow
-	_points[43].x = 0.016f;
+	_points[43].x = 0.0f;
 	_points[43].y = 10.0f*(_points[43].x)*(_points[43].x) + 0.025f*(_points[43].x) - 0.37f;
 	_points[43].w = 1.0f;
 	_colors[43] = vec4(0.87f, 0.58f, 0.22f, 1.0f);
@@ -74,7 +74,7 @@ PBoat::PBoat() {
 		_colors[i] = vec4(0.87f, 0.58f, 0.22f, 1.0f);
 	}
 
-	_points[62].x = 0.016f;
+	_points[62].x = 0.0f;
 	_points[62].y = 10.0f*(_points[62].x)*(_points[62].x) + 0.025f*(_points[62].x) - 0.37f;
 	_points[62].w = 1.0f;
 	_colors[62] = vec4(0.87f, 0.58f, 0.22f, 1.0f);
