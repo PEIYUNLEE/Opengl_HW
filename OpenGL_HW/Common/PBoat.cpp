@@ -47,25 +47,37 @@ PBoat::PBoat() {
 	}
 
 	//pbTop
-	for (int i = 32; i < 42; i++) {
+	for (int i = 32; i < 43; i++) {
 		_points[i].x = 0.15f * cosf(M_PI*2.0f*(i - 11.5f) / BCPOINT_NUM); //2拍乘以該點分之總點
 		_points[i].y = 0.15f * sinf(M_PI*2.0f*(i - 11.5f) / BCPOINT_NUM) + 0.13f;
 		_points[i].w = 1.0f;
 		_colors[i] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
 	}
 
-	//pBFire
-	/*for (int i = 44; i < 53; i++) {
-		_points[i].x = 0.03f*(float)(i - 42);
-		_points[i].y = (_points[i].x)*(_points[i].x);
+	//pBFire Yellow
+	_points[43].x = 0.016f;
+	_points[43].y = 10.0f*(_points[43].x)*(_points[43].x) + 0.025f*(_points[43].x) - 0.37f;
+	_points[43].w = 1.0f;
+	_colors[43] = vec4(0.87f, 0.58f, 0.22f, 1.0f);
+
+	for (int i = 44; i < 53; i++) {
+		_points[i].x = 0.016f*(i - 43);
+		_points[i].y = 10.0f*(_points[i].x)*(_points[i].x) + 0.025f*(_points[i].x) - 0.37f;
 		_points[i].w = 1.0f;
 		_colors[i] = vec4(0.87f, 0.58f, 0.22f, 1.0f);
 	}
 
-	_points[53].x = 0.0f;
-	_points[53].y = (_points[53].x)*(_points[53].x);
-	_points[53].w = 1.0f;
-	_colors[53] = vec4(0.87f, 0.58f, 0.22f, 1.0f);*/
+	for (int i = 53; i < 62; i++) {
+		_points[i].x = 0.016f*(i - 62);
+		_points[i].y = 10.0f*(_points[i].x)*(_points[i].x)-0.025f*(_points[i].x) - 0.37f;
+		_points[i].w = 1.0f;
+		_colors[i] = vec4(0.87f, 0.58f, 0.22f, 1.0f);
+	}
+
+	_points[62].x = 0.016f;
+	_points[62].y = 10.0f*(_points[62].x)*(_points[62].x) + 0.025f*(_points[62].x) - 0.37f;
+	_points[62].w = 1.0f;
+	_colors[62] = vec4(0.87f, 0.58f, 0.22f, 1.0f);
 
 	CreateBufferObject();
 }
@@ -117,5 +129,5 @@ void PBoat::Draw() {
 	glDrawArrays(GL_TRIANGLES, 0, BBPOINT_NUM);
 	glDrawArrays(GL_TRIANGLE_FAN, BBPOINT_NUM, BCPOINT_NUM);
 	glDrawArrays(GL_TRIANGLE_FAN, BBPOINT_NUM+ BCPOINT_NUM, BTPOINT_NUM);
-	glDrawArrays(GL_TRIANGLE_FAN, BBPOINT_NUM + BCPOINT_NUM + BTPOINT_NUM, BPPOINT_NUM);
+	glDrawArrays(GL_TRIANGLE_FAN, BBPOINT_NUM + BCPOINT_NUM + BTPOINT_NUM+1, 20);
 }

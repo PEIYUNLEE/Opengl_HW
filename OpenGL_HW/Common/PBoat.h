@@ -3,7 +3,7 @@
 #define BBPOINT_NUM 12 //body+side
 #define BCPOINT_NUM 20 //center circle
 #define BTPOINT_NUM 10 //top circle
-#define BPPOINT_NUM 22 //拋物線
+#define BPPOINT_NUM 20 //拋物線
 #define BTOTPOINT_NUM BBPOINT_NUM+BCPOINT_NUM+BTPOINT_NUM+BPPOINT_NUM
 
 typedef Angel::vec4  color4;
