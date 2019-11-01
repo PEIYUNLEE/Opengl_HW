@@ -1,10 +1,11 @@
 #include "../Header/Angel.h"
 
-#define BBPOINT_NUM 12 //body+side
+#define BSPOINT_NUM 3 //side
+#define BBPOINT_NUM 4 //body
 #define BCPOINT_NUM 20 //center circle
-#define BTPOINT_NUM 10 //top circle
-#define BPPOINT_NUM 20 //拋物線
-#define BTOTPOINT_NUM BBPOINT_NUM+BCPOINT_NUM+BTPOINT_NUM+BPPOINT_NUM+1
+#define BTPOINT_NUM 11 //top circle
+#define BPPOINT_NUM 21 //拋物線
+#define BTOTPOINT_NUM BSPOINT_NUM*2+BBPOINT_NUM+BCPOINT_NUM+BTPOINT_NUM+BPPOINT_NUM*2+1
 
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
