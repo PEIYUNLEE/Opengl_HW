@@ -98,16 +98,16 @@ void Planet::SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle) 
 }
 
 //float g_Tottime = 0.0;
-GLfloat tx = 0.0f;
-GLfloat ty = 0.0f;
+GLfloat ptx = 0.0f;
+GLfloat pty = 0.0f;
 
 void Planet::AutoTranslate(float dt) {
 	mat4 mxTra;
 
 	_ftottime += dt;
 	if (_ftottime >= _fduration) _ftottime -= _fduration;
-	ty = _ftottime*_fspeed;
-	mxTra = Translate(tx, ty,0.0f);
+	pty = _ftottime*_fspeed;
+	mxTra = Translate(ptx, pty,0.0f);
 
 	SetTRSMatrix(mxTra);
 }
@@ -133,3 +133,4 @@ void Planet::Draw() {
 	glDrawArrays(GL_LINE_LOOP, 500, 501);
 	glDrawArrays(GL_LINE_LOOP, 1001, 501);
 }
+

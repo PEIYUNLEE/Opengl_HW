@@ -56,20 +56,11 @@
     <ClCompile Include="Common\Planet.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="Common\Bullet.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Angel.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="CheckError.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="mat.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="vec.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
     <ClInclude Include="Common\PBoat.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -78,6 +69,21 @@
     </ClInclude>
     <ClInclude Include="Common\Planet.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Bullet.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Angel.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\CheckError.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\mat.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\vec.h">
+      <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

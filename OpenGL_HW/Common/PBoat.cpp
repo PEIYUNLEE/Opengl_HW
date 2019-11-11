@@ -1,7 +1,17 @@
 #include "PBoat.h"
 
+
 PBoat::PBoat() {
 
+	SetPoint();
+	CreateBufferObject();
+}
+
+PBoat::~PBoat() {
+	_bulletList->Clear();
+}
+
+void PBoat::SetPoint() {
 	//pBRSide
 	_points[0] = vec4(0.150f, -0.12f, 0.0, 1.0f);
 	_points[1] = vec4(0.230f, -0.12f, 0.0, 1.0f);
@@ -35,8 +45,8 @@ PBoat::PBoat() {
 	_colors[9] = vec4(0.94f, 0.94f, 0.94f, 1.0f);
 	//pBCenter
 	for (int i = 10; i < 30; i++) {
-		_points[i].x = 0.07f * cosf(M_PI*2.0f*(float)(i- 10) / BCPOINT_NUM); //2拍乘以該點分之總點
-		_points[i].y = 0.07f * sinf(M_PI*2.0f*(float)(i- 10) / BCPOINT_NUM)-0.02f;
+		_points[i].x = 0.07f * cosf(M_PI*2.0f*(float)(i - 10) / BCPOINT_NUM); //2拍乘以該點分之總點
+		_points[i].y = 0.07f * sinf(M_PI*2.0f*(float)(i - 10) / BCPOINT_NUM) - 0.02f;
 		_points[i].w = 1.0f;
 		_colors[i] = vec4(0.0667f, 0.1333f, 0.2392f, 1.0f);
 	}
@@ -44,14 +54,14 @@ PBoat::PBoat() {
 	//pbTop
 	for (int i = 30; i < 41; i++) {
 		_points[i].x = 0.15f * cosf(M_PI*2.0f*(float)(i) / BCPOINT_NUM); //2拍乘以該點分之總點
-		_points[i].y = -0.15f * sinf(M_PI*2.0f*(float)(i) / BCPOINT_NUM) +0.13f;
+		_points[i].y = -0.15f * sinf(M_PI*2.0f*(float)(i) / BCPOINT_NUM) + 0.15f;
 		_points[i].w = 1.0f;
 		_colors[i] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
 	}
 
 	//pBFire Yellow
 	for (int i = 50; i > 40; i--) {
-		_points[i].x = 0.016f*(i-51)+0.01f;
+		_points[i].x = 0.016f*(i - 51) + 0.01f;
 		_points[i].y = 10.0f*(_points[i].x)*(_points[i].x) + 0.025f*(_points[i].x) - 0.37f;
 		_points[i].w = 1.0f;
 		_colors[i] = vec4(0.87f, 0.58f, 0.22f, 1.0f);
@@ -63,15 +73,15 @@ PBoat::PBoat() {
 	_colors[51] = vec4(0.87f, 0.58f, 0.22f, 1.0f);
 
 	for (int i = 52; i < 62; i++) {
-		_points[i].x = 0.016f*(i - 51)- 0.01f;;
-		_points[i].y = 10.0f*(_points[i].x)*(_points[i].x)-0.025f*(_points[i].x) - 0.37f;
+		_points[i].x = 0.016f*(i - 51) - 0.01f;;
+		_points[i].y = 10.0f*(_points[i].x)*(_points[i].x) - 0.025f*(_points[i].x) - 0.37f;
 		_points[i].w = 1.0f;
 		_colors[i] = vec4(0.87f, 0.58f, 0.22f, 1.0f);
 	}
 
 	//pBFire red
 	for (int i = 71; i > 61; i--) {
-		_points[i].x = 0.008f*(i - 72) ;
+		_points[i].x = 0.008f*(i - 72);
 		_points[i].y = 20.0f*(_points[i].x)*(_points[i].x) + 0.05f*(_points[i].x) - 0.275f;
 		_points[i].w = 1.0f;
 		_colors[i] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
@@ -83,13 +93,12 @@ PBoat::PBoat() {
 	_colors[72] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
 
 	for (int i = 73; i < 83; i++) {
-		_points[i].x = 0.008f*(i - 72) ;
+		_points[i].x = 0.008f*(i - 72);
 		_points[i].y = 20.0f*(_points[i].x)*(_points[i].x) - 0.05f*(_points[i].x) - 0.275f;
 		_points[i].w = 1.0f;
 		_colors[i] = vec4(0.78f, 0.208f, 0.22f, 1.0f);
 	}
 
-	CreateBufferObject();
 }
 
 void PBoat::CreateBufferObject() {
@@ -129,10 +138,21 @@ void PBoat::SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void PBoat::SetTRSMatrix(mat4 &mat)
+{
+	//矩陣改變
+	_mxTRS = mat;
+	_bUpdateMV = true;
+}
+
 void PBoat::Draw() {
 	glUseProgram(_uiProgram);
 	glBindVertexArray(_uiVao);
 
+	if (_bUpdateMV) {
+		_mxMVFinal = _mxView*_mxTRS;
+		_bUpdateMV = false;
+	}
 	glUniformMatrix4fv(_uiModelView, 1, GL_TRUE, _mxMVFinal);
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, BSPOINT_NUM);
@@ -142,4 +162,8 @@ void PBoat::Draw() {
 	glDrawArrays(GL_TRIANGLE_FAN, BSPOINT_NUM * 2 + BBPOINT_NUM+ BCPOINT_NUM, BTPOINT_NUM);
 	glDrawArrays(GL_TRIANGLE_FAN, BSPOINT_NUM * 2 + BBPOINT_NUM + BCPOINT_NUM+ BTPOINT_NUM, BPPOINT_NUM);
 	glDrawArrays(GL_TRIANGLE_FAN, BSPOINT_NUM * 2 + BBPOINT_NUM + BCPOINT_NUM + BTPOINT_NUM+ BPPOINT_NUM, BPPOINT_NUM);
+}
+
+void PBoat::Shoot(mat4 g_mxModelView,mat4 g_mxProjection) {
+	_bulletList->BulletDraw(g_mxModelView, g_mxProjection);
 }

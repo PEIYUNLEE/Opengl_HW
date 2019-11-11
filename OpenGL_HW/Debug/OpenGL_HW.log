@@ -1,2 +1,7 @@
-﻿  OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.exe
+﻿  main.cpp
+d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\main.cpp(105): warning C4154: 不能在陣列運算式上使用 delete; 所以將陣列轉換成指標
+d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\main.cpp(120): warning C4390: ';': 找到空白的控制陳述式，是正確的嗎?
+d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\main.cpp(123): warning C4390: ';': 找到空白的控制陳述式，是正確的嗎?
+  LINK : 最後的累加連結找不到或未建置 D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.exe，正在執行完整連結
+  OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.exe
   OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.pdb (Full PDB)

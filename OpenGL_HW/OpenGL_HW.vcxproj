@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Common\Bullet.cpp" />
     <ClCompile Include="Common\common.cpp" />
     <ClCompile Include="Common\PBoat.cpp" />
     <ClCompile Include="Common\Planet.cpp" />
@@ -163,13 +164,14 @@
     <None Include="vsVtxColor.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Angel.h" />
-    <ClInclude Include="CheckError.h" />
+    <ClInclude Include="Common\Bullet.h" />
     <ClInclude Include="Common\PBoat.h" />
     <ClInclude Include="Common\Planet.h" />
     <ClInclude Include="Common\Timer.h" />
-    <ClInclude Include="mat.h" />
-    <ClInclude Include="vec.h" />
+    <ClInclude Include="Header\Angel.h" />
+    <ClInclude Include="Header\CheckError.h" />
+    <ClInclude Include="Header\mat.h" />
+    <ClInclude Include="Header\vec.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
