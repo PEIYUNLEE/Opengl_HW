@@ -41,38 +41,32 @@
     <ClCompile Include="InitShader.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Bullet.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
     <ClCompile Include="Common\common.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\MainScene.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Common\PBoat.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Common\Timer.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>原始程式檔</Filter>
-    </ClCompile>
     <ClCompile Include="Common\Planet.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Common\Bullet.cpp">
+    <ClCompile Include="Common\Scene.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Timer.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common\PBoat.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\Timer.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\Planet.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\Bullet.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="Header\Angel.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
@@ -84,6 +78,27 @@
     </ClInclude>
     <ClInclude Include="Header\vec.h">
       <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Bullet.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\MainScene.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\PBoat.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Planet.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Scene.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Struct.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Timer.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

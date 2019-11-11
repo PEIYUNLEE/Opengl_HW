@@ -8,7 +8,6 @@ PBoat::PBoat() {
 }
 
 PBoat::~PBoat() {
-	_bulletList->Clear();
 }
 
 void PBoat::SetPoint() {
@@ -162,8 +161,4 @@ void PBoat::Draw() {
 	glDrawArrays(GL_TRIANGLE_FAN, BSPOINT_NUM * 2 + BBPOINT_NUM+ BCPOINT_NUM, BTPOINT_NUM);
 	glDrawArrays(GL_TRIANGLE_FAN, BSPOINT_NUM * 2 + BBPOINT_NUM + BCPOINT_NUM+ BTPOINT_NUM, BPPOINT_NUM);
 	glDrawArrays(GL_TRIANGLE_FAN, BSPOINT_NUM * 2 + BBPOINT_NUM + BCPOINT_NUM + BTPOINT_NUM+ BPPOINT_NUM, BPPOINT_NUM);
-}
-
-void PBoat::Shoot(mat4 g_mxModelView,mat4 g_mxProjection) {
-	_bulletList->BulletDraw(g_mxModelView, g_mxProjection);
 }

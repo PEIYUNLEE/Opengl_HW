@@ -150,8 +150,10 @@
   <ItemGroup>
     <ClCompile Include="Common\Bullet.cpp" />
     <ClCompile Include="Common\common.cpp" />
+    <ClCompile Include="Common\MainScene.cpp" />
     <ClCompile Include="Common\PBoat.cpp" />
     <ClCompile Include="Common\Planet.cpp" />
+    <ClCompile Include="Common\Scene.cpp" />
     <ClCompile Include="Common\Timer.cpp" />
     <ClCompile Include="InitShader.cpp" />
     <ClCompile Include="main.cpp" />
@@ -165,8 +167,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\Bullet.h" />
+    <ClInclude Include="Common\MainScene.h" />
     <ClInclude Include="Common\PBoat.h" />
     <ClInclude Include="Common\Planet.h" />
+    <ClInclude Include="Common\Scene.h" />
+    <ClInclude Include="Common\Struct.h" />
     <ClInclude Include="Common\Timer.h" />
     <ClInclude Include="Header\Angel.h" />
     <ClInclude Include="Header\CheckError.h" />

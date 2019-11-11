@@ -54,16 +54,15 @@ void Bullet::SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle) 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-GLfloat btx = 0.0f;
-GLfloat bty = 0.0f;
 
 void Bullet::AutoTranslate(float dt) {
 	mat4 mxTra;
+	GLfloat btx = 0.0f;
+	GLfloat bty = 0.0f;
 
 	_ftottime += dt;
 	bty = _ftottime*_fspeed;
 	mxTra = Translate(btx, bty, 0.0f);
-
 	SetTRSMatrix(mxTra);
 }
 
@@ -87,25 +86,33 @@ void Bullet::Draw() {
 	glDrawArrays(GL_TRIANGLE_FAN, 0, POINT_NUM);
 }
 
+
+
 //BulletList
-BulletList::BulletList(int count) {
+BulletList::BulletList(mat4 g_mxModelView, mat4 g_mxProjection,int count) {
 
 	_totCount = count; //目前所有
 
 	//bulid bullet
 	pHead = pTail = NULL;
 	pHead = new Bullet;
+	pHead->SetShader(g_mxModelView, g_mxProjection);
 	pHead->index = 0;
 	pHead->link = NULL;
 	pTail = pHead;
 	for (int i= 1; i < count; i++)
 	{
 		pGet = new Bullet;
+		pGet->SetShader(g_mxModelView, g_mxProjection);
 		pHead->index = i;
 		pGet->link = NULL;
 		pTail->link = pGet;
 		pTail = pGet;
 	}
+}
+
+BulletList::~BulletList() {
+	Clear();
 }
 
 //void BulletList::PushHead() {
@@ -128,7 +135,7 @@ void BulletList::Clear() {
 	for (int i = 0; i < _totCount; i++)
 	{
 		if (pGet != NULL) {
-			printf("%d個是%d", i, pGet->index);
+			//printf("%d個是%d", i, pGet->index);
 			pHead = pGet->link;
 			delete pGet;
 			i++;
@@ -136,7 +143,25 @@ void BulletList::Clear() {
 	}
 }
 
-void BulletList::BulletDraw(mat4 g_mxModelView, mat4 g_mxProjection) {
-	pGet->SetShader(g_mxModelView, g_mxProjection);
-	pGet = pGet->link;
+void BulletList::BulletDraw(int currentCount) {
+	pGet = pHead;
+	for (int i = 0; i < currentCount; i++)
+	{
+		pGet->Draw();
+		pGet = pGet->link;
+	}
+}
+
+void BulletList::AutoTranslate(float timeDelta,int currentCount) {
+
+	for (int i = 0; i < currentCount; i++)
+	{
+		if(i==0)
+			pGet = pHead;
+		if (pGet != NULL) {
+			pGet->AutoTranslate(timeDelta);
+			pGet = pGet->link;
+			//printf("%f\n", timeDelta);
+		}
+	}
 }

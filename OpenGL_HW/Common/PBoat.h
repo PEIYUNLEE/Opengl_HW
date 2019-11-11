@@ -27,7 +27,7 @@ private:
 	bool  _bUpdateMV;
 	bool  _bUpdateProj;
 
-	BulletList *_bulletList= new BulletList(5);
+	//BulletList *_bulletList= new BulletList(5);
 	int _bulletCount=0;
 
 	void CreateBufferObject();
@@ -41,8 +41,6 @@ public:
 	void SetTRSMatrix(mat4 &mat);
 	void SetViewMatrix(mat4 &mat);
 	void SetProjectionMatrix(mat4 &mat);
-
-	void Shoot(mat4 mxModelView, mat4 mxProjection);
 
 	void Draw();
 };

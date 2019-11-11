@@ -1,4 +1,5 @@
 #include "../Header/Angel.h"
+#include "Struct.h"
 
 #define POINT_NUM 10
 
@@ -32,8 +33,7 @@ private:
 
 	//node
 	Bullet *link;
-
-
+	struct Collider _collider;
 public:
 	Bullet();
 
@@ -57,11 +57,13 @@ private:
 	int _totCount;
 
 public:
-	BulletList(int count);
+	BulletList(mat4 g_mxModelView, mat4 g_mxProjection,int count);
+	~BulletList();
 	void PrintList();			// 印出list的所有資料
 	void PushHead();		// 在list的尾巴新增node
 	void PushTail();		// 在list的尾巴新增node
 	void Delete(int index);			// 刪除list中的index
 	void Clear();					// 把整串list刪除
-	void BulletDraw(mat4 g_mxModelView, mat4 g_mxProjection);
+	void BulletDraw(int currentCount);
+	void AutoTranslate(float timeDelta,int totBullet);
 };
