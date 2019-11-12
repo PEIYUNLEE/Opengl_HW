@@ -8,6 +8,7 @@ PBoat::PBoat() {
 }
 
 PBoat::~PBoat() {
+
 }
 
 void PBoat::SetPoint() {

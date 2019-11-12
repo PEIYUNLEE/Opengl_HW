@@ -42,22 +42,23 @@ void MainScene::Draw() {
 		_planet[i]->Draw();
 	}
 
+	_bulletList->BulletDraw();
+
 	_pBoat->Draw();
 
-	if (_currentBullet > 0) {
-		_bulletList->BulletDraw(_currentBullet);
-	}
 }
 
 void MainScene::Update(float delta) {
+	_timer += delta;
+	if (_timer >= 0.2f) {
+		_timer = 0.0f;
+		_bulletList->BulletShoot(_pBoat->_mxTRS); //player射出子彈，傳入player座標
+	}
 	for (int i = 0; i < 3; i++)
 	{
 		_planet[i]->AutoTranslate(delta);
 	}
-	if (_currentBullet>0)
-	{
-		_bulletList->AutoTranslate(delta, _currentBullet);
-	}
+	_bulletList->AutoTranslate(delta);
 }
 
 MainScene::~MainScene() {

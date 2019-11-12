@@ -22,16 +22,17 @@ private:
 	GLuint _uiModelView, _uiProjection;
 
 	mat4 _mxView, _mxProjection;
-	mat4 _mxMVFinal, _mxTRS;
+	
 
 	bool  _bUpdateMV;
 	bool  _bUpdateProj;
 
-	//BulletList *_bulletList= new BulletList(5);
-	int _bulletCount=0;
-
 	void CreateBufferObject();
+
 public:
+
+	mat4 _mxMVFinal,_mxTRS;
+
 	PBoat();
 	~PBoat();
 

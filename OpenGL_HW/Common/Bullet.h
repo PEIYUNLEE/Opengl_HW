@@ -20,7 +20,8 @@ private:
 	GLuint _uiModelView, _uiProjection;
 
 	mat4 _mxView, _mxProjection;
-	mat4 _mxMVFinal, _mxTRS;
+	mat4  _mxTRS;
+	mat4 _mxOri;
 
 	bool  _bUpdateMV;
 	bool  _bUpdateProj;
@@ -32,9 +33,12 @@ private:
 	float _ftottime;
 
 	//node
-	Bullet *link;
+	Bullet *_prelink;
+	Bullet *_nextlink;
 	struct Collider _collider;
 public:
+	mat4 _mxMVFinal;
+
 	Bullet();
 
 	void SetPoint();
@@ -45,6 +49,9 @@ public:
 	void SetViewMatrix(mat4 &mat);
 	void SetProjectionMatrix(mat4 &mat);
 
+	void Collision();	//判定有沒有碰到敵人或超出範圍
+	void DestoryBullet();	//將子彈丟回子彈池
+
 	void Draw();
 
 	//list
@@ -53,10 +60,13 @@ public:
 
 class BulletList{
 private:
+	Bullet *pUseHead, *pUseTail, *pUseGet;
 	Bullet *pHead, *pTail, *pGet;
 	int _totCount;
 
 public:
+	int _shootCount = 0;
+
 	BulletList(mat4 g_mxModelView, mat4 g_mxProjection,int count);
 	~BulletList();
 	void PrintList();			// 印出list的所有資料
@@ -64,6 +74,7 @@ public:
 	void PushTail();		// 在list的尾巴新增node
 	void Delete(int index);			// 刪除list中的index
 	void Clear();					// 把整串list刪除
-	void BulletDraw(int currentCount);
-	void AutoTranslate(float timeDelta,int totBullet);
+	void BulletShoot(mat4 &mat);
+	void BulletDraw();
+	void AutoTranslate(float timeDelta);
 };

@@ -2,7 +2,7 @@
 #include "Planet.h"
 #include "PBoat.h"
 
-#define TOTBULLETCOUNT 50
+#define TOTBULLETCOUNT 80
 
 class MainScene
 {
@@ -14,10 +14,10 @@ private:
 	mat4 _mxModelView, _mxProjection;
 
 	void CreateGameObject();
+	float _timer;
 
 public:
 	PBoat *_pBoat;
-	int _currentBullet = 0;
 
 	MainScene(mat4 g_mxModelView, mat4 g_mxProjection);
 	~MainScene();
