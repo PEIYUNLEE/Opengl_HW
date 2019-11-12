@@ -89,7 +89,7 @@ void Bullet::Draw() {
 
 void Bullet::Collision()
 {
-	if(_mxTRS)
+	//if(_mxTRS)
 
 }
 
