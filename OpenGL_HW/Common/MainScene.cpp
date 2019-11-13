@@ -30,10 +30,10 @@ void MainScene::CreateGameObject() {
 		idx++;
 	}
 
+	_bulletList = new BulletList(_mxModelView, _mxProjection,TOTBULLETCOUNT);
+	
 	_pBoat = new PBoat;
 	_pBoat->SetShader(_mxModelView, _mxProjection);
-
-	_bulletList = new BulletList(_mxModelView, _mxProjection,TOTBULLETCOUNT);
 }
 
 void MainScene::Draw() {
@@ -49,10 +49,12 @@ void MainScene::Draw() {
 }
 
 void MainScene::Update(float delta) {
+	//_bulletList->Collision();
 	_timer += delta;
 	if (_timer >= 0.2f) {
 		_timer = 0.0f;
 		_bulletList->BulletShoot(_pBoat->_mxTRS); //player射出子彈，傳入player座標
+		
 	}
 	for (int i = 0; i < 3; i++)
 	{

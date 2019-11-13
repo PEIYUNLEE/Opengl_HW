@@ -2,7 +2,7 @@
 #include "Planet.h"
 #include "PBoat.h"
 
-#define TOTBULLETCOUNT 80
+#define TOTBULLETCOUNT 30
 
 class MainScene
 {

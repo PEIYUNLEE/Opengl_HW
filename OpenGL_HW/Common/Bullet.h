@@ -28,7 +28,6 @@ private:
 
 	void CreateBufferObject();
 
-	int index;
 	float _fspeed =0.7f;
 	float _ftottime;
 
@@ -49,8 +48,6 @@ public:
 	void SetViewMatrix(mat4 &mat);
 	void SetProjectionMatrix(mat4 &mat);
 
-	void Collision();	//判定有沒有碰到敵人或超出範圍
-	void DestoryBullet();	//將子彈丟回子彈池
 
 	void Draw();
 
@@ -60,12 +57,15 @@ public:
 
 class BulletList{
 private:
-	Bullet *pUseHead, *pUseTail, *pUseGet;
-	Bullet *pHead, *pTail, *pGet;
+	Bullet *pUseTail, *pUseHead;
+	Bullet *pHead, *pTail, *pNewGet;
+	Bullet *pColliGet, *pGet, *pClearGet,*pDrawGet, *pNewBulletGet, *pTraGet, *getPre;
+
 	int _totCount;
 
 public:
 	int _shootCount = 0;
+	int _storeCount = 0;
 
 	BulletList(mat4 g_mxModelView, mat4 g_mxProjection,int count);
 	~BulletList();
@@ -77,4 +77,7 @@ public:
 	void BulletShoot(mat4 &mat);
 	void BulletDraw();
 	void AutoTranslate(float timeDelta);
+
+	void Collision();	//判定有沒有碰到敵人或超出範圍
+	void DestoryBullet();	//將子彈丟回子彈池
 };
