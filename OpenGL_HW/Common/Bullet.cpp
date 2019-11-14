@@ -2,8 +2,15 @@
 
 
 Bullet::Bullet() {
+	_transform = new Transform(POINT_NUM);
 	SetPoint();
-	CreateBufferObject();
+	_transform->_points = _points;
+	_transform->_colors = _colors;
+	_transform->CreateBufferObject();
+}
+
+Bullet::~Bullet() {
+	delete _transform;
 }
 
 void Bullet::SetPoint() {
@@ -17,41 +24,8 @@ void Bullet::SetPoint() {
 
 }
 
-void Bullet::CreateBufferObject() {
-
-	glGenVertexArrays(1, &_uiVao);
-	glBindVertexArray(_uiVao);
-
-	glGenBuffers(1, &_uiBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, _uiBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(_points) + sizeof(_colors), NULL, GL_STATIC_DRAW);
-
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(_points), _points);
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(_points), sizeof(_colors), _colors);
-}
-
 void Bullet::SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle) {
-
-	if (uiShaderHandle == MAX_UNSIGNED_INT) _uiProgram = InitShader("vsVtxColor.glsl", "fsVtxColor.glsl");
-	else _uiProgram = uiShaderHandle;
-
-	GLuint vPosition = glGetAttribLocation(_uiProgram, "vPosition");
-	glEnableVertexAttribArray(vPosition);
-	glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-
-	GLuint vColor = glGetAttribLocation(_uiProgram, "vColor");
-	glEnableVertexAttribArray(vColor);
-	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(_points)));
-
-	_uiModelView = glGetUniformLocation(_uiProgram, "ModelView");
-	_mxView = mxView;
-	glUniformMatrix4fv(_uiModelView, 1, GL_TRUE, _mxView);
-
-	_uiProjection = glGetUniformLocation(_uiProgram, "Projection");
-	_mxProjection = mxProjection;
-	glUniformMatrix4fv(_uiProjection, 1, GL_TRUE, _mxProjection);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	_transform->SetShader(mxView, mxProjection, uiShaderHandle);
 }
 
 void Bullet::AutoTranslate(float dt) {
@@ -62,43 +36,14 @@ void Bullet::AutoTranslate(float dt) {
 	_ftottime += dt;
 	bty = _ftottime*_fspeed;
 	mxTra = Translate(btx, bty, 0.0f);
-	SetTRSMatrix(mxTra*_mxOri);
-}
-
-void Bullet::SetTRSMatrix(mat4 &mat)
-{
-	//矩陣改變
-	_mxTRS = mat;
-	_bUpdateMV = true;
-	
+	_transform->SetTRSMatrix(mxTra*_mxOri);
 }
 
 void Bullet::Draw() {
-	glUseProgram(_uiProgram);
-	glBindVertexArray(_uiVao);
-
-	if (_bUpdateMV) {
-		_mxMVFinal = _mxView*_mxTRS;
-		_bUpdateMV = false;
-	}
-	glUniformMatrix4fv(_uiModelView, 1, GL_TRUE, _mxMVFinal);
+	_transform->Draw();
 
 	glDrawArrays(GL_TRIANGLE_FAN, 0, POINT_NUM);
 }
-
-//void Bullet::DrawW() {
-//	glBindVertexArray(_uiVao);
-//
-//	if (_bUpdateMV) {
-//		_mxMVFinal = _mxView*_mxTRS;
-//		_bUpdateMV = false;
-//	}
-//	glUniformMatrix4fv(_uiModelView, 1, GL_TRUE, _mxMVFinal);
-//
-//	glDrawArrays(GL_TRIANGLE_FAN, 0, POINT_NUM);
-//}
-
-
 
 
 
@@ -130,14 +75,6 @@ BulletList::~BulletList() {
 	Clear();
 }
 
-//void BulletList::PushHead() {
-//	/*pHead = new Bullet;
-//	pHead->index = count++;
-//	pHead->link = NULL;
-//	pTail = pHead;*/
-//}
-//
-
 void BulletList::PushTail() {
 	mat4 init;
 	Bullet *pGet;
@@ -146,8 +83,8 @@ void BulletList::PushTail() {
 	pTail->_nextlink = pGet;
 	pGet->_prelink = pTail;
 	pGet->_mxOri = init;
-	pGet->_mxTRS = init;
-	pGet->_mxMVFinal = init;
+	pGet->_transform->_mxTRS = init;
+	pGet->_transform->_mxMVFinal = init;
 	pGet->_ftottime = 0.0f;
 	pTail = pGet;
 	pTail->_nextlink = NULL;
@@ -242,7 +179,7 @@ void BulletList::Collision()
 		for (int i = 0; i < _shootCount; i++)
 		{
 			if (pColliGet != NULL) {
-				if (pColliGet->_mxTRS._m[1].w >= 2.0f) {
+				if (pColliGet->_transform->_mxTRS._m[1].w >= 2.0f) {
 					DestoryBullet();
 					k++;
 				}
@@ -292,5 +229,17 @@ void BulletList::DestoryBullet()
 
 		PushTail();	//將子彈丟回子彈池
 		pColliGet = pGetNext;
+	}
+}
+
+void BulletList::Update(float delta,bool isBoatShoot,mat4 matBoat) {
+	Collision();
+
+	_timer += delta;
+	if (isBoatShoot == true) {
+		if (_timer >= 0.2f) {
+			_timer = 0.0f;
+			BulletShoot(matBoat); //player射出子彈，傳入player座標
+		}
 	}
 }

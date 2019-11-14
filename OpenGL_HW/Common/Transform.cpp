@@ -10,7 +10,7 @@ void Transform::CreateBufferObject() {
 	glBindVertexArray(_uiVao);
 	glGenBuffers(1, &_uiBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, _uiBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(*_points)*_pointNum+ sizeof(*_colors)*_pointNum, NULL, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(*_points)*_pointNum + sizeof(*_colors)*_pointNum, NULL, GL_STATIC_DRAW);
 
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(*_points)*_pointNum, *_points);
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(*_points)*_pointNum, sizeof(*_colors)*_pointNum, *_colors);

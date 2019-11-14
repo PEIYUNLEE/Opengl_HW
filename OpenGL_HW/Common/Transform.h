@@ -1,3 +1,4 @@
+#pragma once
 #include "../Header/Angel.h"
 
 typedef Angel::vec4  color4;
@@ -13,15 +14,13 @@ private:
 	GLuint _uiModelView, _uiProjection;
 
 	mat4 _mxView, _mxProjection;
-	mat4 _mxOri;
-	mat4 _mxMVFinal;
 
 	bool  _bUpdateMV;
 	bool  _bUpdateProj;
 
 public:
 	mat4  _mxTRS;
-
+	mat4 _mxMVFinal;
 	vec4 *_points, *_colors;
 
 	Transform(int pointNum);
@@ -30,7 +29,6 @@ public:
 
 	void CreateBufferObject();
 
-	void SetPoint();
 	void SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
 	GLuint GetShaderHandle() { return _uiProgram; }
 	void AutoTranslate(float dt);

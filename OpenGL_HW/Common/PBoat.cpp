@@ -1,6 +1,5 @@
 #include "PBoat.h"
 
-
 PBoat::PBoat() {
 	_transform = new Transform(BTOTPOINT_NUM);
 	SetPoint();
@@ -10,7 +9,7 @@ PBoat::PBoat() {
 }
 
 PBoat::~PBoat() {
-
+	delete _transform;
 }
 
 void PBoat::SetPoint() {

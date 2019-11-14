@@ -2,6 +2,7 @@
 #include "Planet.h"
 #include "PBoat.h"
 #include "Bullet.h"
+#include "Enemy.h"
 
 #define TOTBULLETCOUNT 50
 
@@ -12,10 +13,10 @@ private:
 	
 	Planet *_planet[3];
 	BulletList *_bulletList;
+	Enemy *_enemy;
 	mat4 _mxModelView, _mxProjection;
 
 	void CreateGameObject();
-	float _timer;
 	
 public:
 	PBoat *_pBoat;

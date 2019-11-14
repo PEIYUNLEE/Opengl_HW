@@ -34,6 +34,9 @@ void MainScene::CreateGameObject() {
 	
 	_pBoat = new PBoat;
 	_pBoat->SetShader(_mxModelView, _mxProjection);
+
+	_enemy = new Enemy;
+	_enemy->SetShader(_mxModelView, _mxProjection);
 }
 
 void MainScene::Draw() {
@@ -46,21 +49,13 @@ void MainScene::Draw() {
 
 	_pBoat->Draw();
 
-}
-int k = 0;
-void MainScene::Update(float delta) {
-	_bulletList->Collision();
+	_enemy->Draw();
 
-	_timer += delta;
-	if (isBoatShoot == true) {
-		if (_timer >= 0.2f) {
-			_timer = 0.0f;
-			_bulletList->BulletShoot(_pBoat->_transform->_mxTRS); //player射出子彈，傳入player座標
-			k++;
-			printf("k = %d\n", k);
-			printf("%d\n", _bulletList->_shootCount);
-		}
-	}
+}
+
+
+void MainScene::Update(float delta) {
+	_bulletList->Update(delta,isBoatShoot, _pBoat->_transform->_mxTRS);
 
 	for (int i = 0; i < 3; i++)
 	{

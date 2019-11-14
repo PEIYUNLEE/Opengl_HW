@@ -1,4 +1,5 @@
 #include "../Header/Angel.h"
+#include "Transform.h"
 
 #define POINT_NUM 10
 
@@ -13,18 +14,6 @@ private:
 	//data
 	vec4 _points[POINT_NUM];
 	vec4 _colors[POINT_NUM];
-	GLuint _uiVao;
-	GLuint _uiBuffer;
-	GLuint _uiProgram;
-	GLuint _uiModelView, _uiProjection;
-
-	mat4 _mxView, _mxProjection;
-	mat4  _mxTRS;
-	mat4 _mxOri;
-	mat4 _mxMVFinal;
-
-	bool  _bUpdateMV;
-	bool  _bUpdateProj;
 
 	void CreateBufferObject();
 
@@ -35,18 +24,15 @@ private:
 	Bullet *_prelink;
 	Bullet *_nextlink;
 public:
+	Transform *_transform;
 	mat4 _mxOri;
 
 	Bullet();
+	~Bullet();
 
 	void SetPoint();
-	void SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
-	GLuint GetShaderHandle() { return _uiProgram; }
 	void AutoTranslate(float dt);
-	void SetTRSMatrix(mat4 &mat);
-	void SetViewMatrix(mat4 &mat);
-	void SetProjectionMatrix(mat4 &mat);
-
+	void SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
 
 	void Draw();
 
@@ -62,6 +48,8 @@ private:
 
 	int _totCount;
 
+	float _timer;
+
 public:
 	int _shootCount = 0;
 	int _storeCount = 0;
@@ -76,7 +64,7 @@ public:
 	void BulletShoot(mat4 &mat);
 	void BulletDraw();
 	void AutoTranslate(float timeDelta);
-
+	void Update(float delta, bool isBoatShoot,mat4 matBoat);
 	void Collision();	//判定有沒有碰到敵人或超出範圍
 	void DestoryBullet();	//將子彈丟回子彈池
 };
