@@ -55,7 +55,7 @@ void MainScene::Update(float delta) {
 	if (isBoatShoot == true) {
 		if (_timer >= 0.2f) {
 			_timer = 0.0f;
-			_bulletList->BulletShoot(_pBoat->_mxTRS); //player射出子彈，傳入player座標
+			_bulletList->BulletShoot(_pBoat->_transform->_mxTRS); //player射出子彈，傳入player座標
 			k++;
 			printf("k = %d\n", k);
 			printf("%d\n", _bulletList->_shootCount);
@@ -76,5 +76,5 @@ MainScene::~MainScene() {
 }
 
 void MainScene::SetPosition(mat4 mxGT) {
-	_pBoat->SetTRSMatrix(mxGT);
+	_pBoat->_transform->SetTRSMatrix(mxGT);
 }

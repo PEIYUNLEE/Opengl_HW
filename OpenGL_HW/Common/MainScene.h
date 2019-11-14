@@ -1,6 +1,7 @@
 #include "../Header/Angel.h"
 #include "Planet.h"
 #include "PBoat.h"
+#include "Bullet.h"
 
 #define TOTBULLETCOUNT 50
 
@@ -16,7 +17,6 @@ private:
 	void CreateGameObject();
 	float _timer;
 	
-
 public:
 	PBoat *_pBoat;
 	bool isBoatShoot=false;

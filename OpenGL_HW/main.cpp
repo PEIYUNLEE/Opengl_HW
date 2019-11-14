@@ -42,7 +42,7 @@ void Win_MouseMotion(int x, int y) {
 	g_fTx = 2.5f*(x - HALF_SIZE) / (HALF_SIZE);
 	g_fTy = -2.5f*(y - HALF_SIZE) / (HALF_SIZE);
 	mxGT = Translate(g_fTx, g_fTy, 0);
-	g_MainScene->_pBoat->SetTRSMatrix(mxGT);
+	g_MainScene->_pBoat->_transform->SetTRSMatrix(mxGT);
 }
 void Win_PassiveMotion(int x, int y) {
 	mat4 mxGT, mxT;
@@ -50,7 +50,7 @@ void Win_PassiveMotion(int x, int y) {
 	g_fTx = 2.5f*(x - HALF_SIZE) / (HALF_SIZE);
 	g_fTy = -2.5f*(y - HALF_SIZE) / (HALF_SIZE);
 	mxGT = Translate(g_fTx, g_fTy, 0);
-	g_MainScene->_pBoat->SetTRSMatrix(mxGT);
+	g_MainScene->_pBoat->_transform->SetTRSMatrix(mxGT);
 }
 
 void Win_Keyboard(unsigned char key, int x, int y)

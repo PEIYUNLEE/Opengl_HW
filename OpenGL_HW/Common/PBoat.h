@@ -1,5 +1,5 @@
 #include "../Header/Angel.h"
-#include "Bullet.h"
+#include "Transform.h"
 
 #define BSPOINT_NUM 3 //side
 #define BBPOINT_NUM 4 //body
@@ -16,32 +16,26 @@ class PBoat
 private:
 	vec4 _points[BTOTPOINT_NUM];
 	vec4 _colors[BTOTPOINT_NUM];
-	GLuint _uiVao;
+	/*GLuint _uiVao;
 	GLuint _uiBuffer;
 	GLuint _uiProgram;
-	GLuint _uiModelView, _uiProjection;
+	GLuint _uiModelView, _uiProjection;*/
 
-	mat4 _mxView, _mxProjection;
+	//mat4 _mxView, _mxProjection;
+	//mat4 _mxMVFinal, _mxTRS;
 	
 
-	bool  _bUpdateMV;
-	bool  _bUpdateProj;
+	//bool  _bUpdateMV;
+	//bool  _bUpdateProj;
 
 	void CreateBufferObject();
-
 public:
-
-	mat4 _mxMVFinal,_mxTRS;
+	Transform *_transform;
 
 	PBoat();
 	~PBoat();
-
 	void SetPoint();
-	void SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
-	GLuint GetShaderHandle() { return _uiProgram; }
-	void SetTRSMatrix(mat4 &mat);
-	void SetViewMatrix(mat4 &mat);
-	void SetProjectionMatrix(mat4 &mat);
-
 	void Draw();
+
+	void SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
 };

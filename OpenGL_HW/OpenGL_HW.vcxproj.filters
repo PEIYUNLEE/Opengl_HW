@@ -59,10 +59,10 @@
     <ClCompile Include="Common\Planet.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Common\Scene.cpp">
+    <ClCompile Include="Common\Timer.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Common\Timer.cpp">
+    <ClCompile Include="Common\Transform.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -91,13 +91,10 @@
     <ClInclude Include="Common\Planet.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Common\Scene.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\Struct.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="Common\Timer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Transform.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

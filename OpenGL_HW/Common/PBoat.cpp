@@ -2,9 +2,11 @@
 
 
 PBoat::PBoat() {
-
+	_transform = new Transform(BTOTPOINT_NUM);
 	SetPoint();
-	CreateBufferObject();
+	_transform->_points = _points;
+	_transform->_colors = _colors;
+	_transform->CreateBufferObject();
 }
 
 PBoat::~PBoat() {
@@ -101,59 +103,12 @@ void PBoat::SetPoint() {
 
 }
 
-void PBoat::CreateBufferObject() {
-
-	glGenVertexArrays(1, &_uiVao);
-	glBindVertexArray(_uiVao);
-
-	glGenBuffers(1, &_uiBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, _uiBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(_points) + sizeof(_colors), NULL, GL_STATIC_DRAW);
-
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(_points), _points);
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(_points), sizeof(_colors), _colors);
-}
-
 void PBoat::SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle) {
-
-	if (uiShaderHandle == MAX_UNSIGNED_INT) _uiProgram = InitShader("vsVtxColor.glsl", "fsVtxColor.glsl");
-	else _uiProgram = uiShaderHandle;
-
-	GLuint vPosition = glGetAttribLocation(_uiProgram, "vPosition");
-	glEnableVertexAttribArray(vPosition);
-	glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-
-	GLuint vColor = glGetAttribLocation(_uiProgram, "vColor");
-	glEnableVertexAttribArray(vColor);
-	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(_points)));
-
-	_uiModelView = glGetUniformLocation(_uiProgram, "ModelView");
-	_mxView = mxView;
-	glUniformMatrix4fv(_uiModelView, 1, GL_TRUE, _mxView);
-
-	_uiProjection = glGetUniformLocation(_uiProgram, "Projection");
-	_mxProjection = mxProjection;
-	glUniformMatrix4fv(_uiProjection, 1, GL_TRUE, _mxProjection);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void PBoat::SetTRSMatrix(mat4 &mat)
-{
-	//¯x°}§ïÅÜ
-	_mxTRS = mat;
-	_bUpdateMV = true;
+	_transform->SetShader(mxView, mxProjection, uiShaderHandle);
 }
 
 void PBoat::Draw() {
-	glUseProgram(_uiProgram);
-	glBindVertexArray(_uiVao);
-
-	if (_bUpdateMV) {
-		_mxMVFinal = _mxView*_mxTRS;
-		_bUpdateMV = false;
-	}
-	glUniformMatrix4fv(_uiModelView, 1, GL_TRUE, _mxMVFinal);
+	_transform->Draw();
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, BSPOINT_NUM);
 	glDrawArrays(GL_TRIANGLE_STRIP, BSPOINT_NUM, BSPOINT_NUM);

@@ -1,5 +1,4 @@
 #include "../Header/Angel.h"
-#include "Struct.h"
 
 #define POINT_NUM 10
 
@@ -35,8 +34,9 @@ private:
 	//node
 	Bullet *_prelink;
 	Bullet *_nextlink;
-	struct Collider _collider;
 public:
+
+	vec4 _position;
 
 	Bullet();
 
