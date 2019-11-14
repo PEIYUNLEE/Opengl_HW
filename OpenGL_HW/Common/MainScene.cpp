@@ -50,14 +50,18 @@ void MainScene::Draw() {
 int k = 0;
 void MainScene::Update(float delta) {
 	_bulletList->Collision();
+
 	_timer += delta;
-	if (_timer >= 0.2f) {
-		_timer = 0.0f;
-		_bulletList->BulletShoot(_pBoat->_mxTRS); //player射出子彈，傳入player座標
-		k++;
-		printf("k = %d\n",k);
-		printf("%d\n", _bulletList->_shootCount);
+	if (isBoatShoot == true) {
+		if (_timer >= 0.2f) {
+			_timer = 0.0f;
+			_bulletList->BulletShoot(_pBoat->_mxTRS); //player射出子彈，傳入player座標
+			k++;
+			printf("k = %d\n", k);
+			printf("%d\n", _bulletList->_shootCount);
+		}
 	}
+
 	for (int i = 0; i < 3; i++)
 	{
 		_planet[i]->AutoTranslate(delta);

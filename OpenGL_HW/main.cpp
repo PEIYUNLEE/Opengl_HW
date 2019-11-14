@@ -36,6 +36,14 @@ void onFrameMove(float delta)
 }
 //----------------------------------------------------------------------------
 
+void Win_MouseMotion(int x, int y) {
+	mat4 mxGT, mxT;
+
+	g_fTx = 2.5f*(x - HALF_SIZE) / (HALF_SIZE);
+	g_fTy = -2.5f*(y - HALF_SIZE) / (HALF_SIZE);
+	mxGT = Translate(g_fTx, g_fTy, 0);
+	g_MainScene->_pBoat->SetTRSMatrix(mxGT);
+}
 void Win_PassiveMotion(int x, int y) {
 	mat4 mxGT, mxT;
 
@@ -43,7 +51,6 @@ void Win_PassiveMotion(int x, int y) {
 	g_fTy = -2.5f*(y - HALF_SIZE) / (HALF_SIZE);
 	mxGT = Translate(g_fTx, g_fTy, 0);
 	g_MainScene->_pBoat->SetTRSMatrix(mxGT);
-	//printf("%f", g_MainScene->_pBoat->_mxTRS._m[0][3]);
 }
 
 void Win_Keyboard(unsigned char key, int x, int y)
@@ -60,6 +67,10 @@ void Win_Mouse(int button, int state, int x, int y) {
 	switch (button) {
 	case GLUT_LEFT_BUTTON:   // 目前按下的是滑鼠左鍵
 		if (state == GLUT_DOWN) {
+			g_MainScene->isBoatShoot=true;
+		}
+		else if (state == GLUT_UP) {
+			g_MainScene->isBoatShoot = false;
 		}
 		break;
 	case GLUT_MIDDLE_BUTTON:  // 目前按下的是滑鼠中鍵 
@@ -98,6 +109,7 @@ int main(int argc, char **argv)
 	init();
 	
 	glutMouseFunc(Win_Mouse);
+	glutMotionFunc(Win_MouseMotion);
 	glutPassiveMotionFunc(Win_PassiveMotion);
 
 	glutDisplayFunc(GL_Display);
