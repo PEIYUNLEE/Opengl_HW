@@ -1,4 +1,8 @@
 ﻿  MainScene.cpp
 d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\mainscene.cpp(73): warning C4154: 不能在陣列運算式上使用 delete; 所以將陣列轉換成指標
+  正在產生程式碼...
+  正在略過... (未偵測到相關變更)
+  main.cpp
+  PBoat.cpp
   OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.exe
   OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.pdb (Full PDB)

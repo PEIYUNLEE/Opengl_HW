@@ -16,17 +16,6 @@ class PBoat
 private:
 	vec4 _points[BTOTPOINT_NUM];
 	vec4 _colors[BTOTPOINT_NUM];
-	/*GLuint _uiVao;
-	GLuint _uiBuffer;
-	GLuint _uiProgram;
-	GLuint _uiModelView, _uiProjection;*/
-
-	//mat4 _mxView, _mxProjection;
-	//mat4 _mxMVFinal, _mxTRS;
-	
-
-	//bool  _bUpdateMV;
-	//bool  _bUpdateProj;
 
 	void CreateBufferObject();
 public:
@@ -36,6 +25,5 @@ public:
 	~PBoat();
 	void SetPoint();
 	void Draw();
-
 	void SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
 };

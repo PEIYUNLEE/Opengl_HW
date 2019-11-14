@@ -35,8 +35,7 @@ private:
 	Bullet *_prelink;
 	Bullet *_nextlink;
 public:
-
-	vec4 _position;
+	mat4 _mxOri;
 
 	Bullet();
 
