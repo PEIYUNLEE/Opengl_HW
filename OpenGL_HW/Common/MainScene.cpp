@@ -47,14 +47,16 @@ void MainScene::Draw() {
 	_pBoat->Draw();
 
 }
-
+int k = 0;
 void MainScene::Update(float delta) {
-	//_bulletList->Collision();
+	_bulletList->Collision();
 	_timer += delta;
 	if (_timer >= 0.2f) {
 		_timer = 0.0f;
 		_bulletList->BulletShoot(_pBoat->_mxTRS); //player射出子彈，傳入player座標
-		
+		k++;
+		printf("k = %d\n",k);
+		printf("%d\n", _bulletList->_shootCount);
 	}
 	for (int i = 0; i < 3; i++)
 	{
@@ -67,4 +69,8 @@ MainScene::~MainScene() {
 	delete [] _planet;
 	delete _pBoat;
 	delete _bulletList;
+}
+
+void MainScene::SetPosition(mat4 mxGT) {
+	_pBoat->SetTRSMatrix(mxGT);
 }

@@ -2,7 +2,7 @@
 #include "Planet.h"
 #include "PBoat.h"
 
-#define TOTBULLETCOUNT 30
+#define TOTBULLETCOUNT 50
 
 class MainScene
 {
@@ -15,6 +15,7 @@ private:
 
 	void CreateGameObject();
 	float _timer;
+	
 
 public:
 	PBoat *_pBoat;
@@ -23,4 +24,6 @@ public:
 	~MainScene();
 	void Update(float timeDelta);
 	void Draw();
+
+	void SetPosition(mat4 mxGT);
 };

@@ -22,6 +22,7 @@ private:
 	mat4 _mxView, _mxProjection;
 	mat4  _mxTRS;
 	mat4 _mxOri;
+	mat4 _mxMVFinal;
 
 	bool  _bUpdateMV;
 	bool  _bUpdateProj;
@@ -36,7 +37,6 @@ private:
 	Bullet *_nextlink;
 	struct Collider _collider;
 public:
-	mat4 _mxMVFinal;
 
 	Bullet();
 
@@ -59,7 +59,7 @@ class BulletList{
 private:
 	Bullet *pUseTail, *pUseHead;
 	Bullet *pHead, *pTail, *pNewGet;
-	Bullet *pColliGet, *pGet, *pClearGet,*pDrawGet, *pNewBulletGet, *pTraGet, *getPre;
+	Bullet *pColliGet;
 
 	int _totCount;
 
