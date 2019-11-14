@@ -1,3 +1,4 @@
+#pragma once
 #include "../Header/Angel.h"
 #include "Transform.h"
 
@@ -21,4 +22,6 @@ public:
 	void SetPoint();
 	void Draw();
 	void SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
+	
+	friend class EnemyManager;
 };

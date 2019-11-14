@@ -1,17 +1,5 @@
-﻿  MainScene.cpp
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.h(4): warning C4005: 'POINT_NUM': 巨集重複定義
-  d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\bullet.h(4): note: 請參閱 'POINT_NUM' 之前的定義
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\mainscene.cpp(68): warning C4154: 不能在陣列運算式上使用 delete; 所以將陣列轉換成指標
-  Bullet.cpp
+﻿  Bullet.cpp
 d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\bullet.cpp(19): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
 d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\bullet.cpp(20): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-  正在產生程式碼...
-  正在編譯...
-  main.cpp
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.h(4): warning C4005: 'POINT_NUM': 巨集重複定義
-  d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\bullet.h(4): note: 請參閱 'POINT_NUM' 之前的定義
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\main.cpp(77): warning C4390: ';': 找到空白的控制陳述式，是正確的嗎?
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\main.cpp(80): warning C4390: ';': 找到空白的控制陳述式，是正確的嗎?
-  正在產生程式碼...
   OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.exe
   OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.pdb (Full PDB)

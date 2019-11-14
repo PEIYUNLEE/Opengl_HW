@@ -1,3 +1,4 @@
+#pragma once
 #include "../Header/Angel.h"
 
 typedef Angel::vec4  color4;

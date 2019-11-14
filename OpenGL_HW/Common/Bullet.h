@@ -1,3 +1,4 @@
+#pragma once
 #include "../Header/Angel.h"
 #include "Transform.h"
 

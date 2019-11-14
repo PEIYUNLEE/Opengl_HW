@@ -61,7 +61,6 @@ void MainScene::Update(float delta) {
 	{
 		_planet[i]->AutoTranslate(delta);
 	}
-	_bulletList->AutoTranslate(delta);
 }
 
 MainScene::~MainScene() {

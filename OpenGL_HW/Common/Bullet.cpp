@@ -179,10 +179,11 @@ void BulletList::Collision()
 		for (int i = 0; i < _shootCount; i++)
 		{
 			if (pColliGet != NULL) {
-				if (pColliGet->_transform->_mxTRS._m[1].w >= 2.0f) {
+				if (pColliGet->_transform->_mxTRS._m[1].w >= 2.0f|| pColliGet->_transform->_mxTRS._m[1].w <= -2.0f) {
 					DestoryBullet();
 					k++;
 				}
+				//if()
 				else {
 					if(pColliGet!=pUseTail)
 						pColliGet = pColliGet->_nextlink;
@@ -242,4 +243,7 @@ void BulletList::Update(float delta,bool isBoatShoot,mat4 matBoat) {
 			BulletShoot(matBoat); //player射出子彈，傳入player座標
 		}
 	}
+
+
+	AutoTranslate(delta);
 }
