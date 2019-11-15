@@ -30,9 +30,7 @@ void MainScene::CreateGameObject() {
 		idx++;
 	}
 
-	//_enemy = new Enemy;
-	//_enemy->SetShader(_mxModelView, _mxProjection);
-
+	_enemy = new Enemy(_mxModelView, _mxProjection);
 	_pBoat = new PBoat(_mxModelView, _mxProjection);
 	
 }
@@ -44,8 +42,7 @@ void MainScene::Draw() {
 	}
 
 	_pBoat->Draw();
-
-	//_enemy->Draw();
+	_enemy->Draw();
 }
 
 
@@ -62,4 +59,5 @@ void MainScene::Update(float delta) {
 MainScene::~MainScene() {
 	if (_planet != NULL) delete [] _planet;
 	if (_pBoat != NULL) delete _pBoat;
+	if (_enemy != NULL) delete _enemy;
 }

@@ -5,7 +5,7 @@ Bullet::Bullet(mat4 &mxView, mat4 &mxProjection) {
 	_prelink = NULL;
 	_nextlink = NULL;
 	SetPoint();
-	_transform = new Transform(mxView, mxProjection, POINT_NUM, _points, _colors);
+	_transform = new Transform(mxView, mxProjection, BULLET_POINT_NUM, _points, _colors);
 }
 
 Bullet::~Bullet() {
@@ -14,9 +14,9 @@ Bullet::~Bullet() {
 
 void Bullet::SetPoint() {
 	
-	for (int i = 0; i < POINT_NUM; i++) {
-		_points[i].x = 0.07f * cosf(M_PI*2.0f*(float)(i - 10) / POINT_NUM); //2拍乘以該點分之總點
-		_points[i].y = 0.07f * sinf(M_PI*2.0f*(float)(i - 10) / POINT_NUM);
+	for (int i = 0; i < BULLET_POINT_NUM; i++) {
+		_points[i].x = 0.07f * cosf(M_PI*2.0f*(float)(i - 10) / BULLET_POINT_NUM); //2拍乘以該點分之總點
+		_points[i].y = 0.07f * sinf(M_PI*2.0f*(float)(i - 10) / BULLET_POINT_NUM);
 		_points[i].w = 1.0f;
 		_colors[i] = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	}
@@ -37,7 +37,7 @@ void Bullet::AutoTranslate(float dt) {
 void Bullet::Draw() {
 	_transform->Draw();
 
-	glDrawArrays(GL_TRIANGLE_FAN, 0, POINT_NUM);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, BULLET_POINT_NUM);
 }
 
 void Bullet::Reset() {

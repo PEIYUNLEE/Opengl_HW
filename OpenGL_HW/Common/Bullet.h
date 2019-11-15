@@ -2,7 +2,7 @@
 #include "../Header/Angel.h"
 #include "Transform.h"
 
-#define POINT_NUM 10
+#define BULLET_POINT_NUM 10
 
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
@@ -12,8 +12,8 @@ class Bullet
 {
 private:
 	//data
-	vec4 _points[POINT_NUM];
-	vec4 _colors[POINT_NUM];
+	vec4 _points[BULLET_POINT_NUM];
+	vec4 _colors[BULLET_POINT_NUM];
 
 	float _fspeed =0.7f;
 	float _ftottime;
