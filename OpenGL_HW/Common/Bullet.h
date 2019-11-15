@@ -1,6 +1,8 @@
 #pragma once
 #include "../Header/Angel.h"
 #include "Transform.h"
+#include "Enemy.h"
+#include "PBoat.h"
 
 #define POINT_NUM 10
 
@@ -41,6 +43,9 @@ public:
 	friend class BulletList;
 };
 
+
+
+
 class BulletList{
 private:
 	Bullet *pUseTail, *pUseHead;
@@ -50,12 +55,14 @@ private:
 	int _totCount;
 
 	float _timer;
+	Enemy *_enemy;
+	PBoat *_player;
 
 public:
 	int _shootCount = 0;
 	int _storeCount = 0;
 
-	BulletList(mat4 g_mxModelView, mat4 g_mxProjection,int count);
+	BulletList(mat4 g_mxModelView, mat4 g_mxProjection,int count,Enemy *enemy);
 	~BulletList();
 	void PrintList();			// 印出list的所有資料
 	void PushHead();		// 在list的尾巴新增node

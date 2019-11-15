@@ -9,7 +9,7 @@ PBoat::PBoat() {
 }
 
 PBoat::~PBoat() {
-	delete _transform;
+	if(_transform != NULL) delete _transform;
 }
 
 void PBoat::SetPoint() {

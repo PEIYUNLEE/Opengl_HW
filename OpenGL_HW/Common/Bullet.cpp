@@ -10,7 +10,7 @@ Bullet::Bullet() {
 }
 
 Bullet::~Bullet() {
-	delete _transform;
+	if(_transform!=NULL) delete _transform;
 }
 
 void Bullet::SetPoint() {
@@ -49,9 +49,11 @@ void Bullet::Draw() {
 
 
 //BulletList
-BulletList::BulletList(mat4 g_mxModelView, mat4 g_mxProjection,int count) {
+BulletList::BulletList(mat4 g_mxModelView, mat4 g_mxProjection,int count,Enemy *enemy) {
 	_totCount = count; //目前所有
 	_storeCount = _totCount;
+	
+	_enemy=enemy;
 
 	//bulid bullet
 	pHead = pTail = NULL;
@@ -75,6 +77,19 @@ BulletList::~BulletList() {
 	Clear();
 }
 
+void BulletList::Clear() {
+	Bullet *pClearGet;
+	for (int i = 0; i < _totCount; i++)
+	{
+		pClearGet = pHead;
+		if (pClearGet != NULL) {
+			pHead = pClearGet->_nextlink;
+			delete pClearGet;
+			i++;
+		}
+	}
+}
+
 void BulletList::PushTail() {
 	mat4 init;
 	Bullet *pGet;
@@ -88,19 +103,6 @@ void BulletList::PushTail() {
 	pGet->_ftottime = 0.0f;
 	pTail = pGet;
 	pTail->_nextlink = NULL;
-}
-
-void BulletList::Clear() {
-	Bullet *pClearGet;
-	for (int i = 0; i < _totCount; i++)
-	{
-		pClearGet = pHead;
-		if (pClearGet != NULL) {
-			pHead = pClearGet->_nextlink;
-			delete pClearGet;
-			i++;
-		}
-	}
 }
 
 void BulletList::BulletDraw() {

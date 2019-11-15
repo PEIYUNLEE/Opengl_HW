@@ -127,6 +127,7 @@ void Planet::Draw() {
 		_mxMVFinal = _mxView*_mxTRS;
 		_bUpdateMV = false;
 	}
+
 	glUniformMatrix4fv(_uiModelView, 1, GL_TRUE, _mxMVFinal);
 
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 500);

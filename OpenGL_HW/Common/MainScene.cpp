@@ -30,13 +30,14 @@ void MainScene::CreateGameObject() {
 		idx++;
 	}
 
-	_bulletList = new BulletList(_mxModelView, _mxProjection,TOTBULLETCOUNT);
-	
+	_enemy = new Enemy;
+	_enemy->SetShader(_mxModelView, _mxProjection);
+
 	_pBoat = new PBoat;
 	_pBoat->SetShader(_mxModelView, _mxProjection);
 
-	_enemy = new Enemy;
-	_enemy->SetShader(_mxModelView, _mxProjection);
+	_bulletList = new BulletList(_mxModelView, _mxProjection,TOTBULLETCOUNT,_enemy);
+	
 }
 
 void MainScene::Draw() {
