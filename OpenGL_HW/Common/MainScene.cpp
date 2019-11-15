@@ -30,7 +30,7 @@ void MainScene::CreateGameObject() {
 		idx++;
 	}
 
-	_enemy = new Enemy(_mxModelView, _mxProjection);
+	_enemyManager = new EnemyManager(_mxModelView, _mxProjection);
 	_pBoat = new PBoat(_mxModelView, _mxProjection);
 	
 }
@@ -42,7 +42,7 @@ void MainScene::Draw() {
 	}
 
 	_pBoat->Draw();
-	_enemy->Draw();
+	_enemyManager->Draw();
 }
 
 

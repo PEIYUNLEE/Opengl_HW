@@ -3,7 +3,7 @@
 #include "Planet.h"
 #include "PBoat.h"
 #include "Bullet.h"
-#include "Enemy.h"
+#include "EnemyManager.h"
 
 
 class MainScene
@@ -12,7 +12,7 @@ private:
 	//«Å§iª«¥ó
 	
 	Planet *_planet[3];
-	Enemy *_enemy;
+	EnemyManager *_enemyManager;
 	mat4 _mxModelView, _mxProjection;
 
 	void CreateGameObject();
