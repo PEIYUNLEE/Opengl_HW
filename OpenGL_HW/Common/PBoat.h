@@ -1,6 +1,7 @@
 #pragma once
 #include "../Header/Angel.h"
 #include "Transform.h"
+#include "Bullet.h"
 
 #define BSPOINT_NUM 3 //side
 #define BBPOINT_NUM 4 //body
@@ -18,13 +19,13 @@ private:
 	vec4 _points[BTOTPOINT_NUM];
 	vec4 _colors[BTOTPOINT_NUM];
 
-	void CreateBufferObject();
 public:
 	Transform *_transform;
+	BulletList *_bulletList;
 
-	PBoat();
+	PBoat(mat4 &mxView, mat4 &mxProjection);
 	~PBoat();
 	void SetPoint();
 	void Draw();
-	void SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
+	void Update(float delta, bool isBoatShoot);
 };

@@ -5,7 +5,6 @@
 #include "Bullet.h"
 #include "Enemy.h"
 
-#define TOTBULLETCOUNT 50
 
 class MainScene
 {
@@ -27,6 +26,4 @@ public:
 	~MainScene();
 	void Update(float timeDelta);
 	void Draw();
-
-	void SetPosition(mat4 mxGT);
 };

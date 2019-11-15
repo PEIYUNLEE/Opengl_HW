@@ -30,13 +30,10 @@ void MainScene::CreateGameObject() {
 		idx++;
 	}
 
-	_enemy = new Enemy;
-	_enemy->SetShader(_mxModelView, _mxProjection);
+	//_enemy = new Enemy;
+	//_enemy->SetShader(_mxModelView, _mxProjection);
 
-	_pBoat = new PBoat;
-	_pBoat->SetShader(_mxModelView, _mxProjection);
-
-	_bulletList = new BulletList(_mxModelView, _mxProjection,TOTBULLETCOUNT,_enemy);
+	_pBoat = new PBoat(_mxModelView, _mxProjection);
 	
 }
 
@@ -46,30 +43,23 @@ void MainScene::Draw() {
 		_planet[i]->Draw();
 	}
 
-	_bulletList->BulletDraw();
-
 	_pBoat->Draw();
 
-	_enemy->Draw();
-
+	//_enemy->Draw();
 }
 
 
 void MainScene::Update(float delta) {
-	_bulletList->Update(delta,isBoatShoot, _pBoat->_transform->_mxTRS);
 
 	for (int i = 0; i < 3; i++)
 	{
 		_planet[i]->AutoTranslate(delta);
 	}
+
+	_pBoat->Update(delta, isBoatShoot);
 }
 
 MainScene::~MainScene() {
-	delete [] _planet;
-	delete _pBoat;
-	delete _bulletList;
-}
-
-void MainScene::SetPosition(mat4 mxGT) {
-	_pBoat->_transform->SetTRSMatrix(mxGT);
+	if (_planet != NULL) delete [] _planet;
+	if (_pBoat != NULL) delete _pBoat;
 }

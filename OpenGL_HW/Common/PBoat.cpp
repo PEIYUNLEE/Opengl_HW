@@ -1,15 +1,15 @@
 #include "PBoat.h"
 
-PBoat::PBoat() {
-	_transform = new Transform(BTOTPOINT_NUM);
+PBoat::PBoat(mat4 &mxView, mat4 &mxProjection) {
 	SetPoint();
-	_transform->_points = _points;
-	_transform->_colors = _colors;
-	_transform->CreateBufferObject();
+	_transform = new Transform(mxView, mxProjection, BTOTPOINT_NUM,_points,_colors);
+
+	_bulletList = new BulletList(mxView, mxProjection, 50);
 }
 
 PBoat::~PBoat() {
 	if(_transform != NULL) delete _transform;
+	if (_bulletList != NULL) delete _bulletList;
 }
 
 void PBoat::SetPoint() {
@@ -102,13 +102,10 @@ void PBoat::SetPoint() {
 
 }
 
-void PBoat::SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle) {
-	_transform->SetShader(mxView, mxProjection, uiShaderHandle);
-}
-
 void PBoat::Draw() {
-	_transform->Draw();
+	_bulletList->BulletDraw();
 
+	_transform->Draw();
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, BSPOINT_NUM);
 	glDrawArrays(GL_TRIANGLE_STRIP, BSPOINT_NUM, BSPOINT_NUM);
 	glDrawArrays(GL_TRIANGLE_STRIP, BSPOINT_NUM*2, BBPOINT_NUM);
@@ -116,4 +113,9 @@ void PBoat::Draw() {
 	glDrawArrays(GL_TRIANGLE_FAN, BSPOINT_NUM * 2 + BBPOINT_NUM+ BCPOINT_NUM, BTPOINT_NUM);
 	glDrawArrays(GL_TRIANGLE_FAN, BSPOINT_NUM * 2 + BBPOINT_NUM + BCPOINT_NUM+ BTPOINT_NUM, BPPOINT_NUM);
 	glDrawArrays(GL_TRIANGLE_FAN, BSPOINT_NUM * 2 + BBPOINT_NUM + BCPOINT_NUM + BTPOINT_NUM+ BPPOINT_NUM, BPPOINT_NUM);
+
+}
+
+void PBoat::Update(float delta,bool isBoatShoot) {
+	_bulletList->Update(delta, isBoatShoot, _transform->_mxTRS);
 }

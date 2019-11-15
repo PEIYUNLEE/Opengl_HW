@@ -2,7 +2,7 @@
 #include "../Header/Angel.h"
 #include "Transform.h"
 
-#define POINT_NUM 20 //center circle
+//#define POINT_NUM 20 //center circle
 
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;

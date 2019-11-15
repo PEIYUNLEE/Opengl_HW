@@ -1,7 +1,11 @@
 #include "Transform.h"
 
-Transform::Transform(int pointNum) {
+Transform::Transform(mat4 &mxView, mat4 &mxProjection, int pointNum, vec4 *points, vec4 *colors) {
 	_pointNum = pointNum;
+	_points = points;
+	_colors = colors;
+	CreateBufferObject();
+	SetShader(mxView, mxProjection);
 }
 
 void Transform::CreateBufferObject() {
@@ -56,5 +60,13 @@ void Transform::Draw() {
 		_bUpdateMV = false;
 	}
 	glUniformMatrix4fv(_uiModelView, 1, GL_TRUE, _mxMVFinal);
+
+}
+
+void Transform::Reset() {
+	mat4 init;
+	_mxTRS = init;
+	_mxMVFinal = init;
+	_mxOri = init;
 
 }
