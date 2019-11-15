@@ -12,7 +12,6 @@ private:
 	//«Å§iª«¥ó
 	
 	Planet *_planet[3];
-	BulletList *_bulletList;
 	Enemy *_enemy;
 	mat4 _mxModelView, _mxProjection;
 

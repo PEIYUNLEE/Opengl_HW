@@ -15,7 +15,6 @@ private:
 	GLuint _uiModelView, _uiProjection;
 
 	mat4 _mxView, _mxProjection;
-	mat4 _mxMVFinal;
 
 	bool  _bUpdateMV;
 	bool  _bUpdateProj;
@@ -28,6 +27,7 @@ private:
 public:
 	mat4 _mxOri;
 	mat4  _mxTRS;
+	mat4 _mxMVFinal;
 
 	Transform(mat4 &mxView, mat4 &mxProjection, int pointNum,vec4 *points,vec4 *colors);
 	//~Transform();

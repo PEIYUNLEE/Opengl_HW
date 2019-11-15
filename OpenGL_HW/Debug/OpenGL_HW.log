@@ -1,22 +1,7 @@
-﻿  Enemy.cpp
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(15): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(16): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-  Bullet.cpp
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\bullet.cpp(18): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\bullet.cpp(19): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-  正在產生程式碼...
-cl : 命令列 warning D9028: 最少重建失敗，還原成一般建置
-  正在編譯...
-  MainScene.cpp
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\mainscene.cpp(60): warning C4154: 不能在陣列運算式上使用 delete; 所以將陣列轉換成指標
-  PBoat.cpp
+﻿  PBoat.cpp
 d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\pboat.cpp(49): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
 d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\pboat.cpp(50): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
 d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\pboat.cpp(57): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
 d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\pboat.cpp(58): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-  main.cpp
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\main.cpp(77): warning C4390: ';': 找到空白的控制陳述式，是正確的嗎?
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\main.cpp(80): warning C4390: ';': 找到空白的控制陳述式，是正確的嗎?
-  正在產生程式碼...
   OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.exe
   OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.pdb (Full PDB)

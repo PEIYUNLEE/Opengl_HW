@@ -189,17 +189,8 @@ void BulletList::DestoryBullet()
 	}
 }
 
-void BulletList::Update(float delta,bool isBoatShoot,mat4 matBoat) {
-
-	_timer += delta;
-	if (isBoatShoot == true) {
-		if (_timer >= 0.2f) {
-			_timer = 0.0f;
-			BulletShoot(matBoat); //player射出子彈，傳入player座標
-		}
-	}
-	
-
+void BulletList::Update(float delta,mat4 matPlayer) {
+	//player的bulletllist
 	//做每顆子彈要做的事
 	if (_shootCount > 0) {
 		pUpdateGet = pUseHead;
@@ -211,11 +202,16 @@ void BulletList::Update(float delta,bool isBoatShoot,mat4 matBoat) {
 					DestoryBullet();
 					k++;
 				}
+				/*else if (_collider.CircleCollision(pUpdateGet->_transform->_mxTRS, matEnemy,)) {
+					Print(pUpdateGet->_transform->_mxMVFinal);
+					Print(matParent);
+				}*/
 				else {
 					pUpdateGet->AutoTranslate(delta);
 					if (pUpdateGet != pUseTail)
 						pUpdateGet = pUpdateGet->_nextlink;
 				}
+
 			}
 		}
 

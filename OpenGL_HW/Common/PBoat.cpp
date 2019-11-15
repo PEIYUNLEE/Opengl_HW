@@ -117,5 +117,15 @@ void PBoat::Draw() {
 }
 
 void PBoat::Update(float delta,bool isBoatShoot) {
-	_bulletList->Update(delta, isBoatShoot, _transform->_mxTRS);
+	_timer += delta;
+	if (isBoatShoot == true) {
+		if (_timer >= 0.2f) {
+			_timer = 0.0f;
+			_bulletList->BulletShoot(_transform->_mxTRS); //player射出子彈，傳入player座標
+		}
+	}
+
+
+	_bulletList->Update(delta, _transform->_mxTRS);
+
 }
