@@ -4,7 +4,7 @@ PBoat::PBoat(mat4 &mxView, mat4 &mxProjection) {
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, BTOTPOINT_NUM,_points,_colors);
 
-	_bulletList = new BulletList(mxView, mxProjection, 50);
+	_bulletList = new BulletList(mxView, mxProjection, 50, 'p');
 }
 
 PBoat::~PBoat() {
@@ -13,6 +13,8 @@ PBoat::~PBoat() {
 }
 
 void PBoat::SetPoint() {
+	_points = new vec4[BTOTPOINT_NUM];
+	_colors = new vec4[BTOTPOINT_NUM];
 	//pBRSide
 	_points[0] = vec4(0.150f, -0.12f, 0.0, 1.0f);
 	_points[1] = vec4(0.230f, -0.12f, 0.0, 1.0f);
@@ -126,6 +128,6 @@ void PBoat::Update(float delta,bool isBoatShoot) {
 	}
 
 
-	_bulletList->Update(delta, _transform->_mxTRS);
+	_bulletList->Update(delta);
 
 }

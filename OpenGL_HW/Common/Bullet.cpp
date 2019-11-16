@@ -1,9 +1,10 @@
 #include "Bullet.h"
 
 
-Bullet::Bullet(mat4 &mxView, mat4 &mxProjection) {
+Bullet::Bullet(mat4 &mxView, mat4 &mxProjection, char character) {
 	_prelink = NULL;
 	_nextlink = NULL;
+	_character = character;
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, BULLET_POINT_NUM, _points, _colors);
 }
@@ -13,7 +14,9 @@ Bullet::~Bullet() {
 }
 
 void Bullet::SetPoint() {
-	
+	_points = new vec4[BULLET_POINT_NUM];
+	_colors = new vec4[BULLET_POINT_NUM];
+
 	for (int i = 0; i < BULLET_POINT_NUM; i++) {
 		_points[i].x = 0.07f * cosf(M_PI*2.0f*(float)(i - 10) / BULLET_POINT_NUM); //2拍乘以該點分之總點
 		_points[i].y = 0.07f * sinf(M_PI*2.0f*(float)(i - 10) / BULLET_POINT_NUM);
@@ -28,9 +31,15 @@ void Bullet::AutoTranslate(float dt) {
 	GLfloat btx = 0.0f;
 	GLfloat bty = 0.0f;
 
+
 	_ftottime += dt;
 	bty = _ftottime*_fspeed;
-	mxTra = Translate(btx, bty, 0.0f);
+
+	if (_character == 'e')
+		mxTra = Translate(btx, -bty, 0.0f);
+	else if (_character == 'p')
+		mxTra = Translate(btx, bty, 0.0f);
+
 	_transform->SetTRSMatrix(mxTra*_transform->_mxOri);
 }
 
@@ -49,21 +58,22 @@ void Bullet::Reset() {
 
 
 //BulletList
-BulletList::BulletList(mat4 &mxView, mat4 &mxProjection, int totCount) {
+BulletList::BulletList(mat4 &mxView, mat4 &mxProjection, int totCount, char character) {
 	_totCount = totCount; //目前所有
 	_storeCount = _totCount;
 	_shootCount = 0;
+	_character = character;
 
 	//bulid bullet
-	pHead = pTail = NULL;
-	pHead = new Bullet(mxView, mxProjection);
-	pTail = pHead;
+	pBHead = pBTail = NULL;
+	pBHead = new Bullet(mxView, mxProjection , _character);
+	pBTail = pBHead;
 	for (int i= 1; i < _totCount; i++)
 	{
-		pNewGet = new Bullet(mxView, mxProjection);
-		pNewGet->_prelink = pTail;
-		pTail->_nextlink = pNewGet;
-		pTail = pNewGet;
+		pBNewGet = new Bullet(mxView, mxProjection , _character);
+		pBNewGet->_prelink = pBTail;
+		pBTail->_nextlink = pBNewGet;
+		pBTail = pBNewGet;
 	}
 }
 
@@ -75,9 +85,9 @@ void BulletList::Clear() {
 	Bullet *pClearGet;
 	for (int i = 0; i < _totCount; i++)
 	{
-		pClearGet = pHead;
+		pClearGet = pBHead;
 		if (pClearGet != NULL) {
-			pHead = pClearGet->_nextlink;
+			pBHead = pClearGet->_nextlink;
 			delete pClearGet;
 			i++;
 		}
@@ -86,19 +96,19 @@ void BulletList::Clear() {
 
 void BulletList::PushTail() {
 	Bullet *pGet;
-	pGet = pUpdateGet;
+	pGet = pBUpdateGet;
 
-	pTail->_nextlink = pGet;
-	pGet->_prelink = pTail;
+	pBTail->_nextlink = pGet;
+	pGet->_prelink = pBTail;
 	pGet->Reset();
-	pTail = pGet;
-	pTail->_nextlink = NULL;
+	pBTail = pGet;
+	pBTail->_nextlink = NULL;
 }
 
 void BulletList::BulletDraw() {
 	if (_shootCount > 0) {
 		Bullet *pDrawGet;
-		pDrawGet = pUseHead;
+		pDrawGet = pBUseHead;
 		for (int i = 0; i < _shootCount; i++)
 		{
 			pDrawGet->Draw();
@@ -111,35 +121,36 @@ void BulletList::BulletShoot(mat4 &mat) {
 	Bullet *pNewBulletGet;
 	if (_shootCount == 0)	//當目前use槽沒東西，跟子彈池要子彈
 	{
-		pNewBulletGet = pHead;	//當目前use槽沒東西，跟子彈池要子彈
-		pUseHead = pNewBulletGet;
+		pNewBulletGet = pBHead;	//當目前use槽沒東西，跟子彈池要子彈
+		pBUseHead = pNewBulletGet;
 
-		pHead = pHead->_nextlink;	
-		pHead -> _prelink = NULL;	//子彈從子彈池移出
+		pBHead = pBHead->_nextlink;	
+		pBHead -> _prelink = NULL;	//子彈從子彈池移出
 
 		pNewBulletGet-> _prelink = NULL;
 		pNewBulletGet-> _nextlink = NULL;
 		pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
-		pUseTail = pNewBulletGet;
+		pBUseTail = pNewBulletGet;
 		_shootCount++;
 		_storeCount--;
 	}
 	else
 	{
 		if (_shootCount < _totCount) {
-			pNewBulletGet = pHead;	//跟子彈池要子彈
+			pNewBulletGet = pBHead;	//跟子彈池要子彈
 			if (_shootCount < _totCount - 1) {
-				pHead = pHead->_nextlink;
-				pHead->_prelink = NULL;	//子彈從子彈池移出
+				pBHead = pBHead->_nextlink;
+				pBHead->_prelink = NULL;	//子彈從子彈池移出
 			}
-			else if (pHead == pTail) {
-				pHead = pTail = NULL;	//子彈從子彈池移出
+			else if (pBHead == pBTail && pBHead != NULL) {
+				pBHead = NULL;	//子彈從子彈池移出
+				pBTail = NULL;
 			}
-			pUseTail->_nextlink = pNewBulletGet;
-			pNewBulletGet->_prelink = pUseTail;
+			pBUseTail->_nextlink = pNewBulletGet;
+			pNewBulletGet->_prelink = pBUseTail;
 			pNewBulletGet->_nextlink = NULL;
 			pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
-			pUseTail = pNewBulletGet;
+			pBUseTail = pNewBulletGet;
 			_shootCount++;
 			_storeCount--;
 		}
@@ -151,55 +162,55 @@ void BulletList::BulletShoot(mat4 &mat) {
 
 
 
-void BulletList::DestoryBullet()
+void BulletList::DestroyBullet()
 {
 	Bullet *pGetPre,*pGetNext;
-	if (pUpdateGet == pUseHead) {
+	if (pBUpdateGet == pBUseHead) {
 		//如果消失的是顯示的第一顆子彈(_prelink==NULL)
-		if (pUseHead == pUseTail) //只剩一顆
-			pUseHead = pUseTail = NULL;
+		if (pBUseHead == pBUseTail) //只剩一顆
+			pBUseHead = pBUseTail = NULL;
 		else
 		{
-			pUseHead = pUseHead->_nextlink;
-			pUseHead->_prelink = NULL;
+			pBUseHead = pBUseHead->_nextlink;
+			pBUseHead->_prelink = NULL;
 		}
 		
 		PushTail();	//將子彈丟回子彈池
-		pUpdateGet = pUseHead;
+		pBUpdateGet = pBUseHead;
 	}
-	else if(pUpdateGet == pUseTail)
+	else if(pBUpdateGet == pBUseTail)
 	{
 		//如果消失的是顯示的最後一顆子彈(_nextlink==NULL)
 		//且一定是pUseHead != pUseTail 不只剩一顆
-		pGetPre = pUpdateGet->_prelink;
-		pUseTail = pGetPre;
-		pUseTail->_nextlink = NULL;
+		pGetPre = pBUpdateGet->_prelink;
+		pBUseTail = pGetPre;
+		pBUseTail->_nextlink = NULL;
 		PushTail();	//將子彈丟回子彈池
-		pUpdateGet = NULL;	//結束檢查
+		pBUpdateGet = NULL;	//結束檢查
 	}
 	else {
-		pGetPre = pUpdateGet->_prelink;
-		pGetNext = pUpdateGet->_nextlink;
+		pGetPre = pBUpdateGet->_prelink;
+		pGetNext = pBUpdateGet->_nextlink;
 
 		pGetPre->_nextlink = pGetNext;
 		pGetNext->_prelink = pGetPre;	//重新連結
 
 		PushTail();	//將子彈丟回子彈池
-		pUpdateGet = pGetNext;
+		pBUpdateGet = pGetNext;
 	}
 }
 
-void BulletList::Update(float delta,mat4 matPlayer) {
+void BulletList::Update(float delta) {
 	//player的bulletllist
 	//做每顆子彈要做的事
 	if (_shootCount > 0) {
-		pUpdateGet = pUseHead;
+		pBUpdateGet = pBUseHead;
 		int k = 0;
 		for (int i = 0; i < _shootCount; i++)
 		{
-			if (pUpdateGet != NULL) {
-				if (pUpdateGet->_transform->_mxTRS._m[1].w >= 2.0f || pUpdateGet->_transform->_mxTRS._m[1].w <= -2.0f) {
-					DestoryBullet();
+			if (pBUpdateGet != NULL) {
+				if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.0f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.0f) {
+					DestroyBullet();
 					k++;
 				}
 				/*else if (_collider.CircleCollision(pUpdateGet->_transform->_mxTRS, matEnemy,)) {
@@ -207,9 +218,9 @@ void BulletList::Update(float delta,mat4 matPlayer) {
 					Print(matParent);
 				}*/
 				else {
-					pUpdateGet->AutoTranslate(delta);
-					if (pUpdateGet != pUseTail)
-						pUpdateGet = pUpdateGet->_nextlink;
+					pBUpdateGet->AutoTranslate(delta);
+					if (pBUpdateGet != pBUseTail)
+						pBUpdateGet = pBUpdateGet->_nextlink;
 				}
 
 			}

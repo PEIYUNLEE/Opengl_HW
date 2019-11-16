@@ -16,13 +16,13 @@ typedef Angel::vec4  point4;
 class PBoat
 {
 private:
-	vec4 _points[BTOTPOINT_NUM];
-	vec4 _colors[BTOTPOINT_NUM];
+	vec4 *_points;
+	vec4 *_colors;
 
 	float _timer;
 public:
-	Transform * _transform;
-	BulletList * _bulletList;
+	Transform *_transform;
+	BulletList *_bulletList;
 
 	PBoat(mat4 &mxView, mat4 &mxProjection);
 	~PBoat();

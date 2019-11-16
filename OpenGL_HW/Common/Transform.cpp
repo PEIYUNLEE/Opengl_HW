@@ -68,5 +68,4 @@ void Transform::Reset() {
 	_mxTRS = init;
 	_mxMVFinal = init;
 	_mxOri = init;
-
 }

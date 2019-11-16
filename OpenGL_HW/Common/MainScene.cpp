@@ -42,7 +42,7 @@ void MainScene::Draw() {
 	}
 
 	_pBoat->Draw();
-	_enemyManager->Draw();
+	_enemyManager->EnemyDraw();
 }
 
 
@@ -54,10 +54,11 @@ void MainScene::Update(float delta) {
 	}
 
 	_pBoat->Update(delta, isBoatShoot);
+	_enemyManager->Update(delta);
 }
 
 MainScene::~MainScene() {
 	if (_planet != NULL) delete [] _planet;
 	if (_pBoat != NULL) delete _pBoat;
-	if (_enemy != NULL) delete _enemy;
+	if (_enemyManager != NULL) delete _enemyManager;
 }

@@ -2,9 +2,10 @@
 #include "../Header/Angel.h"
 #include "Planet.h"
 #include "PBoat.h"
-#include "Bullet.h"
 #include "EnemyManager.h"
-
+//class Planet;
+//class PBoat;
+//class EnemyManager;
 
 class MainScene
 {

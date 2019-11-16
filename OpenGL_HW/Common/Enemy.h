@@ -13,20 +13,28 @@ protected:
 	int _pointNum;
 	vec4 *_points;
 	vec4 *_colors;
+	char _type;
+	float _ftottime;
+	float _fspeed;
+	float _attackTimer;
+	float _attakDuration;
 public:
 	Transform *_transform;
-
-	Enemy(mat4 &_mxView, mat4 &_mxProjection, int pointNum);
-	virtual ~Enemy();
-
-	virtual void SetPoint() = 0;
-	virtual void Shoot() = 0;
-
-	void Draw();
-	//void Destroy();
+	BulletList *_bulletList;
 
 	Enemy *_prelink;
 	Enemy *_nextlink;
+
+	Enemy(mat4 &_mxView, mat4 &_mxProjection, float fspeed,float attackDuration, int pointNum, char type);
+	virtual ~Enemy();
+
+	virtual void SetPoint() = 0;
+	virtual void Attack(float ftottime) = 0;
+	virtual void AutoTranslate(float ftottime) = 0;
+	virtual void Draw() = 0;
+
+	void Action(float delta);
+	void Reset();
 
 	friend class EnemyManager;
 };
@@ -34,10 +42,18 @@ public:
 class EnemySmall : public Enemy
 {
 private:
-	void SetPoint();
-	void Shoot();
+	void Action(float delta);
+	void Attack(float delta);
+	void AutoTranslate(float ftottime);
 public:
-	EnemySmall(mat4 &mxView, mat4 &mxProjection,int pointNum = 20) : Enemy(mxView,mxProjection, pointNum) {};
+	EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f,float attackDuration = 1.0f, int pointNum = 20, char type = 's') :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
+
+		SetPoint();
+		_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
+	};
 	//~EnemySmall();
+
+	void Draw();
+	void SetPoint();
 };
 
