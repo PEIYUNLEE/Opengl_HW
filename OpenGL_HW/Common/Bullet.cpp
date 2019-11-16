@@ -1,10 +1,13 @@
 #include "Bullet.h"
+#include "PBoat.h"
+#include "EnemyManager.h"
 
 
 Bullet::Bullet(mat4 &mxView, mat4 &mxProjection, char character) {
 	_prelink = NULL;
 	_nextlink = NULL;
 	_character = character;
+	_circlecollider = 0.7f;
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, BULLET_POINT_NUM, _points, _colors);
 }
@@ -160,8 +163,6 @@ void BulletList::BulletShoot(mat4 &mat) {
 	}
 }
 
-
-
 void BulletList::DestroyBullet()
 {
 	Bullet *pGetPre,*pGetNext;
@@ -200,7 +201,7 @@ void BulletList::DestroyBullet()
 	}
 }
 
-void BulletList::Update(float delta) {
+void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
 	//player的bulletllist
 	//做每顆子彈要做的事
 	if (_shootCount > 0) {
@@ -213,9 +214,8 @@ void BulletList::Update(float delta) {
 					DestroyBullet();
 					k++;
 				}
-				/*else if (_collider.CircleCollision(pUpdateGet->_transform->_mxTRS, matEnemy,)) {
-					Print(pUpdateGet->_transform->_mxMVFinal);
-					Print(matParent);
+				/*else if (getEnemyManager->_usetotCount > 0) {
+					bool test = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_circlecollider, getEnemyManager);
 				}*/
 				else {
 					pBUpdateGet->AutoTranslate(delta);
@@ -228,6 +228,37 @@ void BulletList::Update(float delta) {
 
 		_shootCount -= k;
 		_storeCount += k;
+	}
+
+}
+
+void BulletList::Update(float delta, PBoat *getPBoat) {
+	//player的bulletllist
+	//做每顆子彈要做的事
+	if (_shootCount > 0) {
+		/*pBUpdateGet = pBUseHead;
+		int k = 0;
+		for (int i = 0; i < _shootCount; i++)
+		{
+			if (pBUpdateGet != NULL) {
+				if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.0f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.0f) {
+					DestroyBullet();
+					k++;
+				}
+				else if (getPBoat->_usetotCount > 0) {
+					bool test = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_circlecollider, getEnemyManager);
+				}
+				else {
+					pBUpdateGet->AutoTranslate(delta);
+					if (pBUpdateGet != pBUseTail)
+						pBUpdateGet = pBUpdateGet->_nextlink;
+				}
+
+			}
+		}
+
+		_shootCount -= k;
+		_storeCount += k;*/
 	}
 
 }

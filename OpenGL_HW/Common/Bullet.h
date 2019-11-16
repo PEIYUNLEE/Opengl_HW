@@ -1,6 +1,9 @@
 #pragma once
 #include "../Header/Angel.h"
 #include "Transform.h"
+class EnemyManager;
+class PBoat;
+#include "Collision.h"
 
 #define BULLET_POINT_NUM 10
 
@@ -23,6 +26,8 @@ private:
 	//node
 	Bullet *_prelink;
 	Bullet *_nextlink;
+
+	float _circlecollider;
 public:
 	Transform *_transform;
 
@@ -53,7 +58,7 @@ private:
 
 	char _character;
 
-	//Collision _collider;
+	Collision _colliSystem;
 public:
 
 	BulletList(mat4 &mxView, mat4 &mxProjection, int totCount , char character);
@@ -63,8 +68,8 @@ public:
 	void Clear();					// 把整串list刪除
 	void BulletShoot(mat4 &mat);
 	void BulletDraw();
-	//void Update(float delta,mat4 matPlayer);
-	void Update(float delta);
+	void Update(float delta, PBoat *getPBoat);
+	void Update(float delta, EnemyManager *getEnemyManager);
 	//void Collision();	//判定有沒有碰到敵人或超出範圍
 	void DestroyBullet();	//將子彈丟回子彈池
 };

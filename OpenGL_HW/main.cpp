@@ -1,5 +1,7 @@
 #include "Header\Angel.h"
 #include "Common\MainScene.h"
+#include "Common\PBoat.h"
+#include "Common\EnemyManager.h"
 
 #define SCREEN_SIZE 800
 #define HALF_SIZE (SCREEN_SIZE/2)

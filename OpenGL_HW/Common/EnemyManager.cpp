@@ -1,6 +1,6 @@
 #include "EnemyManager.h"
-#include <cstdlib> /* 亂數相關函數 */
-#include <ctime>   /* 時間相關函數 */
+#include "Enemy.h"
+#include "PBoat.h"
 
 EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int totCount_m) {
 
@@ -42,6 +42,10 @@ EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int t
 
 EnemyManager::~EnemyManager() {
 	Clear();
+}
+
+void EnemyManager::GetComponent(PBoat *getPBoat) {
+	_getPBoat = getPBoat;
 }
 
 void EnemyManager::Clear() {
@@ -263,7 +267,7 @@ void EnemyManager::Update(float dt) {
 					k++;
 				}
 				else {
-					pEUpdateGet->Action(dt);	//攻擊、move //FIX
+					pEUpdateGet->Action(dt,_getPBoat);	//攻擊、move //FIX
 					if (pEUpdateGet != pEUseTail)
 						pEUpdateGet = pEUpdateGet->_nextlink;
 				}

@@ -1,4 +1,6 @@
 #include "Enemy.h"
+#include "PBoat.h"
+#include "Bullet.h"
 
 Enemy::Enemy(mat4 &mxView, mat4 &mxProjection, float fspeed,float attackDuration, int pointNum, char type){
 	_type = type;
@@ -7,6 +9,8 @@ Enemy::Enemy(mat4 &mxView, mat4 &mxProjection, float fspeed,float attackDuration
 	_attakDuration = attackDuration;
 	_pointNum = pointNum;
 	_fspeed = fspeed;
+	_circlecollider = 0.07f;
+	_isDead = false;
 
 	_bulletList = new BulletList(mxView, mxProjection, 10 , 'e');
 }
@@ -17,18 +21,19 @@ Enemy::~Enemy() {
 	if (_colors != NULL) delete _colors;
 	if (_bulletList != NULL) delete _bulletList;
 }
-void Enemy::Action(float dt) {
+void Enemy::Action(float dt, PBoat *getPBoat) {
 	_ftottime += dt;
 	Attack(dt);
 	//AutoTranslate(_ftottime);			//fix
 
-	_bulletList->Update(dt);
+	_bulletList->Update(dt, getPBoat);
 }
 
 void Enemy::Reset() {
 	_transform->Reset();
 	_ftottime = 0;
 	_attackTimer = 0;
+	_isDead = false;
 }
 
 
@@ -74,4 +79,7 @@ void EnemySmall::Draw() {
 	glDrawArrays(GL_TRIANGLE_FAN, 0, _pointNum);
 }
 
+void EnemySmall::Hurt() {
+	//_isDead = true;
+}
 

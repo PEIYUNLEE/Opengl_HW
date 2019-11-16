@@ -1,7 +1,11 @@
 #pragma once
+
+#include <cstdlib> /* 亂數相關函數 */
+#include <ctime>   /* 時間相關函數 */
 #include "../Header/Angel.h"
 #include "Transform.h"
-#include "Bullet.h"
+class BulletList;
+class EnemyManager;
 
 #define BSPOINT_NUM 3 //side
 #define BBPOINT_NUM 4 //body
@@ -20,12 +24,14 @@ private:
 	vec4 *_colors;
 
 	float _timer;
+	EnemyManager *_getEnemyManager;
 public:
 	Transform *_transform;
 	BulletList *_bulletList;
 
 	PBoat(mat4 &mxView, mat4 &mxProjection);
 	~PBoat();
+	void GetComponent(EnemyManager *getEnemyManager);
 	void SetPoint();
 	void Draw();
 	void Update(float delta, bool isBoatShoot);

@@ -1,7 +1,9 @@
 #pragma once
 #include "../Header/Angel.h"
 #include "Transform.h"
-#include "Bullet.h"
+class BulletList;
+class PBoat;
+
 
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
@@ -18,12 +20,16 @@ protected:
 	float _fspeed;
 	float _attackTimer;
 	float _attakDuration;
+	bool _isDead;
+
 public:
 	Transform *_transform;
 	BulletList *_bulletList;
 
 	Enemy *_prelink;
 	Enemy *_nextlink;
+
+	float _circlecollider;
 
 	Enemy(mat4 &_mxView, mat4 &_mxProjection, float fspeed,float attackDuration, int pointNum, char type);
 	virtual ~Enemy();
@@ -32,8 +38,9 @@ public:
 	virtual void Attack(float ftottime) = 0;
 	virtual void AutoTranslate(float ftottime) = 0;
 	virtual void Draw() = 0;
+	virtual void Hurt() = 0;
 
-	void Action(float delta);
+	void Action(float delta, PBoat *getPBoat);
 	void Reset();
 
 	friend class EnemyManager;
@@ -54,6 +61,7 @@ public:
 	//~EnemySmall();
 
 	void Draw();
+	void Hurt();
 	void SetPoint();
 };
 

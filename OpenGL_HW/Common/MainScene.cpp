@@ -1,4 +1,6 @@
 #include "MainScene.h"
+#include "PBoat.h"
+#include "EnemyManager.h"
 
 MainScene::MainScene(mat4 g_mxModelView, mat4 g_mxProjection) {
 	_mxModelView = g_mxModelView;
@@ -32,7 +34,9 @@ void MainScene::CreateGameObject() {
 
 	_enemyManager = new EnemyManager(_mxModelView, _mxProjection);
 	_pBoat = new PBoat(_mxModelView, _mxProjection);
-	
+
+	_enemyManager->GetComponent(_pBoat);
+	_pBoat->GetComponent(_enemyManager);
 }
 
 void MainScene::Draw() {

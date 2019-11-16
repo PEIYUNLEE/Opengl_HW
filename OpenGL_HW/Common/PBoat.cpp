@@ -1,4 +1,6 @@
 #include "PBoat.h"
+#include "Bullet.h"
+#include "EnemyManager.h"
 
 PBoat::PBoat(mat4 &mxView, mat4 &mxProjection) {
 	SetPoint();
@@ -10,6 +12,10 @@ PBoat::PBoat(mat4 &mxView, mat4 &mxProjection) {
 PBoat::~PBoat() {
 	if(_transform != NULL) delete _transform;
 	if (_bulletList != NULL) delete _bulletList;
+}
+
+void PBoat::GetComponent(EnemyManager *getEnemyManager) {
+	_getEnemyManager = getEnemyManager;
 }
 
 void PBoat::SetPoint() {
@@ -128,6 +134,6 @@ void PBoat::Update(float delta,bool isBoatShoot) {
 	}
 
 
-	_bulletList->Update(delta);
+	_bulletList->Update(delta,_getEnemyManager);
 
 }
