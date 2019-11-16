@@ -23,7 +23,7 @@ Enemy::~Enemy() {
 }
 void Enemy::Action(float dt, PBoat *getPBoat) {
 	_ftottime += dt;
-	Attack(dt);
+	//Attack(dt);
 	//AutoTranslate(_ftottime);			//fix
 
 	_bulletList->Update(dt, getPBoat);
@@ -56,7 +56,6 @@ void EnemySmall::SetPoint() {
 void EnemySmall::Attack(float dt){
 	_attackTimer += dt;
 	if (_attackTimer >= _attakDuration) {
-		Print(_attackTimer);
 		_attackTimer = 0.0f;
 		_bulletList->BulletShoot(_transform->_mxTRS);
 	}

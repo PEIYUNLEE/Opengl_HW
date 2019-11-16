@@ -18,7 +18,7 @@ bool Collision::OnCircleCollision(mat4 mat_Object, float cObjectRadius, EnemyMan
 			dx = (mat_Object._m[0].w - pGet->_transform->_mxTRS._m[0].w);
 			dy = (mat_Object._m[1].w - pGet->_transform->_mxTRS._m[1].w);
 			dsquare = dx*dx + dy*dy;
-			if (dsquare <= radiusPlus*radiusPlus) {
+			if (dsquare <= radiusPlus*radiusPlus && dsquare!=0) {
 				pGet->Hurt(); //Enemy反應
 				return true; //銷毀物件
 			}

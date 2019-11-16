@@ -7,7 +7,7 @@ Bullet::Bullet(mat4 &mxView, mat4 &mxProjection, char character) {
 	_prelink = NULL;
 	_nextlink = NULL;
 	_character = character;
-	_circlecollider = 0.7f;
+	_circlecollider = 0.07f;
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, BULLET_POINT_NUM, _points, _colors);
 }
@@ -207,6 +207,7 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
 	if (_shootCount > 0) {
 		pBUpdateGet = pBUseHead;
 		int k = 0;
+		bool result = false;
 		for (int i = 0; i < _shootCount; i++)
 		{
 			if (pBUpdateGet != NULL) {
@@ -214,13 +215,20 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
 					DestroyBullet();
 					k++;
 				}
-				/*else if (getEnemyManager->_usetotCount > 0) {
-					bool test = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_circlecollider, getEnemyManager);
-				}*/
 				else {
-					pBUpdateGet->AutoTranslate(delta);
-					if (pBUpdateGet != pBUseTail)
-						pBUpdateGet = pBUpdateGet->_nextlink;
+					if (getEnemyManager->_usetotCount > 0)
+					{
+						result = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_circlecollider, getEnemyManager);
+					}
+					if (result == true) {
+						DestroyBullet();
+						k++;
+					}
+					else if (result == false) {
+						pBUpdateGet->AutoTranslate(delta);
+						if (pBUpdateGet != pBUseTail)
+							pBUpdateGet = pBUpdateGet->_nextlink;
+					}
 				}
 
 			}
@@ -236,7 +244,7 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 	//player的bulletllist
 	//做每顆子彈要做的事
 	if (_shootCount > 0) {
-		/*pBUpdateGet = pBUseHead;
+		pBUpdateGet = pBUseHead;
 		int k = 0;
 		for (int i = 0; i < _shootCount; i++)
 		{
@@ -245,9 +253,9 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 					DestroyBullet();
 					k++;
 				}
-				else if (getPBoat->_usetotCount > 0) {
+				/*else if (getPBoat->_usetotCount > 0) {
 					bool test = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_circlecollider, getEnemyManager);
-				}
+				}*/
 				else {
 					pBUpdateGet->AutoTranslate(delta);
 					if (pBUpdateGet != pBUseTail)
@@ -258,7 +266,7 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 		}
 
 		_shootCount -= k;
-		_storeCount += k;*/
+		_storeCount += k;
 	}
 
 }

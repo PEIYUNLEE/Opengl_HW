@@ -240,8 +240,6 @@ void EnemyManager::Update(float dt) {
 		EnemyGenerater('s', _genMat);
 		_genDuration = RandomTime();		//FIX 3.0
 		_genMat = RandomPosition();	//FIX Y2.55F
-		Print(_genDuration);
-		Print(_genMat);
 	}
 
 	//做畫面Enemy要做的事
