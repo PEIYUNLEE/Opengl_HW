@@ -216,6 +216,9 @@ void BulletList::ResetBulletList()
 	_storeCount = _totCount;
 }
 
+
+Bullet* bulletResult;
+
 void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
 	//player的bulletllist
 	//做每顆子彈要做的事
@@ -226,7 +229,12 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
 		for (int i = 0; i < _shootCount; i++)
 		{
 			if (pBUpdateGet != NULL) {
-				if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.5f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.5f) {
+				if (bulletResult == pBUpdateGet) {
+					DestroyBullet();
+					k++;
+					bulletResult = NULL;
+				}
+				else if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.5f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.5f) {
 					DestroyBullet();
 					k++;
 				}
@@ -261,6 +269,7 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 	if (_shootCount > 0) {
 		pBUpdateGet = pBUseHead;
 		int k = 0;
+		bool result = false;
 		for (int i = 0; i < _shootCount; i++)
 		{
 			if (pBUpdateGet != NULL) {
@@ -268,13 +277,24 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 					DestroyBullet();
 					k++;
 				}
-				/*else if (getPBoat->_usetotCount > 0) {
-					bool test = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_circlecollider, getEnemyManager);
-				}*/
 				else {
-					pBUpdateGet->AutoTranslate(delta);
-					if (pBUpdateGet != pBUseTail)
-						pBUpdateGet = pBUpdateGet->_nextlink;
+					bulletResult = BulletVsBullet(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_circlecollider,getPBoat);
+					if (bulletResult != NULL) {
+						DestroyBullet();
+						k++;
+					}
+					else {
+						//result = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, getPBoat->_transform->_mxTRS, _circlecollider);
+						if (result == true) {
+							DestroyBullet();
+							k++;
+						}
+						else if (result == false) {
+							pBUpdateGet->AutoTranslate(delta);
+							if (pBUpdateGet != pBUseTail)
+								pBUpdateGet = pBUpdateGet->_nextlink;
+						}
+					}
 				}
 
 			}
@@ -284,4 +304,22 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 		_storeCount += k;
 	}
 
+}
+
+Bullet* BulletList::BulletVsBullet(mat4 mat_Bullet, float cBulletRadius, PBoat *getPBoat) {
+	bool result = false;
+	int shootCount = getPBoat->_bulletList->_shootCount;
+	if (shootCount > 0) {
+		Bullet *pCGet;
+		pCGet = getPBoat->_bulletList->pBUseHead;
+		for (int i = 0; i < shootCount; i++)
+		{
+			if (pCGet != NULL) {
+				result = _colliSystem.OnCircleCollision(mat_Bullet, cBulletRadius, pCGet->_transform->_mxTRS, pCGet->_circlecollider);
+				if (result == true)	return pCGet;
+				else pCGet = pCGet->_nextlink;
+			}
+		}
+	}
+	return NULL;
 }

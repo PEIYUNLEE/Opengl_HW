@@ -28,7 +28,21 @@ bool Collision::OnCircleCollision(mat4 mat_Object, float cObjectRadius, EnemyMan
 	return false;	//都沒有
 }
 
-//bool Collision::OnCircleCollision(mat4 mat_Object, float cObjectRadius, mat4 mat_PBoat, float cPBoatRadius) {
-//	//物件與Boat
-//	float radiusPlus = 0;
-//}
+bool Collision::OnCircleCollision(mat4 mat_Object,float cObjectRadius, mat4 mat_Main, float cPBoatRadius) {
+	//物件與物件
+
+	float radiusPlus = 0;
+	float dx, dy, dsquare;
+
+	dx = dy = dsquare = radiusPlus = 0;
+	radiusPlus = cPBoatRadius + cObjectRadius;
+
+	dx = (mat_Object._m[0].w - mat_Main._m[0].w);
+	dy = (mat_Object._m[1].w - mat_Main._m[1].w);
+	dsquare = dx*dx + dy*dy;
+
+	if (dsquare <= radiusPlus*radiusPlus && dsquare != 0) {
+		return true; //銷毀物件
+	}
+	return false;	//都沒有
+}

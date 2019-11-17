@@ -23,6 +23,7 @@ private:
 	vec4 *_points;
 	vec4 *_colors;
 
+	float _circlecollider;
 	float _timer;
 	EnemyManager *_getEnemyManager;
 public:

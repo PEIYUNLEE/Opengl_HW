@@ -27,8 +27,8 @@ private:
 	Bullet *_prelink;
 	Bullet *_nextlink;
 
-	float _circlecollider;
 public:
+	float _circlecollider;
 	Transform *_transform;
 
 	Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed);
@@ -48,18 +48,19 @@ public:
 
 class BulletList{
 private:
-	Bullet *pBUseTail, *pBUseHead;
 	Bullet *pBHead, *pBTail, *pBNewGet;
 	Bullet *pBUpdateGet;
 
 	int _totCount;
-	int _shootCount;
 	int _storeCount;
 
 	char _character;
 
 	Collision _colliSystem;
 public:
+
+	Bullet *pBUseTail, *pBUseHead;
+	int _shootCount;
 
 	BulletList(mat4 &mxView, mat4 &mxProjection, int totCount , char character, float fspeed);
 	~BulletList();
@@ -73,4 +74,5 @@ public:
 	//void Collision();	//判定有沒有碰到敵人或超出範圍
 	void DestroyBullet();	//將子彈丟回子彈池
 	void ResetBulletList();
+	Bullet* BulletVsBullet(mat4 mat_Bullet, float cBulletRadius, PBoat *getPBoat);
 };

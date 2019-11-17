@@ -3,6 +3,7 @@
 #include "EnemyManager.h"
 
 PBoat::PBoat(mat4 &mxView, mat4 &mxProjection) {
+	//_circlecollider = 
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, BTOTPOINT_NUM,_points,_colors);
 
