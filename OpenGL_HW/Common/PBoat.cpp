@@ -6,7 +6,7 @@ PBoat::PBoat(mat4 &mxView, mat4 &mxProjection) {
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, BTOTPOINT_NUM,_points,_colors);
 
-	_bulletList = new BulletList(mxView, mxProjection, 50, 'p');
+	_bulletList = new BulletList(mxView, mxProjection, 50, 'p',1.0f);
 }
 
 PBoat::~PBoat() {
@@ -127,7 +127,7 @@ void PBoat::Draw() {
 void PBoat::Update(float delta,bool isBoatShoot) {
 	_timer += delta;
 	if (isBoatShoot == true) {
-		if (_timer >= 0.2f) {
+		if (_timer >= 0.3f) {
 			_timer = 0.0f;
 			_bulletList->BulletShoot(_transform->_mxTRS); //player射出子彈，傳入player座標
 		}

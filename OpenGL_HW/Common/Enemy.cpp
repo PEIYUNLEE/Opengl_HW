@@ -11,8 +11,8 @@ Enemy::Enemy(mat4 &mxView, mat4 &mxProjection, float fspeed,float attackDuration
 	_fspeed = fspeed;
 	_circlecollider = 0.07f;
 	_isDead = false;
-
-	_bulletList = new BulletList(mxView, mxProjection, 10 , 'e');
+	_initFlag = false;
+	_bulletList = new BulletList(mxView, mxProjection, 10 , 'e',1.25f);
 }
 
 Enemy::~Enemy() {
@@ -34,6 +34,7 @@ void Enemy::Reset() {
 	_ftottime = 0.0f;
 	_attackTimer = 0;
 	_isDead = false;
+	_initFlag = false;
 }
 
 
@@ -52,9 +53,12 @@ void EnemySmall::SetPoint() {
 		_colors[i] = vec4(0.0f, 0.0f, 1.0f, 1.0f);
 	}
 }
-
 void EnemySmall::Attack(float dt){
 	_attackTimer += dt;
+	if (!_initFlag&&_attackTimer>=0.5f) {
+		_bulletList->BulletShoot(_transform->_mxTRS);
+		_initFlag = true;
+	}
 	if (_attackTimer >= _attakDuration) {
 		_attackTimer = 0.0f;
 		_bulletList->BulletShoot(_transform->_mxTRS);

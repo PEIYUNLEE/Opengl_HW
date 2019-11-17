@@ -3,10 +3,11 @@
 #include "EnemyManager.h"
 
 
-Bullet::Bullet(mat4 &mxView, mat4 &mxProjection, char character) {
+Bullet::Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed) {
 	_prelink = NULL;
 	_nextlink = NULL;
 	_character = character;
+	_fspeed = fspeed;
 	_circlecollider = 0.07f;
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, BULLET_POINT_NUM, _points, _colors);
@@ -61,7 +62,7 @@ void Bullet::Reset() {
 
 
 //BulletList
-BulletList::BulletList(mat4 &mxView, mat4 &mxProjection, int totCount, char character) {
+BulletList::BulletList(mat4 &mxView, mat4 &mxProjection, int totCount, char character,float fspeed = 1.0f) {
 	_totCount = totCount; //目前所有
 	_storeCount = _totCount;
 	_shootCount = 0;
@@ -69,11 +70,11 @@ BulletList::BulletList(mat4 &mxView, mat4 &mxProjection, int totCount, char char
 
 	//bulid bullet
 	pBHead = pBTail = NULL;
-	pBHead = new Bullet(mxView, mxProjection , _character);
+	pBHead = new Bullet(mxView, mxProjection , _character, fspeed);
 	pBTail = pBHead;
 	for (int i= 1; i < _totCount; i++)
 	{
-		pBNewGet = new Bullet(mxView, mxProjection , _character);
+		pBNewGet = new Bullet(mxView, mxProjection , _character, fspeed);
 		pBNewGet->_prelink = pBTail;
 		pBTail->_nextlink = pBNewGet;
 		pBTail = pBNewGet;
@@ -225,7 +226,7 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
 		for (int i = 0; i < _shootCount; i++)
 		{
 			if (pBUpdateGet != NULL) {
-				if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.0f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.0f) {
+				if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.5f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.5f) {
 					DestroyBullet();
 					k++;
 				}
@@ -263,7 +264,7 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 		for (int i = 0; i < _shootCount; i++)
 		{
 			if (pBUpdateGet != NULL) {
-				if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.0f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.0f) {
+				if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.5f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.5f) {
 					DestroyBullet();
 					k++;
 				}

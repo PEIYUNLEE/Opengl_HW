@@ -22,6 +22,9 @@ protected:
 	float _attakDuration;
 	bool _isDead;
 
+
+	bool _initFlag;
+
 public:
 	Transform *_transform;
 	BulletList *_bulletList;
@@ -52,8 +55,7 @@ private:
 	void Attack(float delta);
 	void AutoTranslate(float ftottime);
 public:
-	EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f,float attackDuration = 1.0f, int pointNum = 20, char type = 's') :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
-
+	EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f,float attackDuration = 3.0f, int pointNum = 20, char type = 's') :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
 		SetPoint();
 		_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
 	};

@@ -18,7 +18,7 @@ private:
 	vec4 *_points;
 	vec4 *_colors;
 
-	float _fspeed =0.7f;
+	float _fspeed;
 	float _ftottime;
 
 	char _character;
@@ -31,7 +31,7 @@ private:
 public:
 	Transform *_transform;
 
-	Bullet(mat4 &mxView, mat4 &mxProjection, char character);
+	Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed);
 	~Bullet();
 
 	void SetPoint();
@@ -61,7 +61,7 @@ private:
 	Collision _colliSystem;
 public:
 
-	BulletList(mat4 &mxView, mat4 &mxProjection, int totCount , char character);
+	BulletList(mat4 &mxView, mat4 &mxProjection, int totCount , char character, float fspeed);
 	~BulletList();
 
 	void PushTail();		// 在list的尾巴新增node

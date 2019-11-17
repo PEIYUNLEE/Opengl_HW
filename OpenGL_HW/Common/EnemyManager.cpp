@@ -148,7 +148,6 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 		pETail_m = pTail;
 		break;
 	}
-	Print(_usetotCount);
 }
 
 void EnemyManager::EnemyDraw() {
