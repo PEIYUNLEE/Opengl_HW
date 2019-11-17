@@ -33,8 +33,8 @@ void GL_Display(void)
 
 void onFrameMove(float delta)
 {
-	g_MainScene->Update(delta);
 	GL_Display();
+	g_MainScene->Update(delta);
 }
 //----------------------------------------------------------------------------
 

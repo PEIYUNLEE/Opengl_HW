@@ -49,7 +49,6 @@ public:
 class EnemySmall : public Enemy
 {
 private:
-	void Action(float delta);
 	void Attack(float delta);
 	void AutoTranslate(float ftottime);
 public:

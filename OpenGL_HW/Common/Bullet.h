@@ -72,4 +72,5 @@ public:
 	void Update(float delta, EnemyManager *getEnemyManager);
 	//void Collision();	//判定有沒有碰到敵人或超出範圍
 	void DestroyBullet();	//將子彈丟回子彈池
+	void ResetBulletList();
 };

@@ -23,15 +23,15 @@ Enemy::~Enemy() {
 }
 void Enemy::Action(float dt, PBoat *getPBoat) {
 	_ftottime += dt;
-	//Attack(dt);
-	//AutoTranslate(_ftottime);			//fix
+	Attack(dt);
+	AutoTranslate(_ftottime);		
 
 	_bulletList->Update(dt, getPBoat);
 }
 
 void Enemy::Reset() {
 	_transform->Reset();
-	_ftottime = 0;
+	_ftottime = 0.0f;
 	_attackTimer = 0;
 	_isDead = false;
 }
@@ -79,6 +79,6 @@ void EnemySmall::Draw() {
 }
 
 void EnemySmall::Hurt() {
-	//_isDead = true;
+	_isDead = true;
 }
 

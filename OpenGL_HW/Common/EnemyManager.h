@@ -2,6 +2,7 @@
 #include "../Header/Angel.h"
 class Enemy;
 class PBoat;
+class BulletList;
 
 class EnemyManager {
 private:
@@ -18,7 +19,7 @@ private:
 	float _genDuration;
 	mat4 _genMat;
 
-	float RandomTime(float min = 5.0f, float max = 10.0f);
+	float RandomTime(float min = 3.0f, float max = 5.0f);
 	mat4 RandomPosition(float minX = -1.5f, float maxX = 1.5f , float Y = 2.55f);
 
 	PBoat *_getPBoat;

@@ -1,6 +1,7 @@
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "PBoat.h"
+#include "Bullet.h"
 
 EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int totCount_m) {
 
@@ -197,6 +198,7 @@ void EnemyManager::PushTail() {
 void EnemyManager::DestroyEnemy()
 {
 	Enemy *pGetPre, *pGetNext;
+	pEUpdateGet->_bulletList->ResetBulletList();
 	if (pEUpdateGet == pEUseHead) {
 		//如果消失的是顯示的第一個敵人(_prelink==NULL)
 		if (pEUseHead == pEUseTail) //只剩一顆
@@ -235,11 +237,11 @@ void EnemyManager::DestroyEnemy()
 void EnemyManager::Update(float dt) {
 	_timer += dt;
 	//產生敵人
-	if (_timer > _genDuration){		//FIX 3.0
+	if (_timer > _genDuration){		
 		_timer = 0.0f;
 		EnemyGenerater('s', _genMat);
-		_genDuration = RandomTime();		//FIX 3.0
-		_genMat = RandomPosition();	//FIX Y2.55F
+		_genDuration = RandomTime();	
+		_genMat = RandomPosition();	
 	}
 
 	//做畫面Enemy要做的事
@@ -249,7 +251,22 @@ void EnemyManager::Update(float dt) {
 		for (int i = 0; i < _usetotCount; i++)
 		{
 			if (pEUpdateGet != NULL) {
-				if (pEUpdateGet->_transform->_mxTRS._m[1].w >= 2.6f || pEUpdateGet->_transform->_mxTRS._m[1].w <= -2.6f) {
+				if (pEUpdateGet->_isDead == true) {
+
+					switch (pEUpdateGet->_type)
+					{
+					case 's':
+						ds++;
+						break;
+					case 'm':
+						dm++;
+						break;
+					}
+
+					DestroyEnemy(); 
+					k++;
+				}
+				else if (pEUpdateGet->_transform->_mxTRS._m[1].w >= 2.6f || pEUpdateGet->_transform->_mxTRS._m[1].w <= -2.6f) {
 
 					switch (pEUpdateGet->_type)
 					{

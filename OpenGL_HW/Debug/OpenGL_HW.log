@@ -1,5 +1,6 @@
 ﻿  Bullet.cpp
 d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\bullet.cpp(24): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
 d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\bullet.cpp(25): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\bullet.cpp(208): warning C4553: '==': 運算子無效; 要使用 '=' 嗎?
   OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.exe
   OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.pdb (Full PDB)

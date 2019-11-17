@@ -114,8 +114,10 @@ void BulletList::BulletDraw() {
 		pDrawGet = pBUseHead;
 		for (int i = 0; i < _shootCount; i++)
 		{
-			pDrawGet->Draw();
-			pDrawGet = pDrawGet->_nextlink;
+			if (pDrawGet != NULL) {
+				pDrawGet->Draw();
+				pDrawGet = pDrawGet->_nextlink;
+			}
 		}
 	}
 }
@@ -199,6 +201,18 @@ void BulletList::DestroyBullet()
 		PushTail();	//將子彈丟回子彈池
 		pBUpdateGet = pGetNext;
 	}
+}
+
+void BulletList::ResetBulletList()
+{
+	pBUpdateGet == pBUseHead;
+	for (int i = 0; i < _shootCount; i++)
+	{
+		if(pBUpdateGet!=NULL)
+			DestroyBullet();
+	}
+	_shootCount = 0;
+	_storeCount = _totCount;
 }
 
 void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
