@@ -4,6 +4,8 @@
 #include <ctime>   /* 時間相關函數 */
 #include "../Header/Angel.h"
 #include "Transform.h"
+#include "ColorDefine.h"
+#include "Defense.h"
 class BulletList;
 class EnemyManager;
 
@@ -23,12 +25,15 @@ private:
 	vec4 *_points;
 	vec4 *_colors;
 
-	float _circlecollider;
 	float _timer;
 	EnemyManager *_getEnemyManager;
 public:
 	Transform *_transform;
 	BulletList *_bulletList;
+	Defense *_defense;
+	bool _isDefense;
+	bool _isDead;
+	float *_colliderSize;
 
 	PBoat(mat4 &mxView, mat4 &mxProjection);
 	~PBoat();
@@ -36,4 +41,7 @@ public:
 	void SetPoint();
 	void Draw();
 	void Update(float delta, bool isBoatShoot);
+	void Hurt();
+
+	void Revival();
 };

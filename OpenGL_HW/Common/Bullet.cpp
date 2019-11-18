@@ -8,7 +8,9 @@ Bullet::Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed) {
 	_nextlink = NULL;
 	_character = character;
 	_fspeed = fspeed;
-	_circlecollider = 0.07f;
+	_colliderSize = new float[2];
+	_colliderSize[0] = 0.07f;
+	_colliderSize[1] = 0.07f;
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, BULLET_POINT_NUM, _points, _colors);
 }
@@ -206,7 +208,7 @@ void BulletList::DestroyBullet()
 
 void BulletList::ResetBulletList()
 {
-	pBUpdateGet == pBUseHead;
+	pBUpdateGet = pBUseHead;
 	for (int i = 0; i < _shootCount; i++)
 	{
 		if(pBUpdateGet!=NULL)
@@ -241,7 +243,7 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
 				else {
 					if (getEnemyManager->_usetotCount > 0)
 					{
-						result = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_circlecollider, getEnemyManager);
+						result = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, *(pBUpdateGet->_colliderSize), getEnemyManager);
 					}
 					if (result == true) {
 						DestroyBullet();
@@ -264,7 +266,7 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
 }
 
 void BulletList::Update(float delta, PBoat *getPBoat) {
-	//player的bulletllist
+	//enemy的bulletllist
 	//做每顆子彈要做的事
 	if (_shootCount > 0) {
 		pBUpdateGet = pBUseHead;
@@ -278,14 +280,19 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 					k++;
 				}
 				else {
-					bulletResult = BulletVsBullet(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_circlecollider,getPBoat);
+					bulletResult = BulletVsBullet(pBUpdateGet->_transform->_mxTRS, *(pBUpdateGet->_colliderSize),getPBoat);
 					if (bulletResult != NULL) {
 						DestroyBullet();
 						k++;
+						i = _shootCount;
 					}
 					else {
-						//result = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, getPBoat->_transform->_mxTRS, _circlecollider);
+						if(getPBoat->_isDefense)
+							result = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, *(pBUpdateGet->_colliderSize), getPBoat->_transform->_mxTRS, *(getPBoat->_defense->_colliderSize));
+						else
+							result = _colliSystem.OnBoxCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_colliderSize, getPBoat->_transform->_mxTRS, getPBoat->_colliderSize);
 						if (result == true) {
+							getPBoat->Hurt();
 							DestroyBullet();
 							k++;
 						}
@@ -315,7 +322,7 @@ Bullet* BulletList::BulletVsBullet(mat4 mat_Bullet, float cBulletRadius, PBoat *
 		for (int i = 0; i < shootCount; i++)
 		{
 			if (pCGet != NULL) {
-				result = _colliSystem.OnCircleCollision(mat_Bullet, cBulletRadius, pCGet->_transform->_mxTRS, pCGet->_circlecollider);
+				result = _colliSystem.OnCircleCollision(mat_Bullet, cBulletRadius, pCGet->_transform->_mxTRS, *(pCGet->_colliderSize));
 				if (result == true)	return pCGet;
 				else pCGet = pCGet->_nextlink;
 			}

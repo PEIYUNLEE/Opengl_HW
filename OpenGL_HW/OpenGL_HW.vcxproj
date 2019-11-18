@@ -151,6 +151,7 @@
     <ClCompile Include="Common\Bullet.cpp" />
     <ClCompile Include="Common\Collision.cpp" />
     <ClCompile Include="Common\common.cpp" />
+    <ClCompile Include="Common\Defense.cpp" />
     <ClCompile Include="Common\Enemy.cpp" />
     <ClCompile Include="Common\EnemyManager.cpp" />
     <ClCompile Include="Common\MainScene.cpp" />
@@ -171,6 +172,8 @@
   <ItemGroup>
     <ClInclude Include="Common\Bullet.h" />
     <ClInclude Include="Common\Collision.h" />
+    <ClInclude Include="Common\ColorDefine.h" />
+    <ClInclude Include="Common\Defense.h" />
     <ClInclude Include="Common\Enemy.h" />
     <ClInclude Include="Common\EnemyManager.h" />
     <ClInclude Include="Common\MainScene.h" />

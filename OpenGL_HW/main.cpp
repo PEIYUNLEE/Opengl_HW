@@ -2,6 +2,7 @@
 #include "Common\MainScene.h"
 #include "Common\PBoat.h"
 #include "Common\EnemyManager.h"
+#include "Common\ColorDefine.h"
 
 #define SCREEN_SIZE 800
 #define HALF_SIZE (SCREEN_SIZE/2)
@@ -39,25 +40,33 @@ void onFrameMove(float delta)
 //----------------------------------------------------------------------------
 
 void Win_MouseMotion(int x, int y) {
-	mat4 mxGT, mxT;
+	if (!g_MainScene->_pBoat->_isDead) {
+		mat4 mxGT, mxT;
 
-	g_fTx = 2.5f*(x - HALF_SIZE) / (HALF_SIZE);
-	g_fTy = -2.5f*(y - HALF_SIZE) / (HALF_SIZE);
-	mxGT = Translate(g_fTx, g_fTy, 0);
-	g_MainScene->_pBoat->_transform->SetTRSMatrix(mxGT);
+		g_fTx = 2.5f*(x - HALF_SIZE) / (HALF_SIZE);
+		g_fTy = -2.5f*(y - HALF_SIZE) / (HALF_SIZE);
+		mxGT = Translate(g_fTx, g_fTy, 0);
+		g_MainScene->_pBoat->_transform->SetTRSMatrix(mxGT);
+	}
 }
 void Win_PassiveMotion(int x, int y) {
-	mat4 mxGT, mxT;
+	if (!g_MainScene->_pBoat->_isDead) {
+		mat4 mxGT, mxT;
 
-	g_fTx = 2.5f*(x - HALF_SIZE) / (HALF_SIZE);
-	g_fTy = -2.5f*(y - HALF_SIZE) / (HALF_SIZE);
-	mxGT = Translate(g_fTx, g_fTy, 0);
-	g_MainScene->_pBoat->_transform->SetTRSMatrix(mxGT);
+		g_fTx = 2.5f*(x - HALF_SIZE) / (HALF_SIZE);
+		g_fTy = -2.5f*(y - HALF_SIZE) / (HALF_SIZE);
+		mxGT = Translate(g_fTx, g_fTy, 0);
+		g_MainScene->_pBoat->_transform->SetTRSMatrix(mxGT);
+	}
 }
 
 void Win_Keyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
+	case 'q':
+		if(g_MainScene->_pBoat->_isDead)
+			g_MainScene->_pBoat->Revival();
+		break;
 	case 033:
 		delete g_MainScene;
 		exit(EXIT_SUCCESS);
@@ -69,10 +78,12 @@ void Win_Mouse(int button, int state, int x, int y) {
 	switch (button) {
 	case GLUT_LEFT_BUTTON:   // 目前按下的是滑鼠左鍵
 		if (state == GLUT_DOWN) {
-			g_MainScene->isBoatShoot=true;
+			if(!g_MainScene->_pBoat->_isDead)
+				g_MainScene->isBoatShoot=true;
 		}
 		else if (state == GLUT_UP) {
-			g_MainScene->isBoatShoot = false;
+			if (!g_MainScene->_pBoat->_isDead)
+				g_MainScene->isBoatShoot = false;
 		}
 		break;
 	case GLUT_MIDDLE_BUTTON:  // 目前按下的是滑鼠中鍵 
@@ -104,6 +115,8 @@ int main(int argc, char **argv)
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 
 	glutCreateWindow("Color Shoot Game");
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
 	glewExperimental = GL_TRUE;
 	glewInit();

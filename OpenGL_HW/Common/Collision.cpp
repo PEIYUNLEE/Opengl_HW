@@ -46,3 +46,23 @@ bool Collision::OnCircleCollision(mat4 mat_Object,float cObjectRadius, mat4 mat_
 	}
 	return false;	//都沒有
 }
+
+bool Collision::OnBoxCollision(mat4 mat_Object, float *cObjectRadius, mat4 mat_Main, float *cPBoatRadius) {
+	//物件與物件
+
+	float radiusPlus_X , radiusPlus_Y;
+	float dx, dy, dsquare;
+
+	dx = dy = dsquare = radiusPlus_X = radiusPlus_Y = 0;
+	radiusPlus_X = cObjectRadius[0]+ cPBoatRadius[0];
+	radiusPlus_Y = cObjectRadius[1] + cPBoatRadius[1];
+
+	dx = (mat_Object._m[0].w - mat_Main._m[0].w);
+	dy = (mat_Object._m[1].w - mat_Main._m[1].w);
+	dsquare = dx*dx + dy*dy;
+
+	if (dsquare <= ((radiusPlus_X*radiusPlus_X)+ (radiusPlus_Y*radiusPlus_Y)) && dsquare != 0) {
+		return true; //銷毀物件
+	}
+	return false;	//都沒有
+}

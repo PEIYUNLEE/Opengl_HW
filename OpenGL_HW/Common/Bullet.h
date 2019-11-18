@@ -28,7 +28,7 @@ private:
 	Bullet *_nextlink;
 
 public:
-	float _circlecollider;
+	float *_colliderSize;
 	Transform *_transform;
 
 	Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed);
