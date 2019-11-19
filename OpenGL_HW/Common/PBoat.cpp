@@ -33,6 +33,7 @@ void PBoat::GetComponent(EnemyManager *getEnemyManager) {
 void PBoat::SetPoint() {
 	_points = new vec4[BTOTPOINT_NUM];
 	_colors = new vec4[BTOTPOINT_NUM];
+
 	//pBRSide
 	_points[0] = vec4(0.150f, -0.12f, 0.0, 1.0f);
 	_points[1] = vec4(0.230f, -0.12f, 0.0, 1.0f);
@@ -143,7 +144,7 @@ void PBoat::Update(float delta,bool isBoatShoot) {
 		if (isBoatShoot == true) {
 			if (_timer >= 0.3f) {
 				_timer = 0.0f;
-				_bulletList->BulletShoot(_transform->_mxTRS); //player射出子彈，傳入player座標
+				_bulletList->BulletShoot(_transform->_mxTRS,0.0f,1.0f); //player射出子彈，傳入player座標
 			}
 		}
 

@@ -21,7 +21,7 @@ public:
 	PBoat *_pBoat;
 	bool isBoatShoot=false;
 
-	MainScene(mat4 g_mxModelView, mat4 g_mxProjection);
+	MainScene(mat4 &g_mxModelView, mat4 &g_mxProjection);
 	~MainScene();
 	void Update(float timeDelta);
 	void Draw();

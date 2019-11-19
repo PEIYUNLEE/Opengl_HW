@@ -2,7 +2,7 @@
 #include "PBoat.h"
 #include "EnemyManager.h"
 
-MainScene::MainScene(mat4 g_mxModelView, mat4 g_mxProjection) {
+MainScene::MainScene(mat4 &g_mxModelView, mat4 &g_mxProjection) {
 	_mxModelView = g_mxModelView;
 	_mxProjection = g_mxProjection;
 	CreateGameObject();

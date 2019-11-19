@@ -55,11 +55,35 @@ private:
 	void Attack(float delta);
 	void AutoTranslate(float ftottime);
 public:
-	EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f,float attackDuration = 3.0f, int pointNum = 20, char type = 's') :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
-		SetPoint();
-		_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
-	};
+	//EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f,float attackDuration = 3.0f, int pointNum = 18, char type = 's') :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
+	//	_bulletList = new BulletList(mxView, mxProjection, 10, 'e', 1.25f);
+	//	SetPoint();
+	//	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
+	//};
 	//~EnemySmall();
+
+	EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f, float attackDuration = 3.0f, int pointNum = 18, char type = 's');
+
+	void Draw();
+	void Hurt();
+	void SetPoint();
+};
+
+
+class EnemyMiddle : public Enemy
+{
+private:
+	void Attack(float delta);
+	void AutoTranslate(float ftottime);
+public:
+	//EnemyMiddle(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f, float attackDuration = 3.0f, int pointNum = 30, char type = 'm') :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
+
+	//	_bulletList = new BulletList(mxView, mxProjection, 50, 'm', 1.25f);
+	//	SetPoint();
+	//	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
+	//};
+	//~EnemyMiddle();
+	EnemyMiddle(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.3f, float attackDuration = 3.0f, int pointNum = 30, char type = 'm');
 
 	void Draw();
 	void Hurt();

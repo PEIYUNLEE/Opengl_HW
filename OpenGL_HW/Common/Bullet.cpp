@@ -36,15 +36,13 @@ void Bullet::AutoTranslate(float dt) {
 	mat4 mxTra;
 	GLfloat btx = 0.0f;
 	GLfloat bty = 0.0f;
-
+	
 
 	_ftottime += dt;
-	bty = _ftottime*_fspeed;
+	bty = _ftottime*_fspeed*_bIY;
+	btx = _ftottime*_fspeed*_bIX;
 
-	if (_character == 'e')
-		mxTra = Translate(btx, -bty, 0.0f);
-	else if (_character == 'p')
-		mxTra = Translate(btx, bty, 0.0f);
+	mxTra = Translate(btx, bty, 0.0f);
 
 	_transform->SetTRSMatrix(mxTra*_transform->_mxOri);
 }
@@ -125,7 +123,7 @@ void BulletList::BulletDraw() {
 	}
 }
 
-void BulletList::BulletShoot(mat4 &mat) {
+void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY) {
 	Bullet *pNewBulletGet;
 	if (_shootCount == 0)	//當目前use槽沒東西，跟子彈池要子彈
 	{
@@ -138,6 +136,8 @@ void BulletList::BulletShoot(mat4 &mat) {
 		pNewBulletGet-> _prelink = NULL;
 		pNewBulletGet-> _nextlink = NULL;
 		pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
+		pNewBulletGet->_bIX = bIX;
+		pNewBulletGet->_bIY = bIY;
 		pBUseTail = pNewBulletGet;
 		_shootCount++;
 		_storeCount--;
@@ -158,6 +158,8 @@ void BulletList::BulletShoot(mat4 &mat) {
 			pNewBulletGet->_prelink = pBUseTail;
 			pNewBulletGet->_nextlink = NULL;
 			pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
+			pNewBulletGet->_bIX = bIX;
+			pNewBulletGet->_bIY = bIY;
 			pBUseTail = pNewBulletGet;
 			_shootCount++;
 			_storeCount--;
@@ -262,7 +264,6 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
 		_shootCount -= k;
 		_storeCount += k;
 	}
-
 }
 
 void BulletList::Update(float delta, PBoat *getPBoat) {
@@ -310,10 +311,9 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 		_shootCount -= k;
 		_storeCount += k;
 	}
-
 }
 
-Bullet* BulletList::BulletVsBullet(mat4 mat_Bullet, float cBulletRadius, PBoat *getPBoat) {
+Bullet* BulletList::BulletVsBullet(mat4 &mat_Bullet, float cBulletRadius, PBoat *getPBoat) {
 	bool result = false;
 	int shootCount = getPBoat->_bulletList->_shootCount;
 	if (shootCount > 0) {

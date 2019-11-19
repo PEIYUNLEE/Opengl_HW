@@ -30,15 +30,15 @@ EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int t
 		pETail_s = pENewGet;
 	}
 
-	/*pHead_m = new EnemyMiddle(mxView, mxProjection);
-	pTail_m = pHead_m;
+	pEHead_m = new EnemyMiddle(mxView, mxProjection);
+	pETail_m = pEHead_m;
 	for (int i = 1; i < _totCount_m; i++)
 	{
-		pNewGet = new EnemyMiddle(mxView, mxProjection);
-		pNewGet->_prelink = pTail_m;
-		pTail_m->_nextlink = pNewGet;
-		pTail_m = pNewGet;
-	}*/
+		pENewGet = new EnemyMiddle(mxView, mxProjection);
+		pENewGet->_prelink = pETail_m;
+		pETail_m->_nextlink = pENewGet;
+		pETail_m = pENewGet;
+	}
 }
 
 EnemyManager::~EnemyManager() {
@@ -62,15 +62,15 @@ void EnemyManager::Clear() {
 		}
 	}
 
-	/*for (int i = 0; i < _totCount_m; i++)
+	for (int i = 0; i < _totCount_m; i++)
 	{
-		pClearGet = pHead_m;
+		pClearGet = pEHead_m;
 		if (pClearGet != NULL) {
-			pHead_m = pClearGet->_nextlink;
+			pEHead_m = pClearGet->_nextlink;
 			delete pClearGet;
 			i++;
 		}
-	}*/
+	}
 }
 
 void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
@@ -160,6 +160,9 @@ void EnemyManager::EnemyDraw() {
 			pDrawGet = pDrawGet->_nextlink;
 		}
 	}
+
+	//test 
+	pEHead_m->Draw();
 }
 
 void EnemyManager::PushTail() {
@@ -281,7 +284,7 @@ void EnemyManager::Update(float dt) {
 					k++;
 				}
 				else {
-					pEUpdateGet->Action(dt,_getPBoat);	//§ðÀ»¡Bmove //FIX
+					pEUpdateGet->Action(dt,_getPBoat);	//§ðÀ»¡Bmove
 					if (pEUpdateGet != pEUseTail)
 						pEUpdateGet = pEUpdateGet->_nextlink;
 				}
@@ -295,6 +298,9 @@ void EnemyManager::Update(float dt) {
 		_storeCount_s += ds;
 		_storeCount_m += dm;
 	}
+
+	//test
+	pEHead_m->Action(dt, _getPBoat);
 }
 
 float EnemyManager::RandomTime(float min, float max) {
