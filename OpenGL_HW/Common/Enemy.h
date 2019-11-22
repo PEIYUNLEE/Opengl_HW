@@ -8,6 +8,7 @@ class PBoat;
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
 
+
 class Enemy
 {
 private:
@@ -19,7 +20,7 @@ protected:
 	float _ftottime;
 	float _fspeed;
 	float _attackTimer;
-	float _attakDuration;
+	float _attackDuration;
 	bool _isDead;
 
 
@@ -44,7 +45,7 @@ public:
 	virtual void Hurt() = 0;
 
 	void Action(float delta, PBoat *getPBoat);
-	void Reset();
+	virtual void Reset() =0;
 
 	friend class EnemyManager;
 };
@@ -55,38 +56,70 @@ private:
 	void Attack(float delta);
 	void AutoTranslate(float ftottime);
 public:
-	//EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f,float attackDuration = 3.0f, int pointNum = 18, char type = 's') :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
-	//	_bulletList = new BulletList(mxView, mxProjection, 10, 'e', 1.25f);
-	//	SetPoint();
-	//	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
-	//};
-	//~EnemySmall();
 
 	EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f, float attackDuration = 3.0f, int pointNum = 18, char type = 's');
 
 	void Draw();
 	void Hurt();
 	void SetPoint();
+	void Reset();
 };
-
 
 class EnemyMiddle : public Enemy
 {
 private:
+	float _iX = 0.0f;
+	float _iY = 1.0f;
+	float _rotateDuration= 4.5f;
+	float _rotateTimer = 0.0f;
+	float _translateTimer = 0.0f;
+	GLfloat _fZAngle = 0.0f;
+	GLfloat _btx = 0.0f;
+	GLfloat _bty = 0.0f;
+	bool _isStop=false;
+
 	void Attack(float delta);
 	void AutoTranslate(float ftottime);
 public:
-	//EnemyMiddle(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f, float attackDuration = 3.0f, int pointNum = 30, char type = 'm') :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
-
-	//	_bulletList = new BulletList(mxView, mxProjection, 50, 'm', 1.25f);
-	//	SetPoint();
-	//	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
-	//};
-	//~EnemyMiddle();
-	EnemyMiddle(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.3f, float attackDuration = 3.0f, int pointNum = 30, char type = 'm');
+	EnemyMiddle(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f, float attackDuration = 3.0f, int pointNum = 30, char type = 'm');
 
 	void Draw();
 	void Hurt();
 	void SetPoint();
+	void Reset();
+};
+
+class EnemyBoss : public Enemy
+{
+	enum AttackState
+	{
+		Normal,
+		Progressive,
+		Explosion
+	};
+private:
+	float _iX = 0.0f;
+	float _iY = 1.0f;
+	int _attackState;
+	//float _rotateDuration = 4.5f;
+	//float _rotateTimer = 0.0f;
+	//float _translateTimer = 0.0f;
+	//GLfloat _fZAngle = 0.0f;
+	//GLfloat _btx = 0.0f;
+	//GLfloat _bty = 0.0f;
+	//bool _isStop = false;
+
+	void Attack(float delta);
+	void AutoTranslate(float ftottime);
+public:
+	EnemyBoss(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f, float attackDuration = 3.0f, int pointNum = 4, char type = 'b');
+
+	void Draw();
+	void Hurt();
+	void SetPoint();
+	void Reset();
+	void AttackNormal();
+	void AttackProgressive();
+	void AttackExplosion();
 };
 

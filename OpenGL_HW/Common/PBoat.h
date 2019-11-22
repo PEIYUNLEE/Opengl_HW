@@ -7,6 +7,7 @@
 #include "ColorDefine.h"
 #include "Defense.h"
 class BulletList;
+class Bullet;
 class EnemyManager;
 
 #define BSPOINT_NUM 3 //side
@@ -34,6 +35,7 @@ public:
 	bool _isDefense;
 	bool _isDead;
 	float *_colliderSize;
+	Bullet * _bulletResult;
 
 	PBoat(mat4 &mxView, mat4 &mxProjection);
 	~PBoat();

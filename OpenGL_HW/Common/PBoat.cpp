@@ -150,7 +150,7 @@ void PBoat::Update(float delta,bool isBoatShoot) {
 
 		if (_isDefense == true)	_defense->_transform->SetTRSMatrix(_transform->_mxTRS);
 
-		_bulletList->Update(delta,_getEnemyManager);
+		_bulletList->Update(delta,_getEnemyManager,_bulletResult);
 	}
 }
 

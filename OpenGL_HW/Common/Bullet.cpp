@@ -3,11 +3,14 @@
 #include "EnemyManager.h"
 
 
+
+
 Bullet::Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed) {
 	_prelink = NULL;
 	_nextlink = NULL;
 	_character = character;
-	_fspeed = fspeed;
+	_fSpeedInit = fspeed;
+	_fSpeed = fspeed;
 	_colliderSize = new float[2];
 	_colliderSize[0] = 0.07f;
 	_colliderSize[1] = 0.07f;
@@ -39,8 +42,8 @@ void Bullet::AutoTranslate(float dt) {
 	
 
 	_ftottime += dt;
-	bty = _ftottime*_fspeed*_bIY;
-	btx = _ftottime*_fspeed*_bIX;
+	bty = _ftottime*_fSpeed*_bIY;
+	btx = _ftottime*_fSpeed*_bIX;
 
 	mxTra = Translate(btx, bty, 0.0f);
 
@@ -57,6 +60,7 @@ void Bullet::Reset() {
 	_transform->Reset();
 
 	_ftottime = 0.0f;
+	_fSpeed = _fSpeedInit;
 }
 
 
@@ -170,6 +174,55 @@ void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY) {
 	}
 }
 
+void BulletList::BulletShoot(mat4 &mat, float bIX, float bIY,float fSpeed) {
+	Bullet *pNewBulletGet;
+	if (_shootCount == 0)	//當目前use槽沒東西，跟子彈池要子彈
+	{
+		pNewBulletGet = pBHead;	//當目前use槽沒東西，跟子彈池要子彈
+		pBUseHead = pNewBulletGet;
+
+		pBHead = pBHead->_nextlink;
+		pBHead->_prelink = NULL;	//子彈從子彈池移出
+
+		pNewBulletGet->_prelink = NULL;
+		pNewBulletGet->_nextlink = NULL;
+		pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
+		pNewBulletGet->_bIX = bIX;
+		pNewBulletGet->_bIY = bIY;
+		pNewBulletGet->_fSpeed = fSpeed;
+		pBUseTail = pNewBulletGet;
+		_shootCount++;
+		_storeCount--;
+	}
+	else
+	{
+		if (_shootCount < _totCount) {
+			pNewBulletGet = pBHead;	//跟子彈池要子彈
+			if (_shootCount < _totCount - 1) {
+				pBHead = pBHead->_nextlink;
+				pBHead->_prelink = NULL;	//子彈從子彈池移出
+			}
+			else if (pBHead == pBTail && pBHead != NULL) {
+				pBHead = NULL;	//子彈從子彈池移出
+				pBTail = NULL;
+			}
+			pBUseTail->_nextlink = pNewBulletGet;
+			pNewBulletGet->_prelink = pBUseTail;
+			pNewBulletGet->_nextlink = NULL;
+			pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
+			pNewBulletGet->_bIX = bIX;
+			pNewBulletGet->_bIY = bIY;
+			pNewBulletGet->_fSpeed = fSpeed;
+			pBUseTail = pNewBulletGet;
+			_shootCount++;
+			_storeCount--;
+		}
+		else {
+			printf("%d", _shootCount);
+		}
+	}
+}
+
 void BulletList::DestroyBullet()
 {
 	Bullet *pGetPre,*pGetNext;
@@ -221,9 +274,7 @@ void BulletList::ResetBulletList()
 }
 
 
-Bullet* bulletResult;
-
-void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
+void BulletList::Update(float delta, EnemyManager *getEnemyManager,Bullet *bulletResult) {
 	//player的bulletllist
 	//做每顆子彈要做的事
 	if (_shootCount > 0) {
@@ -236,7 +287,6 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
 				if (bulletResult == pBUpdateGet) {
 					DestroyBullet();
 					k++;
-					bulletResult = NULL;
 				}
 				else if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.5f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.5f) {
 					DestroyBullet();
@@ -269,6 +319,9 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager) {
 void BulletList::Update(float delta, PBoat *getPBoat) {
 	//enemy的bulletllist
 	//做每顆子彈要做的事
+
+	Bullet * bulletResult;
+
 	if (_shootCount > 0) {
 		pBUpdateGet = pBUseHead;
 		int k = 0;
@@ -276,7 +329,7 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 		for (int i = 0; i < _shootCount; i++)
 		{
 			if (pBUpdateGet != NULL) {
-				if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.5f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.5f) {
+				if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.5f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.5f || pBUpdateGet->_transform->_mxTRS._m[0].w <= -2.5f || pBUpdateGet->_transform->_mxTRS._m[0].w >= 2.5f) {
 					DestroyBullet();
 					k++;
 				}
@@ -285,6 +338,7 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 					if (bulletResult != NULL) {
 						DestroyBullet();
 						k++;
+						getPBoat->_bulletResult = bulletResult;
 						i = _shootCount;
 					}
 					else {
@@ -323,7 +377,9 @@ Bullet* BulletList::BulletVsBullet(mat4 &mat_Bullet, float cBulletRadius, PBoat 
 		{
 			if (pCGet != NULL) {
 				result = _colliSystem.OnCircleCollision(mat_Bullet, cBulletRadius, pCGet->_transform->_mxTRS, *(pCGet->_colliderSize));
-				if (result == true)	return pCGet;
+				if (result == true){
+					return pCGet;
+					}
 				else pCGet = pCGet->_nextlink;
 			}
 		}

@@ -18,7 +18,6 @@ private:
 	vec4 *_points;
 	vec4 *_colors;
 
-	float _fspeed;
 	float _ftottime;
 
 	char _character;
@@ -28,6 +27,7 @@ private:
 	Bullet *_nextlink;
 
 public:
+	float _fSpeed,_fSpeedInit;
 	float _bIX, _bIY; //BULLET單位向量
 	float *_colliderSize;
 	Transform *_transform;
@@ -69,11 +69,13 @@ public:
 	void PushTail();		// 在list的尾巴新增node
 	void Clear();					// 把整串list刪除
 	void BulletShoot(mat4 &mat, float bIX, float bIY);
+	void BulletShoot(mat4 &mat, float bIX, float bIY, float fSpeed);
 	void BulletDraw();
 	void Update(float delta, PBoat *getPBoat);
-	void Update(float delta, EnemyManager *getEnemyManager);
+	void Update(float delta, EnemyManager *getEnemyManager, Bullet *bulletResult);
 	//void Collision();	//判定有沒有碰到敵人或超出範圍
 	void DestroyBullet();	//將子彈丟回子彈池
 	void ResetBulletList();
+	void SetBulletSpeed(float fSpeed);
 	Bullet* BulletVsBullet(mat4 &mat_Bullet, float cBulletRadius, PBoat *getPBoat);
 };

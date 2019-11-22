@@ -4,16 +4,25 @@ class Enemy;
 class PBoat;
 class BulletList;
 
+enum LEVEL_STATE
+{
+	LEVEL1,
+	LEVEL2,
+	LEVEL3
+};
+
 class EnemyManager {
 private:
 	Enemy *pEHead_s, *pETail_s;
 	Enemy *pEHead_m, *pETail_m;
 	Enemy *pENewGet , *pEUpdateGet;
+	Enemy *pEBoss;
 
-	int _totCount_s, _totCount_m;
+	int _totCount_s, _totCount_m, _totCount_b;
 	int  _storetotCount;
 	int _useCount_s, _storeCount_s;
 	int _useCount_m, _storeCount_m;
+	int _useCount_b, _storeCount_b;
 
 	float _timer;
 	float _genDuration;
@@ -23,6 +32,7 @@ private:
 	mat4 RandomPosition(float minX = -1.5f, float maxX = 1.5f , float Y = 2.55f);
 
 	PBoat *_getPBoat;
+	int _state;
 public:
 	Enemy *pEUseTail, *pEUseHead;
 	int _usetotCount;
@@ -36,4 +46,5 @@ public:
 	void DestroyEnemy();
 	void PushTail();
 	void EnemyGenerater(char type, mat4 &mat);
+	void EGeneratorController();
 };

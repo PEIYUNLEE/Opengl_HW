@@ -11,7 +11,7 @@ class MainScene
 private:
 	//«Å§iª«¥ó
 	
-	Planet *_planet[3];
+	Planet *_planet;
 	EnemyManager *_enemyManager;
 	mat4 _mxModelView, _mxProjection;
 

@@ -4,15 +4,18 @@
 #include "Bullet.h"
 
 EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int totCount_m) {
+	_state = LEVEL3;
 
 	srand((unsigned)time(NULL));
 
 	_totCount_s = _storeCount_s = totCount_s;
 	_totCount_m = _storeCount_m = totCount_m;
-	_storetotCount = _totCount_s + _totCount_m;
+	_totCount_b = _storeCount_b = 1;
+	_storetotCount = _totCount_s + _totCount_m + _totCount_b;
 	_usetotCount = 0;
 	_useCount_s = 0;
 	_useCount_m = 0;
+	_useCount_b = 0;
 
 	_timer  = 0.0f;
 	_genDuration = RandomTime();
@@ -39,6 +42,8 @@ EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int t
 		pETail_m->_nextlink = pENewGet;
 		pETail_m = pENewGet;
 	}
+
+	pEBoss = new EnemyBoss(mxView, mxProjection);
 }
 
 EnemyManager::~EnemyManager() {
@@ -71,6 +76,8 @@ void EnemyManager::Clear() {
 			i++;
 		}
 	}
+
+	if (pEBoss != NULL) delete pEBoss;
 }
 
 void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
@@ -95,14 +102,23 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 		storeCount = &_storeCount_m;
 		totCount = &_totCount_m;
 		break;
+	case 'b':
+		pHead = pEBoss;
+		pTail = pEBoss;
+		useCount = &_useCount_b;
+		storeCount = &_storeCount_b;
+		totCount = &_totCount_b;
+		break;
 	}
 
 	if (_usetotCount == 0)	//當目前use槽沒東西，跟子彈池要子彈
 	{
 		pNewEnemyGet = pHead;
 		pEUseHead = pNewEnemyGet;
-		pHead = pHead->_nextlink;
-		pHead->_prelink = NULL;	//子彈從子彈池移出
+		if (*totCount != 1) {
+			pHead = pHead->_nextlink;
+			pHead->_prelink = NULL;	//子彈從子彈池移出
+		}
 
 		pNewEnemyGet->_prelink = NULL;
 		pNewEnemyGet->_nextlink = NULL;
@@ -160,9 +176,6 @@ void EnemyManager::EnemyDraw() {
 			pDrawGet = pDrawGet->_nextlink;
 		}
 	}
-
-	//test 
-	pEHead_m->Draw();
 }
 
 void EnemyManager::PushTail() {
@@ -239,12 +252,8 @@ void EnemyManager::DestroyEnemy()
 void EnemyManager::Update(float dt) {
 	_timer += dt;
 	//產生敵人
-	if (_timer > _genDuration){		
-		_timer = 0.0f;
-		EnemyGenerater('s', _genMat);
-		_genDuration = RandomTime();	
-		_genMat = RandomPosition();	
-	}
+
+	EGeneratorController();
 
 	//做畫面Enemy要做的事
 	if (_usetotCount > 0) {
@@ -299,8 +308,6 @@ void EnemyManager::Update(float dt) {
 		_storeCount_m += dm;
 	}
 
-	//test
-	pEHead_m->Action(dt, _getPBoat);
 }
 
 float EnemyManager::RandomTime(float min, float max) {
@@ -323,4 +330,39 @@ mat4 EnemyManager::RandomPosition(float minX, float maxX, float Y) {
 	result._m[0].w = x;
 	result._m[1].w = y;
 	return result;
+}
+
+bool flag=false;
+void EnemyManager::EGeneratorController(){
+	switch (_state)
+	{
+		case LEVEL1:
+			if (_timer > _genDuration) {
+				_timer = 0.0f;
+				EnemyGenerater('s', _genMat);
+				_genDuration = RandomTime();
+				_genMat = RandomPosition();
+			}
+			break;
+		case LEVEL2:
+			if (_timer > _genDuration && !flag) {
+				flag = true;
+				_genMat._m[0].w = 1.5f;
+				_genMat._m[1].w = 2.55f;
+				EnemyGenerater('m', _genMat);
+				_genMat._m[0].w = -1.5f;
+				_genMat._m[1].w = 2.55f;
+				EnemyGenerater('m', _genMat);
+			}
+			break;
+		case LEVEL3:
+			if (!flag) {
+				flag = true;
+				EnemyGenerater('b', _genMat);
+			}
+			break;
+		default:
+			break;
+		}
+
 }
