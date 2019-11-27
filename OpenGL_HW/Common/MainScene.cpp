@@ -21,8 +21,8 @@ void MainScene::CreateGameObject() {
 void MainScene::Draw() {
 	
 	_planetManager->PlanetDraw();
-	_pBoat->Draw();
 	_enemyManager->EnemyDraw();
+	_pBoat->Draw();
 }
 
 

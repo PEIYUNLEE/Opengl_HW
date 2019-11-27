@@ -4,6 +4,7 @@
 class EnemyManager;
 class PBoat;
 #include "Collision.h"
+#include "ColorDefine.h"
 
 #define BULLET_POINT_NUM 10
 
@@ -34,10 +35,10 @@ public:
 	float *_colliderSize;
 	Transform *_transform;
 
-	Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed, const vec4 &color);
+	Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed, const vec4 &color = _COLOR_YELLOW);
 	~Bullet();
 
-	void SetPoint();
+	void SetPoint(const vec4 &color);
 	void AutoTranslate(float dt);
 	void AutoTranslate(float dt,int index);
 	void Draw();

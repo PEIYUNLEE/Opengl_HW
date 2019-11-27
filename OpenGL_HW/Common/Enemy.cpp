@@ -321,14 +321,14 @@ void EnemyMiddle::Reset() {
 /////////EnemyBoss
 EnemyBoss::EnemyBoss(mat4 &mxView, mat4 &mxProjection, float fspeed, float attackDuration, int pointNum, char type) :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
 	_attackState = Idle;
-	_attackDuration = 2.0f;
+	_attackDuration = 1.5f;
 	_iX = 0.0f;
 	_iY = 1.0f;
 	_translateTimer = 0.0f;
 	_btx = 0.0f;
 	_bty = 0.0f;
 	_isExploShoot = false;
-	_pointNum = 54;
+	_pointNum = 249;
 	_bulletList = new BulletList(mxView, mxProjection, 50, 'b', _COLOR_YELLOW, 1.0f);
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
@@ -341,7 +341,7 @@ void EnemyBoss::SetPoint() {
 	float a = 0.0f;
 	float b = 0.0f;
 
-	//
+	////////////////////////////////////////////////////window background
 	_points[0] = vec4(-0.4f , 0.0f , 0.0f , 1.0f);
 	_points[1] = vec4(-0.4f, 0.55f, 0.0f, 1.0f);
 	_points[2] = vec4(0.4f, 0.0f, 0.0f, 1.0f);
@@ -352,18 +352,18 @@ void EnemyBoss::SetPoint() {
 	_colors[2] = _COLOR_BLUEGREEN;
 	_colors[3] = _COLOR_BLUEGREEN;
 
-	//
-	_points[4] = vec4(-0.4f, 0.0f, 0.0f, 1.0f);
-	_points[5] = vec4(-0.4f, 0.55f, 0.0f, 1.0f);
-	_points[6] = vec4(0.4f, 0.0f, 0.0f, 1.0f);
-	_points[7] = vec4(0.4f, 0.55f, 0.0f, 1.0f);
+	////////////////////////////////////////////////////shoot left 1
+	_points[4] = vec4(-0.65f, -0.25f, 0.0f, 1.0f);
+	_points[5] = vec4(-0.65f, 0.1f, 0.0f, 1.0f);
+	_points[6] = vec4(-0.45f, -0.25f, 0.0f, 1.0f);
+	_points[7] = vec4(-0.45f, 0.1f, 0.0f, 1.0f);
 
-	_colors[4] = _COLOR_BLUEGREEN;
-	_colors[5] = _COLOR_BLUEGREEN;
-	_colors[6] = _COLOR_BLUEGREEN;
-	_colors[7] = _COLOR_BLUEGREEN;
+	_colors[4] = _COLOR_GRAY;
+	_colors[5] = _COLOR_GRAY;
+	_colors[6] = _COLOR_GRAY;
+	_colors[7] = _COLOR_GRAY;
 
-	//
+	////////////////////////////////////////////////////window1
 	_points[8] = vec4(-0.375f, 0.0f, 0.0f, 1.0f);
 	_points[9] = vec4(-0.375f, 0.55f, 0.0f, 1.0f);
 	_points[10] = vec4(0.375f, 0.0f, 0.0f, 1.0f);
@@ -374,73 +374,436 @@ void EnemyBoss::SetPoint() {
 	_colors[10] = _COLOR_WINDOW_1;
 	_colors[11] = _COLOR_WINDOW_1;
 
-	//
-	_points[12] = vec4(-0.52f, 0.20f, 0.0f, 1.0f);
-	_points[13] = vec4(-0.21f, 0.66f, 0.0f, 1.0f);
-	_points[14] = vec4(-0.37f, 0.12f, 0.0f, 1.0f);
-	_points[15] = vec4(-0.07f, 0.58f, 0.0f, 1.0f);
+	////////////////////////////////////////////////////monster
+	a = 0.16f;
+	b = 0.16f;
+	for (int i = 12; i < 32; i++)
+	{
+		_points[i].x = a* cosf(M_PI*2.0f*i / 20);
+		_points[i].y = b* sinf(M_PI*2.0f*i / 20) + 0.29f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_PURPLE;
+	}
 
-	_colors[12] = _COLOR_WINDOW_2;
-	_colors[13] = _COLOR_WINDOW_2;
-	_colors[14] = _COLOR_WINDOW_2;
-	_colors[15] = _COLOR_WINDOW_2;
+	////////////////////////////////////////////////////monster hand
+	_points[32] = vec4(-0.21f, 0.29f, 0.0f, 1.0f);
+	_points[33] = vec4(0.21f, 0.29f, 0.0f, 1.0f);
+	_points[34] = vec4(0.0f, 0.15f, 0.0f, 1.0f);
 
-	//
-	_points[16] = vec4(-0.20f, 0.17f, 0.0f, 1.0f);
-	_points[17] = vec4(0.11f, 0.63f, 0.0f, 1.0f);
-	_points[18] = vec4(-0.06f, 0.08f, 0.0f, 1.0f);
-	_points[19] = vec4(0.26f, 0.54f, 0.0f, 1.0f);
+	_colors[32] = _COLOR_PURPLE;
+	_colors[33] = _COLOR_PURPLE;
+	_colors[34] = _COLOR_PURPLE;
 
-	_colors[16] = _COLOR_WINDOW_2;
-	_colors[17] = _COLOR_WINDOW_2;
-	_colors[18] = _COLOR_WINDOW_2;
-	_colors[19] = _COLOR_WINDOW_2;
+	////////////////////////////////////////////////////monster EYE1
+	a = 0.08f;
+	b = 0.08f;
+	for (int i = 35; i < 55; i++)
+	{
+		_points[i].x = a* cosf(M_PI*2.0f*i / 20);
+		_points[i].y = b* sinf(M_PI*2.0f*i / 20) + 0.33f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_WHITE;
+	}
 
-	////
-	_points[20] = vec4(0.07f, 0.11f, 0.0f, 1.0f);
-	_points[21] = vec4(0.29f, -0.04f, 0.0f, 1.0f);
-	_points[22] = vec4(0.37f, 0.57f, 0.0f, 1.0f);
-	_points[23] = vec4(0.58f, 0.46f, 0.0f, 1.0f);
+	////////////////////////////////////////////////////monster EYE2
+	a = 0.035f;
+	b = 0.035f;
+	for (int i = 55; i < 65; i++)
+	{
+		_points[i].x = a* cosf(M_PI*2.0f*i / 10);
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) + 0.3275f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_BLACK;
+	}
 
-	_colors[20] = _COLOR_WINDOW_2;
-	_colors[21] = _COLOR_WINDOW_2;
-	_colors[22] = _COLOR_WINDOW_2;
-	_colors[23] = _COLOR_WINDOW_2;
+	////////////////////////////////////////////////////window2 left
+	_points[65] = vec4(-0.375f, 0.39f, 0.0f, 1.0f);
+	_points[66] = vec4(-0.21f, 0.66f, 0.0f, 1.0f);
+	_points[67] = vec4(-0.37f, 0.12f, 0.0f, 1.0f);
+	_points[68] = vec4(-0.07f, 0.58f, 0.0f, 1.0f);
 
+	_colors[65] = _COLOR_WINDOW_2;
+	_colors[66] = _COLOR_WINDOW_2;
+	_colors[67] = _COLOR_WINDOW_2;
+	_colors[68] = _COLOR_WINDOW_2;
+
+	////////////////////////////////////////////////////window2 center
+	_points[69] = vec4(-0.20f, 0.17f, 0.0f, 1.0f);
+	_points[70] = vec4(0.11f, 0.63f, 0.0f, 1.0f);
+	_points[71] = vec4(-0.06f, 0.08f, 0.0f, 1.0f);
+	_points[72] = vec4(0.26f, 0.54f, 0.0f, 1.0f);
+
+	_colors[69] = _COLOR_WINDOW_2;
+	_colors[70] = _COLOR_WINDOW_2;
+	_colors[71] = _COLOR_WINDOW_2;
+	_colors[72] = _COLOR_WINDOW_2;
+
+	////////////////////////////////////////////////////window2 right
+	_points[73] = vec4(0.07f, 0.11f, 0.0f, 1.0f);
+	_points[74] = vec4(0.29f, -0.04f, 0.0f, 1.0f);
+	_points[75] = vec4(0.375f, 0.56f, 0.0f, 1.0f);
+	_points[76] = vec4(0.375f, 0.11f, 0.0f, 1.0f);
+
+	_colors[73] = _COLOR_WINDOW_2;
+	_colors[74] = _COLOR_WINDOW_2;
+	_colors[75] = _COLOR_WINDOW_2;
+	_colors[76] = _COLOR_WINDOW_2;
+
+	////////////////////////////////////////////////////top line
+	_points[77] = vec4(-0.01f, 0.83f, 0.0f, 1.0f);
+	_points[78] = vec4(-0.01f, 0.89f, 0.0f, 1.0f);
+	_points[79] = vec4(0.01f, 0.83f, 0.0f, 1.0f);
+	_points[80] = vec4(0.01f, 0.89f, 0.0f, 1.0f);
+
+	_colors[77] = _COLOR_YELLOW;
+	_colors[78] = _COLOR_YELLOW;
+	_colors[79] = _COLOR_YELLOW;
+	_colors[80] = _COLOR_YELLOW;
+
+	////////////////////////////////////////////////////head
 	a = 0.405f;
 	b = 0.35f;
-	for (int i = 24; i < 34; i++)
+	for (int i = 81; i < 91; i++)
 	{
-		_points[i].x = a* cosf(M_PI*2.0f*(i - 23.5) / 20);
-		_points[i].y = b* sinf(M_PI*2.0f*(i - 23.5) / 20) + 0.475f;
+		_points[i].x = a* cosf(M_PI*2.0f*(i - 80.5) / 20);
+		_points[i].y = b* sinf(M_PI*2.0f*(i - 80.5) / 20) + 0.485f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_BLUEGREEN;
 	}
 
+	////////////////////////////////////////////////////shoot left 2
+	_points[91] = vec4(-0.61f, -0.3f, 0.0f, 1.0f);
+	_points[92] = vec4(-0.61f, -0.24f, 0.0f, 1.0f);
+	_points[93] = vec4(-0.58f, -0.3f, 0.0f, 1.0f);
+	_points[94] = vec4(-0.58f, -0.24f, 0.0f, 1.0f);
+
+	_colors[91] = _COLOR_GRAY;
+	_colors[92] = _COLOR_GRAY;
+	_colors[93] = _COLOR_GRAY;
+	_colors[94] = _COLOR_GRAY;
+
+	////////////////////////////////////////////////////shoot left 3
+	_points[95] = vec4(-0.52f, -0.3f, 0.0f, 1.0f);
+	_points[96] = vec4(-0.52f, -0.24f, 0.0f, 1.0f);
+	_points[97] = vec4(-0.49f, -0.3f, 0.0f, 1.0f);
+	_points[98] = vec4(-0.49f, -0.24f, 0.0f, 1.0f);
+
+	_colors[95] = _COLOR_GRAY;
+	_colors[96] = _COLOR_GRAY;
+	_colors[97] = _COLOR_GRAY;
+	_colors[98] = _COLOR_GRAY;
+
+
+	/////////////////////////////////////////////////////shoot right 2
+	_points[99] = vec4(0.61f, -0.3f, 0.0f, 1.0f);
+	_points[100] = vec4(0.61f, -0.24f, 0.0f, 1.0f);
+	_points[101] = vec4(0.58f, -0.3f, 0.0f, 1.0f);
+	_points[102] = vec4(0.58f, -0.24f, 0.0f, 1.0f);
+
+	_colors[99] = _COLOR_GRAY;
+	_colors[100] = _COLOR_GRAY;
+	_colors[101] = _COLOR_GRAY;
+	_colors[102] = _COLOR_GRAY;
+
+	////////////////////////////////////////////////////shoot right 3
+	_points[103] = vec4(0.52f, -0.3f, 0.0f, 1.0f);
+	_points[104] = vec4(0.52f, -0.24f, 0.0f, 1.0f);
+	_points[105] = vec4(0.49f, -0.3f, 0.0f, 1.0f);
+	_points[106] = vec4(0.49f, -0.24f, 0.0f, 1.0f);
+
+	_colors[103] = _COLOR_GRAY;
+	_colors[104] = _COLOR_GRAY;
+	_colors[105] = _COLOR_GRAY;
+	_colors[106] = _COLOR_GRAY;
+
+	/////////////////////////////////////////////////////shoot left circle
+	a = 0.035f;
+	b = 0.035f;
+	for (int i = 107; i < 117; i++)
+	{
+		_points[i].x = a* cosf(M_PI*2.0f*i / 10)-0.595f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10)-0.32f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	/////////////////////////////////////////////////////shoot left circle
+	a = 0.035f;
+	b = 0.035f;
+	for (int i = 117; i < 127; i++)
+	{
+		_points[i].x = a* cosf(M_PI*2.0f*i / 10) - 0.505f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.32f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+
+	/////////////////////////////////////////////////////shoot right circle
+	a = 0.035f;
+	b = 0.035f;
+	for (int i = 127; i < 137; i++)
+	{
+		_points[i].x = a* cosf(M_PI*2.0f*i / 10) + 0.595f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.32f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	/////////////////////////////////////////////////////shoot right circle
+	a = 0.035f;
+	b = 0.035f;
+	for (int i = 137; i < 147; i++)
+	{
+		_points[i].x = a* cosf(M_PI*2.0f*i / 10) + 0.505f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.32f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	////////////////////////////////////////////////////shoot right 1
+	_points[147] = vec4(0.65f, -0.25f, 0.0f, 1.0f);
+	_points[148] = vec4(0.65f, 0.1f, 0.0f, 1.0f);
+	_points[149] = vec4(0.45f, -0.25f, 0.0f, 1.0f);
+	_points[150] = vec4(0.45f, 0.1f, 0.0f, 1.0f);
+
+	_colors[147] = _COLOR_GRAY;
+	_colors[148] = _COLOR_GRAY;
+	_colors[149] = _COLOR_GRAY;
+	_colors[150] = _COLOR_GRAY;
+
+
+	////////////////////////////////////////////////////shoot center bottom gray
+	a = 0.46f;
+	b = 0.42f;
+	for (int i = 151; i < 161; i++)
+	{
+		_points[i].x = a* cosf(M_PI*2.0f*(i - 20) / 20);
+		_points[i].y = b* sinf(M_PI*2.0f*(i - 20) / 20) + 0.13f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	////////////////////////////////////////////////////shoot center bottom yellow
+	_points[161] = vec4(-0.30f, -0.205f, 0.0f, 1.0f);
+	_points[162] = vec4(-0.30f, -0.17f, 0.0f, 1.0f);
+	_points[163] = vec4(0.30f, -0.205f, 0.0f, 1.0f);
+	_points[164] = vec4(0.30f, -0.17f, 0.0f, 1.0f);
+
+	_colors[161] = _COLOR_YELLOW;
+	_colors[162] = _COLOR_YELLOW;
+	_colors[163] = _COLOR_YELLOW;
+	_colors[164] = _COLOR_YELLOW;
+
+
+	////////////////////////////////////////////////////shoot center 1
+	_points[165] = vec4(0.1f, -0.375f, 0.0f, 1.0f);
+	_points[166] = vec4(0.1f, -0.25f, 0.0f, 1.0f);
+	_points[167] = vec4(-0.1f, -0.375f, 0.0f, 1.0f);
+	_points[168] = vec4(-0.1f, -0.25f, 0.0f, 1.0f);
+
+	_colors[165] = _COLOR_GRAY;
+	_colors[166] = _COLOR_GRAY;
+	_colors[167] = _COLOR_GRAY;
+	_colors[168] = _COLOR_GRAY;
+
+
+	/////////////////////////////////////////////////////shoot center 2
+	_points[169] = vec4(-0.06f, -0.465f, 0.0f, 1.0f);
+	_points[170] = vec4(-0.06f, -0.365f, 0.0f, 1.0f);
+	_points[171] = vec4(-0.03f, -0.465f, 0.0f, 1.0f);
+	_points[172] = vec4(-0.03f, -0.365f, 0.0f, 1.0f);
+
+	_colors[169] = _COLOR_GRAY;
+	_colors[170] = _COLOR_GRAY;
+	_colors[171] = _COLOR_GRAY;
+	_colors[172] = _COLOR_GRAY;
+
+	////////////////////////////////////////////////////shoot center 2
+	_points[173] = vec4(0.03f, -0.465f, 0.0f, 1.0f);
+	_points[174] = vec4(0.03f, -0.365f, 0.0f, 1.0f);
+	_points[175] = vec4(0.06f, -0.465f, 0.0f, 1.0f);
+	_points[176] = vec4(0.06f, -0.365f, 0.0f, 1.0f);
+
+	_colors[173] = _COLOR_GRAY;
+	_colors[174] = _COLOR_GRAY;
+	_colors[175] = _COLOR_GRAY;
+	_colors[176] = _COLOR_GRAY;
+
+	/////////////////////////////////////////////////////shoot center circle
+	a = 0.035f;
+	b = 0.035f;
+	for (int i = 177; i < 187; i++)
+	{
+		_points[i].x = a* cosf(M_PI*2.0f*i / 10) - 0.045f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.445f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	/////////////////////////////////////////////////////shoot center circle
+	a = 0.035f;
+	b = 0.035f;
+	for (int i = 187; i < 197; i++)
+	{
+		_points[i].x = a* cosf(M_PI*2.0f*i / 10) + 0.045f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.445f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+
+
+	///////////////////////////////////////////////////////body
 	a = 0.85f;
 	b = 0.2f;
-	////Body
-	for (int i = 34; i < 54; i++)
+	for (int i = 197; i < 217; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*i / 20);
 		_points[i].y = b* sinf(M_PI*2.0f*i / 20);
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_BLUEGREEN;
 	}
+
+
+	/////////////////////////////////////////////////////body center yellow
+	_points[217] = vec4(-0.85f, 0.02f, 0.0f, 1.0f);
+	_points[218] = vec4(-0.85f, -0.02f, 0.0f, 1.0f);
+	_points[219] = vec4(0.85f, 0.02f, 0.0f, 1.0f);
+	_points[220] = vec4(0.85f, -0.02f, 0.0f, 1.0f);
+
+	_colors[217] = _COLOR_YELLOW;
+	_colors[218] = _COLOR_YELLOW;
+	_colors[219] = _COLOR_YELLOW;
+	_colors[220] = _COLOR_YELLOW;
+
+	/////////////////////////////////////////////////////body center green
+	_points[221] = vec4(-0.015f, 0.02f, 0.0f, 1.0f);
+	_points[222] = vec4(-0.015f, -0.02f, 0.0f, 1.0f);
+	_points[223] = vec4(0.015f, 0.02f, 0.0f, 1.0f);
+	_points[224] = vec4(0.015f, -0.02f, 0.0f, 1.0f);
+
+	_colors[221] = _COLOR_BLUEGREEN;
+	_colors[222] = _COLOR_BLUEGREEN;
+	_colors[223] = _COLOR_BLUEGREEN;
+	_colors[224] = _COLOR_BLUEGREEN;
+
+	/////////////////////////////////////////////////////body center green
+	_points[225] = vec4(-0.245f, 0.02f, 0.0f, 1.0f);
+	_points[226] = vec4(-0.245f, -0.02f, 0.0f, 1.0f);
+	_points[227] = vec4(-0.215f, 0.02f, 0.0f, 1.0f);
+	_points[228] = vec4(-0.215f, -0.02f, 0.0f, 1.0f);
+
+	_colors[225] = _COLOR_BLUEGREEN;
+	_colors[226] = _COLOR_BLUEGREEN;
+	_colors[227] = _COLOR_BLUEGREEN;
+	_colors[228] = _COLOR_BLUEGREEN;
+
+	/////////////////////////////////////////////////////body center green
+	_points[229] = vec4(-0.475f, 0.02f, 0.0f, 1.0f);
+	_points[230] = vec4(-0.475f, -0.02f, 0.0f, 1.0f);
+	_points[231] = vec4(-0.445f, 0.02f, 0.0f, 1.0f);
+	_points[232] = vec4(-0.445f, -0.02f, 0.0f, 1.0f);
+
+	_colors[229] = _COLOR_BLUEGREEN;
+	_colors[230] = _COLOR_BLUEGREEN;
+	_colors[231] = _COLOR_BLUEGREEN;
+	_colors[232] = _COLOR_BLUEGREEN;
+
+	/////////////////////////////////////////////////////body center green
+	_points[233] = vec4(-0.705f, 0.02f, 0.0f, 1.0f);
+	_points[234] = vec4(-0.705f, -0.02f, 0.0f, 1.0f);
+	_points[235] = vec4(-0.675f, 0.02f, 0.0f, 1.0f);
+	_points[236] = vec4(-0.675f, -0.02f, 0.0f, 1.0f);
+
+	_colors[233] = _COLOR_BLUEGREEN;
+	_colors[234] = _COLOR_BLUEGREEN;
+	_colors[235] = _COLOR_BLUEGREEN;
+	_colors[236] = _COLOR_BLUEGREEN;
+
+
+	/////////////////////////////////////////////////////body center green
+	_points[237] = vec4(0.245f, 0.02f, 0.0f, 1.0f);
+	_points[238] = vec4(0.245f, -0.02f, 0.0f, 1.0f);
+	_points[239] = vec4(0.215f, 0.02f, 0.0f, 1.0f);
+	_points[240] = vec4(0.215f, -0.02f, 0.0f, 1.0f);
+
+	_colors[237] = _COLOR_BLUEGREEN;
+	_colors[238] = _COLOR_BLUEGREEN;
+	_colors[239] = _COLOR_BLUEGREEN;
+	_colors[240] = _COLOR_BLUEGREEN;
+
+	/////////////////////////////////////////////////////body center green
+	_points[241] = vec4(0.475f, 0.02f, 0.0f, 1.0f);
+	_points[242] = vec4(0.475f, -0.02f, 0.0f, 1.0f);
+	_points[243] = vec4(0.445f, 0.02f, 0.0f, 1.0f);
+	_points[244] = vec4(0.445f, -0.02f, 0.0f, 1.0f);
+
+	_colors[241] = _COLOR_BLUEGREEN;
+	_colors[242] = _COLOR_BLUEGREEN;
+	_colors[243] = _COLOR_BLUEGREEN;
+	_colors[244] = _COLOR_BLUEGREEN;
+
+	/////////////////////////////////////////////////////body center green
+	_points[245] = vec4(0.705f, 0.02f, 0.0f, 1.0f);
+	_points[246] = vec4(0.705f, -0.02f, 0.0f, 1.0f);
+	_points[247] = vec4(0.675f, 0.02f, 0.0f, 1.0f);
+	_points[248] = vec4(0.675f, -0.02f, 0.0f, 1.0f);
+
+	_colors[245] = _COLOR_BLUEGREEN;
+	_colors[246] = _COLOR_BLUEGREEN;
+	_colors[247] = _COLOR_BLUEGREEN;
+	_colors[248] = _COLOR_BLUEGREEN;
 }
 
 void EnemyBoss::Draw() {
 	_bulletList->BulletDraw();
 
 	_transform->Draw();
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 16, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 20, 4);
-	glDrawArrays(GL_TRIANGLE_FAN, 24, 10);
-	glDrawArrays(GL_TRIANGLE_FAN, 34, 20);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);  //window background
+	glDrawArrays(GL_TRIANGLE_STRIP, 4, 4); 	//shoot left 1
+	glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);	//window1
+
+	glDrawArrays(GL_TRIANGLE_FAN, 12, 20);	//monster
+	glDrawArrays(GL_TRIANGLES, 32, 3);	//monster hand
+	glDrawArrays(GL_TRIANGLE_FAN, 35, 20);	//monster eye1
+	glDrawArrays(GL_TRIANGLE_FAN, 55, 10);	//monster eye2
+	glDrawArrays(GL_TRIANGLE_STRIP, 65, 4);	//monster hand
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 69, 4);	//window2 left
+	glDrawArrays(GL_TRIANGLE_STRIP, 73, 4);	//window2 center
+	glDrawArrays(GL_TRIANGLE_STRIP, 77, 4); //window2 right
+	glDrawArrays(GL_TRIANGLE_FAN, 81, 10); //head
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 91, 4); //shoot left 2-1
+	glDrawArrays(GL_TRIANGLE_STRIP, 95, 4); //shoot left 2-2
+	glDrawArrays(GL_TRIANGLE_STRIP, 99, 4); //shoot right 2-1
+	glDrawArrays(GL_TRIANGLE_STRIP, 103, 4); //shoot right 2-2
+	glDrawArrays(GL_TRIANGLE_FAN, 107, 10); //shoot left circle-1
+	glDrawArrays(GL_TRIANGLE_FAN, 117, 10); //shoot left circle-2
+	glDrawArrays(GL_TRIANGLE_FAN, 127, 10); //shoot right circle-1
+	glDrawArrays(GL_TRIANGLE_FAN, 137, 10); //shoot right circle-2
+	glDrawArrays(GL_TRIANGLE_STRIP, 147, 4); 	//shoot right 1
+	glDrawArrays(GL_TRIANGLE_FAN, 151, 10);     //shoot center bottom gray
+	glDrawArrays(GL_TRIANGLE_STRIP, 161, 4); 	//shoot center bottom yellow
+	glDrawArrays(GL_TRIANGLE_STRIP, 165, 4); 	//shoot center 1
+	glDrawArrays(GL_TRIANGLE_STRIP, 169, 4); //shoot center 2-1
+	glDrawArrays(GL_TRIANGLE_STRIP, 173, 4); //shoot center 2-2
+	glDrawArrays(GL_TRIANGLE_FAN, 177, 10); //shoot center circle-1
+	glDrawArrays(GL_TRIANGLE_FAN, 187, 10); //shoot center circle-2
+
+	glDrawArrays(GL_TRIANGLE_FAN, 197, 20); //body
+	glDrawArrays(GL_TRIANGLE_STRIP, 217, 4); //body center yellow
+	glDrawArrays(GL_TRIANGLE_STRIP, 221, 4); //body center green
+	glDrawArrays(GL_TRIANGLE_STRIP, 225, 4); //body center green
+	glDrawArrays(GL_TRIANGLE_STRIP, 229, 4); //body center green
+	glDrawArrays(GL_TRIANGLE_STRIP, 233, 4); //body center green
+	glDrawArrays(GL_TRIANGLE_STRIP, 237, 4); //body center green
+	glDrawArrays(GL_TRIANGLE_STRIP, 241, 4); //body center green
+	glDrawArrays(GL_TRIANGLE_STRIP, 245, 4); //body center green
+
+	
+	//257
 }
 
 int normalTime = 0;

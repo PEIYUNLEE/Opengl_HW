@@ -87,7 +87,7 @@ void PlanetManager::PlanetGenerator(mat4 &mxView, mat4 &mxProjection) {
 	SetPosition(1.25f,2.0f);
 
 	_pGet = NULL;
-	for (int i = 1,y=1; i < _planetCount; i++)
+	for (int i = 1,y = 1; i < _planetCount; i++)
 	{
 		_pGet = new Planet(mxView, mxProjection);
 		_pTail->_nextlink = _pGet;
@@ -129,7 +129,6 @@ void PlanetManager::PlanetGenerator(mat4 &mxView, mat4 &mxProjection) {
 			SetPosition(-2.0f, -1.3f);
 		else if (i == 18)
 			SetPosition(-0.2f, -2.5f);
-		else SetPosition(2.6f, 2.6f);
 
 	}
 }
