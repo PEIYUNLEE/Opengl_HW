@@ -28,6 +28,7 @@ private:
 
 	float _timer;
 	EnemyManager *_getEnemyManager;
+	int _heart;
 public:
 	Transform *_transform;
 	BulletList *_bulletList;

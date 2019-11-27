@@ -16,7 +16,7 @@ private:
 	Enemy *pEHead_s, *pETail_s;
 	Enemy *pEHead_m, *pETail_m;
 	Enemy *pENewGet , *pEUpdateGet;
-	Enemy *pEBoss;
+	Enemy *pEBoss,*pEHead_b;
 
 	int _totCount_s, _totCount_m, _totCount_b;
 	int  _storetotCount;

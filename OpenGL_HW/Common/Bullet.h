@@ -18,6 +18,7 @@ private:
 	vec4 *_points;
 	vec4 *_colors;
 
+	bool _bStartRot = false;
 	float _ftottime;
 
 	char _character;
@@ -27,16 +28,18 @@ private:
 	Bullet *_nextlink;
 
 public:
+	bool _isSpecial;
 	float _fSpeed,_fSpeedInit;
 	float _bIX, _bIY; //BULLET單位向量
 	float *_colliderSize;
 	Transform *_transform;
 
-	Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed);
+	Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed, const vec4 &color);
 	~Bullet();
 
 	void SetPoint();
 	void AutoTranslate(float dt);
+	void AutoTranslate(float dt,int index);
 	void Draw();
 	void Reset();
 
@@ -63,13 +66,13 @@ public:
 	Bullet *pBUseTail, *pBUseHead;
 	int _shootCount;
 
-	BulletList(mat4 &mxView, mat4 &mxProjection, int totCount , char character, float fspeed);
+	BulletList(mat4 &mxView, mat4 &mxProjection, int totCount , char character, const vec4 &color, float fspeed);
 	~BulletList();
 
 	void PushTail();		// 在list的尾巴新增node
 	void Clear();					// 把整串list刪除
-	void BulletShoot(mat4 &mat, float bIX, float bIY);
-	void BulletShoot(mat4 &mat, float bIX, float bIY, float fSpeed);
+	void BulletShoot(mat4 &mat, float bIX, float bIY, bool isSpecial = false);
+	void BulletShoot(mat4 &mat, float bIX, float bIY, float fSpeed, bool isSpecial = false);
 	void BulletDraw();
 	void Update(float delta, PBoat *getPBoat);
 	void Update(float delta, EnemyManager *getEnemyManager, Bullet *bulletResult);

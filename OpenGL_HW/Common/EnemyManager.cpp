@@ -43,7 +43,7 @@ EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int t
 		pETail_m = pENewGet;
 	}
 
-	pEBoss = new EnemyBoss(mxView, mxProjection);
+	pEHead_b = new EnemyBoss(mxView, mxProjection);
 }
 
 EnemyManager::~EnemyManager() {
@@ -77,7 +77,7 @@ void EnemyManager::Clear() {
 		}
 	}
 
-	if (pEBoss != NULL) delete pEBoss;
+	if (pEHead_b != NULL) delete pEHead_b;
 }
 
 void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
@@ -103,8 +103,8 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 		totCount = &_totCount_m;
 		break;
 	case 'b':
-		pHead = pEBoss;
-		pTail = pEBoss;
+		pHead = pEHead_b;
+		pTail = pEHead_b;
 		useCount = &_useCount_b;
 		storeCount = &_storeCount_b;
 		totCount = &_totCount_b;
@@ -191,6 +191,9 @@ void EnemyManager::PushTail() {
 		case 'm':
 			pTail = pETail_m;
 			break;
+		case 'b':
+			pTail = pEHead_b;
+			break;
 	}
 
 	pTail->_nextlink = pGet;
@@ -206,6 +209,9 @@ void EnemyManager::PushTail() {
 		break;
 	case 'm':
 		pETail_m = pTail;
+		break;
+	case 'b':
+		pTail = pEHead_b;
 		break;
 	}
 }
@@ -277,7 +283,7 @@ void EnemyManager::Update(float dt) {
 					DestroyEnemy(); 
 					k++;
 				}
-				else if (pEUpdateGet->_transform->_mxTRS._m[1].w >= 2.6f || pEUpdateGet->_transform->_mxTRS._m[1].w <= -2.6f) {
+				else if (pEUpdateGet->_type != 'b' && (pEUpdateGet->_transform->_mxTRS._m[1].w >= 2.6f || pEUpdateGet->_transform->_mxTRS._m[1].w <= -2.6f)) {
 
 					switch (pEUpdateGet->_type)
 					{
@@ -358,6 +364,7 @@ void EnemyManager::EGeneratorController(){
 		case LEVEL3:
 			if (!flag) {
 				flag = true;
+				_genMat = RandomPosition(0.0f,0.0f,3.0f);
 				EnemyGenerater('b', _genMat);
 			}
 			break;

@@ -2,7 +2,6 @@
 #include "../Header/Angel.h"
 #include "Planet.h"
 
-//class Planet;
 class PBoat;
 class EnemyManager;
 
@@ -11,7 +10,7 @@ class MainScene
 private:
 	//«Å§iª«¥ó
 	
-	Planet *_planet;
+	PlanetManager *_planetManager;
 	EnemyManager *_enemyManager;
 	mat4 _mxModelView, _mxProjection;
 

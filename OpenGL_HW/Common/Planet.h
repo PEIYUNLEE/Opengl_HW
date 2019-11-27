@@ -1,45 +1,53 @@
 #pragma once
 #include "../Header/Angel.h"
+#include "Transform.h"
+#include "ColorDefine.h"
 
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
 
+#define CPOINT_NUM 10
+
 class Planet
 {
 private:
-	int _pointsNum;
 	vec4 *_points;
 	vec4 *_colors;
-	GLuint _uiVao;
-	GLuint _uiBuffer;
-	GLuint _uiProgram;
-	GLuint _uiModelView, _uiProjection;
-
-	char *_vsh;
-
-	mat4 _mxView, _mxProjection;
-	mat4 _mxMVFinal, _mxTRS;
-
-	bool  _bUpdateMV;
-	bool  _bUpdateProj;
 
 	float _fduration;
 	float _fspeed;
+	float _radius;
 	float _ftottime;
 
-	void CreateBufferObject();
+	Transform *_transform;
+	void SetPoint();
+
+	Planet *_nextlink;
 public:
-	Planet(float radius = 0.8f, int colorType = 1,float fspeed=-0.5f,float fduration=10.0f, int pointsNum = 500);
+	Planet(mat4 &mxView, mat4 &mxProjection);
 	~Planet();
 
-	void SetShader(mat4 &mxView, mat4 &mxProjection, GLuint uiShaderHandle = MAX_UNSIGNED_INT);
-	GLuint GetShaderHandle() { return _uiProgram; }
-	void SetViewMatrix(mat4 &mat);
-	void SetProjectionMatrix(mat4 &mat);
-	void SetTRSMatrix(mat4 &mat);
 	void AutoTranslate(float dt);
-	vec4 SetColor(int colorType);
-	void SetVShaderName(char* vsh);
-
 	void Draw();
+
+	friend class  PlanetManager;
+};
+
+
+class PlanetManager
+{
+private:
+	int _planetCount;
+	Planet *_pGet,*_pHead,*_pTail;
+
+	void SetPosition(float X,float Y);
+	void Clear();
+	void PlanetGenerator(mat4 &mxView, mat4 &mxProjection);
+	mat4 RandomPosition(float minX, float maxX, float minY, float maxY);
+public:
+	PlanetManager(mat4 &mxView, mat4 &mxProjection);
+	~PlanetManager();
+
+	void Update(float dt);
+	void PlanetDraw();
 };

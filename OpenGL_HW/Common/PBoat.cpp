@@ -14,16 +14,19 @@ PBoat::PBoat(mat4 &mxView, mat4 &mxProjection) {
 	_colliderSize = new float[2];
 	_colliderSize[0] = 0.175f;
 	_colliderSize[1] = 0.2f;
+	_heart = 3;
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, BTOTPOINT_NUM, _points,_colors);
 	_defense = new Defense(mxView, mxProjection, 0.35f);
-	_bulletList = new BulletList(mxView, mxProjection, 50, 'p',1.0f);
+	_bulletList = new BulletList(mxView, mxProjection, 50, 'p', _COLOR_RED ,1.0f);
 }
 
 PBoat::~PBoat() {
 	if(_transform != NULL) delete _transform;
 	if (_defense != NULL) delete _defense;
 	if (_bulletList != NULL) delete _bulletList;
+	if (_points != NULL) delete _points;
+	if (_colors != NULL) delete _colors;
 }
 
 void PBoat::GetComponent(EnemyManager *getEnemyManager) {
@@ -144,7 +147,7 @@ void PBoat::Update(float delta,bool isBoatShoot) {
 		if (isBoatShoot == true) {
 			if (_timer >= 0.3f) {
 				_timer = 0.0f;
-				_bulletList->BulletShoot(_transform->_mxTRS,0.0f,1.0f); //player射出子彈，傳入player座標
+				_bulletList->BulletShoot(_transform->_mxTRS, 0.0f , 1.0f); //player射出子彈，傳入player座標
 			}
 		}
 
@@ -155,10 +158,13 @@ void PBoat::Update(float delta,bool isBoatShoot) {
 }
 
 void PBoat::Hurt() {
+	_heart--;
+	Print(_heart);
 	if (_isDefense)	_isDefense = false;
-	else {
+	else if(_heart <= 0) {
 		_transform->SetTRSMatrix(resetMat);
 		_isDead = true;
+		_bulletList->ResetBulletList();
 	}
 }
 
@@ -166,4 +172,5 @@ void PBoat::Revival() {	//外掛
 	_transform->Reset();
 	_isDead = false;
 	_isDefense = true;
+	_heart = 3;
 }

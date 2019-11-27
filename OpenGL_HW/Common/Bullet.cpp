@@ -5,12 +5,13 @@
 
 
 
-Bullet::Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed) {
+Bullet::Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed, const vec4 &color) {
 	_prelink = NULL;
 	_nextlink = NULL;
 	_character = character;
 	_fSpeedInit = fspeed;
 	_fSpeed = fspeed;
+	_isSpecial = false;
 	_colliderSize = new float[2];
 	_colliderSize[0] = 0.07f;
 	_colliderSize[1] = 0.07f;
@@ -40,14 +41,47 @@ void Bullet::AutoTranslate(float dt) {
 	GLfloat btx = 0.0f;
 	GLfloat bty = 0.0f;
 	
-
 	_ftottime += dt;
+	
 	bty = _ftottime*_fSpeed*_bIY;
 	btx = _ftottime*_fSpeed*_bIX;
 
 	mxTra = Translate(btx, bty, 0.0f);
-
 	_transform->SetTRSMatrix(mxTra*_transform->_mxOri);
+}
+
+float fTransTimer = 0.0f;
+
+void Bullet::AutoTranslate(float dt,int index) {
+	mat4 mxTra;
+	GLfloat btx = 0.0f;
+	GLfloat bty = 0.0f;
+
+	_ftottime += dt;
+
+	if (_ftottime<=2.0f && !_bStartRot) {
+		//正常向下發射
+		bty = _ftottime*_fSpeed*_bIY;
+		btx = _ftottime*_fSpeed*_bIX;
+		mxTra = Translate(btx, bty, 0.0f);
+		_transform->SetTRSMatrix(mxTra*_transform->_mxOri);
+	}
+	else if (!_bStartRot) {
+		if (_ftottime >= 3.0f+1.0f*(index/10)) {
+			_ftottime = 0.0f;
+			_bStartRot = true;
+			_bIX = cosf(M_PI*2.0f*(float)(index - 10) / 10);
+			_bIY = sinf(M_PI*2.0f*(float)(index - 10) / 10);
+			_transform->_mxOri = mxTra;
+		}
+	}
+	else if (_bStartRot) {
+		bty = _ftottime*_fSpeed*_bIY;
+		btx = _ftottime*_fSpeed*_bIX;
+		mxTra = Translate(btx, bty, 0.0f);
+		_transform->SetTRSMatrix(mxTra*_transform->_mxOri);
+	}
+
 }
 
 void Bullet::Draw() {
@@ -61,12 +95,14 @@ void Bullet::Reset() {
 
 	_ftottime = 0.0f;
 	_fSpeed = _fSpeedInit;
+	_isSpecial = false;
+	_bStartRot = false;
 }
 
 
 
 //BulletList
-BulletList::BulletList(mat4 &mxView, mat4 &mxProjection, int totCount, char character,float fspeed = 1.0f) {
+BulletList::BulletList(mat4 &mxView, mat4 &mxProjection, int totCount, char character,const vec4 &color,float fspeed = 1.0f) {
 	_totCount = totCount; //目前所有
 	_storeCount = _totCount;
 	_shootCount = 0;
@@ -74,11 +110,11 @@ BulletList::BulletList(mat4 &mxView, mat4 &mxProjection, int totCount, char char
 
 	//bulid bullet
 	pBHead = pBTail = NULL;
-	pBHead = new Bullet(mxView, mxProjection , _character, fspeed);
+	pBHead = new Bullet(mxView, mxProjection , _character, fspeed, color);
 	pBTail = pBHead;
 	for (int i= 1; i < _totCount; i++)
 	{
-		pBNewGet = new Bullet(mxView, mxProjection , _character, fspeed);
+		pBNewGet = new Bullet(mxView, mxProjection , _character, fspeed, color);
 		pBNewGet->_prelink = pBTail;
 		pBTail->_nextlink = pBNewGet;
 		pBTail = pBNewGet;
@@ -127,7 +163,7 @@ void BulletList::BulletDraw() {
 	}
 }
 
-void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY) {
+void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY,bool isSpecial) {
 	Bullet *pNewBulletGet;
 	if (_shootCount == 0)	//當目前use槽沒東西，跟子彈池要子彈
 	{
@@ -142,6 +178,7 @@ void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY) {
 		pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
 		pNewBulletGet->_bIX = bIX;
 		pNewBulletGet->_bIY = bIY;
+		pNewBulletGet->_isSpecial = isSpecial;
 		pBUseTail = pNewBulletGet;
 		_shootCount++;
 		_storeCount--;
@@ -164,6 +201,7 @@ void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY) {
 			pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
 			pNewBulletGet->_bIX = bIX;
 			pNewBulletGet->_bIY = bIY;
+			pNewBulletGet->_isSpecial = isSpecial;
 			pBUseTail = pNewBulletGet;
 			_shootCount++;
 			_storeCount--;
@@ -174,7 +212,7 @@ void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY) {
 	}
 }
 
-void BulletList::BulletShoot(mat4 &mat, float bIX, float bIY,float fSpeed) {
+void BulletList::BulletShoot(mat4 &mat, float bIX, float bIY,float fSpeed, bool isSpecial) {
 	Bullet *pNewBulletGet;
 	if (_shootCount == 0)	//當目前use槽沒東西，跟子彈池要子彈
 	{
@@ -190,6 +228,7 @@ void BulletList::BulletShoot(mat4 &mat, float bIX, float bIY,float fSpeed) {
 		pNewBulletGet->_bIX = bIX;
 		pNewBulletGet->_bIY = bIY;
 		pNewBulletGet->_fSpeed = fSpeed;
+		pNewBulletGet->_isSpecial = isSpecial;
 		pBUseTail = pNewBulletGet;
 		_shootCount++;
 		_storeCount--;
@@ -213,6 +252,7 @@ void BulletList::BulletShoot(mat4 &mat, float bIX, float bIY,float fSpeed) {
 			pNewBulletGet->_bIX = bIX;
 			pNewBulletGet->_bIY = bIY;
 			pNewBulletGet->_fSpeed = fSpeed;
+			pNewBulletGet->_isSpecial = isSpecial;
 			pBUseTail = pNewBulletGet;
 			_shootCount++;
 			_storeCount--;
@@ -321,6 +361,7 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 	//做每顆子彈要做的事
 
 	Bullet * bulletResult;
+	int index = 0;
 
 	if (_shootCount > 0) {
 		pBUpdateGet = pBUseHead;
@@ -352,7 +393,11 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 							k++;
 						}
 						else if (result == false) {
-							pBUpdateGet->AutoTranslate(delta);
+							if(!pBUpdateGet->_isSpecial) pBUpdateGet->AutoTranslate(delta);
+							else {
+								pBUpdateGet->AutoTranslate(delta,index);
+								index++;
+							}
 							if (pBUpdateGet != pBUseTail)
 								pBUpdateGet = pBUpdateGet->_nextlink;
 						}

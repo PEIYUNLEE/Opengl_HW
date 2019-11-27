@@ -22,6 +22,9 @@ void init(void)
 	g_mxProjection = Ortho(-VP_HALFWIDTH, VP_HALFWIDTH, -VP_HALFWIDTH, VP_HALFWIDTH, -1.0f, 1.0f);
 	g_MainScene = new MainScene(g_mxModelView, g_mxProjection);
 	glClearColor(0.0667f, 0.1333f, 0.2392f,1.0f); //background
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 //----------------------------------------------------------------------------
 
@@ -65,6 +68,10 @@ void Win_Keyboard(unsigned char key, int x, int y)
 	switch (key) {
 	case 'q':
 		if(g_MainScene->_pBoat->_isDead)
+			g_MainScene->_pBoat->Revival();
+		break;
+	case 'Q':
+		if (g_MainScene->_pBoat->_isDead)
 			g_MainScene->_pBoat->Revival();
 		break;
 	case 033:

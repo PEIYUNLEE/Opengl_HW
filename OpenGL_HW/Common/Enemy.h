@@ -93,33 +93,31 @@ class EnemyBoss : public Enemy
 {
 	enum AttackState
 	{
+		Idle,
 		Normal,
 		Progressive,
 		Explosion
 	};
 private:
-	float _iX = 0.0f;
-	float _iY = 1.0f;
+	float _iX;
+	float _iY;
 	int _attackState;
-	//float _rotateDuration = 4.5f;
-	//float _rotateTimer = 0.0f;
-	//float _translateTimer = 0.0f;
-	//GLfloat _fZAngle = 0.0f;
-	//GLfloat _btx = 0.0f;
-	//GLfloat _bty = 0.0f;
-	//bool _isStop = false;
+	float _translateTimer;
+	GLfloat _btx;
+	GLfloat _bty;
+	bool _isExploShoot;
 
 	void Attack(float delta);
 	void AutoTranslate(float ftottime);
 public:
-	EnemyBoss(mat4 &mxView, mat4 &mxProjection, float fspeed = -0.5f, float attackDuration = 3.0f, int pointNum = 4, char type = 'b');
+	EnemyBoss(mat4 &mxView, mat4 &mxProjection, float fspeed = 1.0f, float attackDuration = 3.0f, int pointNum = 32, char type = 'b');
 
 	void Draw();
 	void Hurt();
 	void SetPoint();
 	void Reset();
 	void AttackNormal();
-	void AttackProgressive();
+	void AttackProgressive(int &k);
 	void AttackExplosion();
 };
 
