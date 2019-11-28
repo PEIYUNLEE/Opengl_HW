@@ -33,7 +33,7 @@ public:
 	Enemy *_prelink;
 	Enemy *_nextlink;
 
-	float _circlecollider;
+	float *_colliderSize;
 
 	Enemy(mat4 &_mxView, mat4 &_mxProjection, float fspeed,float attackDuration, int pointNum, char type);
 	virtual ~Enemy();

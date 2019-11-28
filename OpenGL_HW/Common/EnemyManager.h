@@ -1,5 +1,6 @@
 #pragma once
 #include "../Header/Angel.h"
+#include "Collision.h"
 class Enemy;
 class PBoat;
 class BulletList;
@@ -33,6 +34,7 @@ private:
 
 	PBoat *_getPBoat;
 	int _state;
+	Collision _colliSystem;
 public:
 	Enemy *pEUseTail, *pEUseHead;
 	int _usetotCount;

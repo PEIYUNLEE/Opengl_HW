@@ -41,8 +41,9 @@ void Planet::AutoTranslate(float dt) {
 		_transform->_mxOri._m[1].w = 2.6f;
 		_transform->_mxTRS._m[1].w = 2.6f;
 	}
-
-	_transform->SetTRSMatrix(mxTra*_transform->_mxOri);
+	else {
+		_transform->SetTRSMatrix(mxTra*_transform->_mxOri);
+	}
 	
 }
 

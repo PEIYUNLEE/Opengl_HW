@@ -3,6 +3,7 @@
 #include "Bullet.h"
 
 Enemy::Enemy(mat4 &mxView, mat4 &mxProjection, float fspeed,float attackDuration, int pointNum, char type){
+	_colliderSize = new float[2];
 	_type = type;
 	_ftottime = 0;
 	_attackTimer = 0;
@@ -18,6 +19,7 @@ Enemy::~Enemy() {
 	if (_points != NULL) delete _points;
 	if (_colors != NULL) delete _colors;
 	if (_bulletList != NULL) delete _bulletList;
+	if (_colliderSize != NULL) delete [] _colliderSize;
 }
 
 void Enemy::Action(float dt, PBoat *getPBoat) {
@@ -34,7 +36,8 @@ void Enemy::Action(float dt, PBoat *getPBoat) {
 
 /////////EnemySmall
 EnemySmall::EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed, float attackDuration, int pointNum, char type) :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
-	_circlecollider = 0.7f;	//fix
+	_colliderSize[0] = 0.7f;
+	_colliderSize[1] = 0.7f;
 	_bulletList = new BulletList(mxView, mxProjection, 10, 'e', _COLOR_YELLOW, 1.25f);
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
@@ -125,7 +128,8 @@ void EnemySmall::Reset() {
 /////////EnemyMiddle
 EnemyMiddle::EnemyMiddle(mat4 &mxView, mat4 &mxProjection, float fspeed, float attackDuration, int pointNum, char type) :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
 	_attackDuration = 0.5f;
-	_circlecollider = 0.7f;	//fix
+	_colliderSize[0] = 0.7f;
+	_colliderSize[1] = 0.7f;
 	_bulletList = new BulletList(mxView, mxProjection, 20, 'm',  _COLOR_YELLOW, 1.0f);
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
@@ -320,8 +324,10 @@ void EnemyMiddle::Reset() {
 
 /////////EnemyBoss
 EnemyBoss::EnemyBoss(mat4 &mxView, mat4 &mxProjection, float fspeed, float attackDuration, int pointNum, char type) :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
+	_colliderSize[0] = 0.8f;
+	_colliderSize[1] = 0.5f;
 	_attackState = Idle;
-	_attackDuration = 1.5f;
+	_attackDuration = 1.25f;
 	_iX = 0.0f;
 	_iY = 1.0f;
 	_translateTimer = 0.0f;
@@ -342,10 +348,10 @@ void EnemyBoss::SetPoint() {
 	float b = 0.0f;
 
 	////////////////////////////////////////////////////window background
-	_points[0] = vec4(-0.4f , 0.0f , 0.0f , 1.0f);
-	_points[1] = vec4(-0.4f, 0.55f, 0.0f, 1.0f);
-	_points[2] = vec4(0.4f, 0.0f, 0.0f, 1.0f);
-	_points[3] = vec4(0.4f, 0.55f, 0.0f, 1.0f);
+	_points[0] = vec4(-0.4f , -0.2f , 0.0f , 1.0f);
+	_points[1] = vec4(-0.4f, 0.35f, 0.0f, 1.0f);
+	_points[2] = vec4(0.4f, -0.2f, 0.0f, 1.0f);
+	_points[3] = vec4(0.4f, 0.35f, 0.0f, 1.0f);
 
 	_colors[0] = _COLOR_BLUEGREEN;
 	_colors[1] = _COLOR_BLUEGREEN;
@@ -353,10 +359,10 @@ void EnemyBoss::SetPoint() {
 	_colors[3] = _COLOR_BLUEGREEN;
 
 	////////////////////////////////////////////////////shoot left 1
-	_points[4] = vec4(-0.65f, -0.25f, 0.0f, 1.0f);
-	_points[5] = vec4(-0.65f, 0.1f, 0.0f, 1.0f);
-	_points[6] = vec4(-0.45f, -0.25f, 0.0f, 1.0f);
-	_points[7] = vec4(-0.45f, 0.1f, 0.0f, 1.0f);
+	_points[4] = vec4(-0.65f, -0.45f, 0.0f, 1.0f);
+	_points[5] = vec4(-0.65f, -0.1f, 0.0f, 1.0f);
+	_points[6] = vec4(-0.45f, -0.45f, 0.0f, 1.0f);
+	_points[7] = vec4(-0.45f, -0.1f, 0.0f, 1.0f);
 
 	_colors[4] = _COLOR_GRAY;
 	_colors[5] = _COLOR_GRAY;
@@ -364,10 +370,10 @@ void EnemyBoss::SetPoint() {
 	_colors[7] = _COLOR_GRAY;
 
 	////////////////////////////////////////////////////window1
-	_points[8] = vec4(-0.375f, 0.0f, 0.0f, 1.0f);
-	_points[9] = vec4(-0.375f, 0.55f, 0.0f, 1.0f);
-	_points[10] = vec4(0.375f, 0.0f, 0.0f, 1.0f);
-	_points[11] = vec4(0.375f, 0.55f, 0.0f, 1.0f);
+	_points[8] = vec4(-0.375f, -0.2f, 0.0f, 1.0f);
+	_points[9] = vec4(-0.375f, 0.35f, 0.0f, 1.0f);
+	_points[10] = vec4(0.375f, -0.2f, 0.0f, 1.0f);
+	_points[11] = vec4(0.375f, 0.35f, 0.0f, 1.0f);
 
 	_colors[8] = _COLOR_WINDOW_1;
 	_colors[9] = _COLOR_WINDOW_1;
@@ -380,15 +386,15 @@ void EnemyBoss::SetPoint() {
 	for (int i = 12; i < 32; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*i / 20);
-		_points[i].y = b* sinf(M_PI*2.0f*i / 20) + 0.29f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 20) + 0.09f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_PURPLE;
 	}
 
 	////////////////////////////////////////////////////monster hand
-	_points[32] = vec4(-0.21f, 0.29f, 0.0f, 1.0f);
-	_points[33] = vec4(0.21f, 0.29f, 0.0f, 1.0f);
-	_points[34] = vec4(0.0f, 0.15f, 0.0f, 1.0f);
+	_points[32] = vec4(-0.21f, 0.09f, 0.0f, 1.0f);
+	_points[33] = vec4(0.21f, 0.09f, 0.0f, 1.0f);
+	_points[34] = vec4(0.0f, -0.05f, 0.0f, 1.0f);
 
 	_colors[32] = _COLOR_PURPLE;
 	_colors[33] = _COLOR_PURPLE;
@@ -400,7 +406,7 @@ void EnemyBoss::SetPoint() {
 	for (int i = 35; i < 55; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*i / 20);
-		_points[i].y = b* sinf(M_PI*2.0f*i / 20) + 0.33f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 20) + 0.13f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_WHITE;
 	}
@@ -411,16 +417,16 @@ void EnemyBoss::SetPoint() {
 	for (int i = 55; i < 65; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*i / 10);
-		_points[i].y = b* sinf(M_PI*2.0f*i / 10) + 0.3275f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) + 0.1275f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_BLACK;
 	}
 
 	////////////////////////////////////////////////////window2 left
-	_points[65] = vec4(-0.375f, 0.39f, 0.0f, 1.0f);
-	_points[66] = vec4(-0.21f, 0.66f, 0.0f, 1.0f);
-	_points[67] = vec4(-0.37f, 0.12f, 0.0f, 1.0f);
-	_points[68] = vec4(-0.07f, 0.58f, 0.0f, 1.0f);
+	_points[65] = vec4(-0.375f, 0.19f, 0.0f, 1.0f);
+	_points[66] = vec4(-0.21f, 0.46f, 0.0f, 1.0f);
+	_points[67] = vec4(-0.37f, -0.08f, 0.0f, 1.0f);
+	_points[68] = vec4(-0.07f, 0.38f, 0.0f, 1.0f);
 
 	_colors[65] = _COLOR_WINDOW_2;
 	_colors[66] = _COLOR_WINDOW_2;
@@ -428,10 +434,10 @@ void EnemyBoss::SetPoint() {
 	_colors[68] = _COLOR_WINDOW_2;
 
 	////////////////////////////////////////////////////window2 center
-	_points[69] = vec4(-0.20f, 0.17f, 0.0f, 1.0f);
-	_points[70] = vec4(0.11f, 0.63f, 0.0f, 1.0f);
-	_points[71] = vec4(-0.06f, 0.08f, 0.0f, 1.0f);
-	_points[72] = vec4(0.26f, 0.54f, 0.0f, 1.0f);
+	_points[69] = vec4(-0.20f, -0.03f, 0.0f, 1.0f);
+	_points[70] = vec4(0.11f, 0.43f, 0.0f, 1.0f);
+	_points[71] = vec4(-0.06f, -0.12f, 0.0f, 1.0f);
+	_points[72] = vec4(0.26f, 0.34f, 0.0f, 1.0f);
 
 	_colors[69] = _COLOR_WINDOW_2;
 	_colors[70] = _COLOR_WINDOW_2;
@@ -439,10 +445,10 @@ void EnemyBoss::SetPoint() {
 	_colors[72] = _COLOR_WINDOW_2;
 
 	////////////////////////////////////////////////////window2 right
-	_points[73] = vec4(0.07f, 0.11f, 0.0f, 1.0f);
-	_points[74] = vec4(0.29f, -0.04f, 0.0f, 1.0f);
-	_points[75] = vec4(0.375f, 0.56f, 0.0f, 1.0f);
-	_points[76] = vec4(0.375f, 0.11f, 0.0f, 1.0f);
+	_points[73] = vec4(0.07f, -0.09f, 0.0f, 1.0f);
+	_points[74] = vec4(0.29f, -0.24f, 0.0f, 1.0f);
+	_points[75] = vec4(0.375f, 0.36f, 0.0f, 1.0f);
+	_points[76] = vec4(0.375f, -0.09f, 0.0f, 1.0f);
 
 	_colors[73] = _COLOR_WINDOW_2;
 	_colors[74] = _COLOR_WINDOW_2;
@@ -450,10 +456,10 @@ void EnemyBoss::SetPoint() {
 	_colors[76] = _COLOR_WINDOW_2;
 
 	////////////////////////////////////////////////////top line
-	_points[77] = vec4(-0.01f, 0.83f, 0.0f, 1.0f);
-	_points[78] = vec4(-0.01f, 0.89f, 0.0f, 1.0f);
-	_points[79] = vec4(0.01f, 0.83f, 0.0f, 1.0f);
-	_points[80] = vec4(0.01f, 0.89f, 0.0f, 1.0f);
+	_points[77] = vec4(-0.01f, 0.63f, 0.0f, 1.0f);
+	_points[78] = vec4(-0.01f, 0.69f, 0.0f, 1.0f);
+	_points[79] = vec4(0.01f, 0.63f, 0.0f, 1.0f);
+	_points[80] = vec4(0.01f, 0.69f, 0.0f, 1.0f);
 
 	_colors[77] = _COLOR_YELLOW;
 	_colors[78] = _COLOR_YELLOW;
@@ -466,16 +472,16 @@ void EnemyBoss::SetPoint() {
 	for (int i = 81; i < 91; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*(i - 80.5) / 20);
-		_points[i].y = b* sinf(M_PI*2.0f*(i - 80.5) / 20) + 0.485f;
+		_points[i].y = b* sinf(M_PI*2.0f*(i - 80.5) / 20) + 0.285f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_BLUEGREEN;
 	}
 
 	////////////////////////////////////////////////////shoot left 2
-	_points[91] = vec4(-0.61f, -0.3f, 0.0f, 1.0f);
-	_points[92] = vec4(-0.61f, -0.24f, 0.0f, 1.0f);
-	_points[93] = vec4(-0.58f, -0.3f, 0.0f, 1.0f);
-	_points[94] = vec4(-0.58f, -0.24f, 0.0f, 1.0f);
+	_points[91] = vec4(-0.61f, -0.5f, 0.0f, 1.0f);
+	_points[92] = vec4(-0.61f, -0.44f, 0.0f, 1.0f);
+	_points[93] = vec4(-0.58f, -0.5f, 0.0f, 1.0f);
+	_points[94] = vec4(-0.58f, -0.44f, 0.0f, 1.0f);
 
 	_colors[91] = _COLOR_GRAY;
 	_colors[92] = _COLOR_GRAY;
@@ -483,10 +489,10 @@ void EnemyBoss::SetPoint() {
 	_colors[94] = _COLOR_GRAY;
 
 	////////////////////////////////////////////////////shoot left 3
-	_points[95] = vec4(-0.52f, -0.3f, 0.0f, 1.0f);
-	_points[96] = vec4(-0.52f, -0.24f, 0.0f, 1.0f);
-	_points[97] = vec4(-0.49f, -0.3f, 0.0f, 1.0f);
-	_points[98] = vec4(-0.49f, -0.24f, 0.0f, 1.0f);
+	_points[95] = vec4(-0.52f, -0.5f, 0.0f, 1.0f);
+	_points[96] = vec4(-0.52f, -0.44f, 0.0f, 1.0f);
+	_points[97] = vec4(-0.49f, -0.5f, 0.0f, 1.0f);
+	_points[98] = vec4(-0.49f, -0.44f, 0.0f, 1.0f);
 
 	_colors[95] = _COLOR_GRAY;
 	_colors[96] = _COLOR_GRAY;
@@ -495,10 +501,10 @@ void EnemyBoss::SetPoint() {
 
 
 	/////////////////////////////////////////////////////shoot right 2
-	_points[99] = vec4(0.61f, -0.3f, 0.0f, 1.0f);
-	_points[100] = vec4(0.61f, -0.24f, 0.0f, 1.0f);
-	_points[101] = vec4(0.58f, -0.3f, 0.0f, 1.0f);
-	_points[102] = vec4(0.58f, -0.24f, 0.0f, 1.0f);
+	_points[99] = vec4(0.61f, -0.5f, 0.0f, 1.0f);
+	_points[100] = vec4(0.61f, -0.44f, 0.0f, 1.0f);
+	_points[101] = vec4(0.58f, -0.5f, 0.0f, 1.0f);
+	_points[102] = vec4(0.58f, -0.44f, 0.0f, 1.0f);
 
 	_colors[99] = _COLOR_GRAY;
 	_colors[100] = _COLOR_GRAY;
@@ -506,10 +512,10 @@ void EnemyBoss::SetPoint() {
 	_colors[102] = _COLOR_GRAY;
 
 	////////////////////////////////////////////////////shoot right 3
-	_points[103] = vec4(0.52f, -0.3f, 0.0f, 1.0f);
-	_points[104] = vec4(0.52f, -0.24f, 0.0f, 1.0f);
-	_points[105] = vec4(0.49f, -0.3f, 0.0f, 1.0f);
-	_points[106] = vec4(0.49f, -0.24f, 0.0f, 1.0f);
+	_points[103] = vec4(0.52f, -0.5f, 0.0f, 1.0f);
+	_points[104] = vec4(0.52f, -0.44f, 0.0f, 1.0f);
+	_points[105] = vec4(0.49f, -0.5f, 0.0f, 1.0f);
+	_points[106] = vec4(0.49f, -0.44f, 0.0f, 1.0f);
 
 	_colors[103] = _COLOR_GRAY;
 	_colors[104] = _COLOR_GRAY;
@@ -522,7 +528,7 @@ void EnemyBoss::SetPoint() {
 	for (int i = 107; i < 117; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*i / 10)-0.595f;
-		_points[i].y = b* sinf(M_PI*2.0f*i / 10)-0.32f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10)-0.52f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_GRAY;
 	}
@@ -533,7 +539,7 @@ void EnemyBoss::SetPoint() {
 	for (int i = 117; i < 127; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*i / 10) - 0.505f;
-		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.32f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.52f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_GRAY;
 	}
@@ -545,7 +551,7 @@ void EnemyBoss::SetPoint() {
 	for (int i = 127; i < 137; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*i / 10) + 0.595f;
-		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.32f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.52f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_GRAY;
 	}
@@ -556,16 +562,16 @@ void EnemyBoss::SetPoint() {
 	for (int i = 137; i < 147; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*i / 10) + 0.505f;
-		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.32f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.52f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_GRAY;
 	}
 
 	////////////////////////////////////////////////////shoot right 1
-	_points[147] = vec4(0.65f, -0.25f, 0.0f, 1.0f);
-	_points[148] = vec4(0.65f, 0.1f, 0.0f, 1.0f);
-	_points[149] = vec4(0.45f, -0.25f, 0.0f, 1.0f);
-	_points[150] = vec4(0.45f, 0.1f, 0.0f, 1.0f);
+	_points[147] = vec4(0.65f, -0.45f, 0.0f, 1.0f);
+	_points[148] = vec4(0.65f, -0.1f, 0.0f, 1.0f);
+	_points[149] = vec4(0.45f, -0.45f, 0.0f, 1.0f);
+	_points[150] = vec4(0.45f, -0.1f, 0.0f, 1.0f);
 
 	_colors[147] = _COLOR_GRAY;
 	_colors[148] = _COLOR_GRAY;
@@ -579,16 +585,16 @@ void EnemyBoss::SetPoint() {
 	for (int i = 151; i < 161; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*(i - 20) / 20);
-		_points[i].y = b* sinf(M_PI*2.0f*(i - 20) / 20) + 0.13f;
+		_points[i].y = b* sinf(M_PI*2.0f*(i - 20) / 20) - 0.07f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_GRAY;
 	}
 
 	////////////////////////////////////////////////////shoot center bottom yellow
-	_points[161] = vec4(-0.30f, -0.205f, 0.0f, 1.0f);
-	_points[162] = vec4(-0.30f, -0.17f, 0.0f, 1.0f);
-	_points[163] = vec4(0.30f, -0.205f, 0.0f, 1.0f);
-	_points[164] = vec4(0.30f, -0.17f, 0.0f, 1.0f);
+	_points[161] = vec4(-0.30f, -0.405f, 0.0f, 1.0f);
+	_points[162] = vec4(-0.30f, -0.37f, 0.0f, 1.0f);
+	_points[163] = vec4(0.30f, -0.405f, 0.0f, 1.0f);
+	_points[164] = vec4(0.30f, -0.37f, 0.0f, 1.0f);
 
 	_colors[161] = _COLOR_YELLOW;
 	_colors[162] = _COLOR_YELLOW;
@@ -597,10 +603,10 @@ void EnemyBoss::SetPoint() {
 
 
 	////////////////////////////////////////////////////shoot center 1
-	_points[165] = vec4(0.1f, -0.375f, 0.0f, 1.0f);
-	_points[166] = vec4(0.1f, -0.25f, 0.0f, 1.0f);
-	_points[167] = vec4(-0.1f, -0.375f, 0.0f, 1.0f);
-	_points[168] = vec4(-0.1f, -0.25f, 0.0f, 1.0f);
+	_points[165] = vec4(0.1f, -0.575f, 0.0f, 1.0f);
+	_points[166] = vec4(0.1f, -0.45f, 0.0f, 1.0f);
+	_points[167] = vec4(-0.1f, -0.575f, 0.0f, 1.0f);
+	_points[168] = vec4(-0.1f, -0.45f, 0.0f, 1.0f);
 
 	_colors[165] = _COLOR_GRAY;
 	_colors[166] = _COLOR_GRAY;
@@ -609,10 +615,10 @@ void EnemyBoss::SetPoint() {
 
 
 	/////////////////////////////////////////////////////shoot center 2
-	_points[169] = vec4(-0.06f, -0.465f, 0.0f, 1.0f);
-	_points[170] = vec4(-0.06f, -0.365f, 0.0f, 1.0f);
-	_points[171] = vec4(-0.03f, -0.465f, 0.0f, 1.0f);
-	_points[172] = vec4(-0.03f, -0.365f, 0.0f, 1.0f);
+	_points[169] = vec4(-0.06f, -0.665f, 0.0f, 1.0f);
+	_points[170] = vec4(-0.06f, -0.565f, 0.0f, 1.0f);
+	_points[171] = vec4(-0.03f, -0.665f, 0.0f, 1.0f);
+	_points[172] = vec4(-0.03f, -0.565f, 0.0f, 1.0f);
 
 	_colors[169] = _COLOR_GRAY;
 	_colors[170] = _COLOR_GRAY;
@@ -620,10 +626,10 @@ void EnemyBoss::SetPoint() {
 	_colors[172] = _COLOR_GRAY;
 
 	////////////////////////////////////////////////////shoot center 2
-	_points[173] = vec4(0.03f, -0.465f, 0.0f, 1.0f);
-	_points[174] = vec4(0.03f, -0.365f, 0.0f, 1.0f);
-	_points[175] = vec4(0.06f, -0.465f, 0.0f, 1.0f);
-	_points[176] = vec4(0.06f, -0.365f, 0.0f, 1.0f);
+	_points[173] = vec4(0.03f, -0.665f, 0.0f, 1.0f);
+	_points[174] = vec4(0.03f, -0.565f, 0.0f, 1.0f);
+	_points[175] = vec4(0.06f, -0.65f, 0.0f, 1.0f);
+	_points[176] = vec4(0.06f, -0.565f, 0.0f, 1.0f);
 
 	_colors[173] = _COLOR_GRAY;
 	_colors[174] = _COLOR_GRAY;
@@ -636,7 +642,7 @@ void EnemyBoss::SetPoint() {
 	for (int i = 177; i < 187; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*i / 10) - 0.045f;
-		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.445f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.645f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_GRAY;
 	}
@@ -647,7 +653,7 @@ void EnemyBoss::SetPoint() {
 	for (int i = 187; i < 197; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*i / 10) + 0.045f;
-		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.445f;
+		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.645f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_GRAY;
 	}
@@ -660,17 +666,17 @@ void EnemyBoss::SetPoint() {
 	for (int i = 197; i < 217; i++)
 	{
 		_points[i].x = a* cosf(M_PI*2.0f*i / 20);
-		_points[i].y = b* sinf(M_PI*2.0f*i / 20);
+		_points[i].y = b* sinf(M_PI*2.0f*i / 20)-0.2f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_BLUEGREEN;
 	}
 
 
 	/////////////////////////////////////////////////////body center yellow
-	_points[217] = vec4(-0.85f, 0.02f, 0.0f, 1.0f);
-	_points[218] = vec4(-0.85f, -0.02f, 0.0f, 1.0f);
-	_points[219] = vec4(0.85f, 0.02f, 0.0f, 1.0f);
-	_points[220] = vec4(0.85f, -0.02f, 0.0f, 1.0f);
+	_points[217] = vec4(-0.85f, -0.18f, 0.0f, 1.0f);
+	_points[218] = vec4(-0.85f, -0.22f, 0.0f, 1.0f);
+	_points[219] = vec4(0.85f, -0.18f, 0.0f, 1.0f);
+	_points[220] = vec4(0.85f, -0.22f, 0.0f, 1.0f);
 
 	_colors[217] = _COLOR_YELLOW;
 	_colors[218] = _COLOR_YELLOW;
@@ -678,10 +684,10 @@ void EnemyBoss::SetPoint() {
 	_colors[220] = _COLOR_YELLOW;
 
 	/////////////////////////////////////////////////////body center green
-	_points[221] = vec4(-0.015f, 0.02f, 0.0f, 1.0f);
-	_points[222] = vec4(-0.015f, -0.02f, 0.0f, 1.0f);
-	_points[223] = vec4(0.015f, 0.02f, 0.0f, 1.0f);
-	_points[224] = vec4(0.015f, -0.02f, 0.0f, 1.0f);
+	_points[221] = vec4(-0.015f, -0.18f, 0.0f, 1.0f);
+	_points[222] = vec4(-0.015f, -0.22f, 0.0f, 1.0f);
+	_points[223] = vec4(0.015f, -0.18f, 0.0f, 1.0f);
+	_points[224] = vec4(0.015f, -0.22f, 0.0f, 1.0f);
 
 	_colors[221] = _COLOR_BLUEGREEN;
 	_colors[222] = _COLOR_BLUEGREEN;
@@ -689,10 +695,10 @@ void EnemyBoss::SetPoint() {
 	_colors[224] = _COLOR_BLUEGREEN;
 
 	/////////////////////////////////////////////////////body center green
-	_points[225] = vec4(-0.245f, 0.02f, 0.0f, 1.0f);
-	_points[226] = vec4(-0.245f, -0.02f, 0.0f, 1.0f);
-	_points[227] = vec4(-0.215f, 0.02f, 0.0f, 1.0f);
-	_points[228] = vec4(-0.215f, -0.02f, 0.0f, 1.0f);
+	_points[225] = vec4(-0.245f, -0.18f, 0.0f, 1.0f);
+	_points[226] = vec4(-0.245f, -0.22f, 0.0f, 1.0f);
+	_points[227] = vec4(-0.215f, -0.18f, 0.0f, 1.0f);
+	_points[228] = vec4(-0.215f, -0.22f, 0.0f, 1.0f);
 
 	_colors[225] = _COLOR_BLUEGREEN;
 	_colors[226] = _COLOR_BLUEGREEN;
@@ -700,10 +706,10 @@ void EnemyBoss::SetPoint() {
 	_colors[228] = _COLOR_BLUEGREEN;
 
 	/////////////////////////////////////////////////////body center green
-	_points[229] = vec4(-0.475f, 0.02f, 0.0f, 1.0f);
-	_points[230] = vec4(-0.475f, -0.02f, 0.0f, 1.0f);
-	_points[231] = vec4(-0.445f, 0.02f, 0.0f, 1.0f);
-	_points[232] = vec4(-0.445f, -0.02f, 0.0f, 1.0f);
+	_points[229] = vec4(-0.475f, -0.18f, 0.0f, 1.0f);
+	_points[230] = vec4(-0.475f, -0.22f, 0.0f, 1.0f);
+	_points[231] = vec4(-0.445f, -0.18f, 0.0f, 1.0f);
+	_points[232] = vec4(-0.445f, -0.22f, 0.0f, 1.0f);
 
 	_colors[229] = _COLOR_BLUEGREEN;
 	_colors[230] = _COLOR_BLUEGREEN;
@@ -711,10 +717,10 @@ void EnemyBoss::SetPoint() {
 	_colors[232] = _COLOR_BLUEGREEN;
 
 	/////////////////////////////////////////////////////body center green
-	_points[233] = vec4(-0.705f, 0.02f, 0.0f, 1.0f);
-	_points[234] = vec4(-0.705f, -0.02f, 0.0f, 1.0f);
-	_points[235] = vec4(-0.675f, 0.02f, 0.0f, 1.0f);
-	_points[236] = vec4(-0.675f, -0.02f, 0.0f, 1.0f);
+	_points[233] = vec4(-0.705f, -0.18f, 0.0f, 1.0f);
+	_points[234] = vec4(-0.705f, -0.22f, 0.0f, 1.0f);
+	_points[235] = vec4(-0.675f, -0.18f, 0.0f, 1.0f);
+	_points[236] = vec4(-0.675f, -0.22f, 0.0f, 1.0f);
 
 	_colors[233] = _COLOR_BLUEGREEN;
 	_colors[234] = _COLOR_BLUEGREEN;
@@ -723,10 +729,10 @@ void EnemyBoss::SetPoint() {
 
 
 	/////////////////////////////////////////////////////body center green
-	_points[237] = vec4(0.245f, 0.02f, 0.0f, 1.0f);
-	_points[238] = vec4(0.245f, -0.02f, 0.0f, 1.0f);
-	_points[239] = vec4(0.215f, 0.02f, 0.0f, 1.0f);
-	_points[240] = vec4(0.215f, -0.02f, 0.0f, 1.0f);
+	_points[237] = vec4(0.245f, -0.18f, 0.0f, 1.0f);
+	_points[238] = vec4(0.245f, -0.22f, 0.0f, 1.0f);
+	_points[239] = vec4(0.215f, -0.18f, 0.0f, 1.0f);
+	_points[240] = vec4(0.215f, -0.22f, 0.0f, 1.0f);
 
 	_colors[237] = _COLOR_BLUEGREEN;
 	_colors[238] = _COLOR_BLUEGREEN;
@@ -734,10 +740,10 @@ void EnemyBoss::SetPoint() {
 	_colors[240] = _COLOR_BLUEGREEN;
 
 	/////////////////////////////////////////////////////body center green
-	_points[241] = vec4(0.475f, 0.02f, 0.0f, 1.0f);
-	_points[242] = vec4(0.475f, -0.02f, 0.0f, 1.0f);
-	_points[243] = vec4(0.445f, 0.02f, 0.0f, 1.0f);
-	_points[244] = vec4(0.445f, -0.02f, 0.0f, 1.0f);
+	_points[241] = vec4(0.475f, -0.18f, 0.0f, 1.0f);
+	_points[242] = vec4(0.475f, -0.22f, 0.0f, 1.0f);
+	_points[243] = vec4(0.445f, -0.18f, 0.0f, 1.0f);
+	_points[244] = vec4(0.445f, -0.22f, 0.0f, 1.0f);
 
 	_colors[241] = _COLOR_BLUEGREEN;
 	_colors[242] = _COLOR_BLUEGREEN;
@@ -745,10 +751,10 @@ void EnemyBoss::SetPoint() {
 	_colors[244] = _COLOR_BLUEGREEN;
 
 	/////////////////////////////////////////////////////body center green
-	_points[245] = vec4(0.705f, 0.02f, 0.0f, 1.0f);
-	_points[246] = vec4(0.705f, -0.02f, 0.0f, 1.0f);
-	_points[247] = vec4(0.675f, 0.02f, 0.0f, 1.0f);
-	_points[248] = vec4(0.675f, -0.02f, 0.0f, 1.0f);
+	_points[245] = vec4(0.705f, -0.18f, 0.0f, 1.0f);
+	_points[246] = vec4(0.705f, -0.22f, 0.0f, 1.0f);
+	_points[247] = vec4(0.675f, -0.18f, 0.0f, 1.0f);
+	_points[248] = vec4(0.675f, -0.22f, 0.0f, 1.0f);
 
 	_colors[245] = _COLOR_BLUEGREEN;
 	_colors[246] = _COLOR_BLUEGREEN;
@@ -861,6 +867,7 @@ void EnemyBoss::Attack(float dt) {
 
 void EnemyBoss::AttackNormal(){
 	mat4 mat = _transform->_mxTRS;
+	mat._m[1].w -= 0.3f;
 	float fBSpeed = 0.65f;
 
 	if (_attackTimer >= 1.5f*k+0.5f && k<=2) {
@@ -871,6 +878,7 @@ void EnemyBoss::AttackNormal(){
 				mat._m[0].w -= 0.8f;
 				_bulletList->BulletShoot(mat, _iX, -_iY);
 				mat = _transform->_mxTRS;
+				mat._m[1].w -= 0.3f;
 				mat._m[0].w += 0.8f;
 				_bulletList->BulletShoot(mat, _iX, -_iY);
 				break;
@@ -880,6 +888,7 @@ void EnemyBoss::AttackNormal(){
 				mat._m[0].w -= 0.6f;
 				_bulletList->BulletShoot(mat, _iX, -_iY);
 				mat = _transform->_mxTRS;
+				mat._m[1].w -= 0.3f;
 				mat._m[0].w += 0.6f;
 				_bulletList->BulletShoot(mat, _iX, -_iY);
 				break;
@@ -892,9 +901,11 @@ void EnemyBoss::AttackNormal(){
 		{
 			_iY -= 0.025f;
 			mat = _transform->_mxTRS;
+			mat._m[1].w -= 0.3f;
 			mat._m[0].w -= 0.3f*i;
 			_bulletList->BulletShoot(mat, -_iX, -_iY, fBSpeed);
 			mat = _transform->_mxTRS;
+			mat._m[1].w -= 0.3f;
 			mat._m[0].w += 0.3f*i;
 			_bulletList->BulletShoot(mat, _iX, -_iY, fBSpeed);
 			fBSpeed -= 0.001f;
@@ -908,6 +919,7 @@ void EnemyBoss::AttackNormal(){
 
 void EnemyBoss::AttackProgressive(int &k) {
 	mat4 mat = _transform->_mxTRS;
+	mat._m[1].w -= 0.3f;
 
 	if (_attackTimer >= 0.5f*k+0.5f) {
 		_bulletList->BulletShoot(mat, _iX, -_iY);

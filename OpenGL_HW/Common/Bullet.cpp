@@ -21,6 +21,7 @@ Bullet::Bullet(mat4 &mxView, mat4 &mxProjection, char character,float fspeed, co
 
 Bullet::~Bullet() {
 	if(_transform!=NULL) delete _transform;
+	if (_colliderSize != NULL) delete [] _colliderSize;
 }
 
 void Bullet::SetPoint(const vec4 &color) {
@@ -59,7 +60,7 @@ void Bullet::AutoTranslate(float dt,int index) {
 
 	_ftottime += dt;
 
-	if (_ftottime<=1.5f && !_bStartRot) {
+	if (_ftottime<=1.75f && !_bStartRot) {
 		//正常向下發射
 		bty = _ftottime*_fSpeed*_bIY;
 		btx = _ftottime*_fSpeed*_bIX;
@@ -67,7 +68,7 @@ void Bullet::AutoTranslate(float dt,int index) {
 		_transform->SetTRSMatrix(mxTra*_transform->_mxOri);
 	}
 	else if (!_bStartRot) {
-		if (_ftottime >= 2.5f+1.0f*(index/10)) {
+		if (_ftottime >= 2.75f+1.0f*(index/10)) {
 			_ftottime = 0.0f;
 			_bStartRot = true;
 			_bIX = cosf(M_PI*2.0f*(float)(index - 10) / 10);
@@ -335,9 +336,10 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager,Bullet *bulle
 				else {
 					if (getEnemyManager->_usetotCount > 0)
 					{
-						result = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, *(pBUpdateGet->_colliderSize), getEnemyManager);
+						result = _colliSystem.OnBoxCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_colliderSize, getEnemyManager);
 					}
 					if (result == true) {
+						Print("enemyhurt");
 						DestroyBullet();
 						k++;
 					}

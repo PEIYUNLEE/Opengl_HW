@@ -298,6 +298,21 @@ void EnemyManager::Update(float dt) {
 					DestroyEnemy();	//如果碰到邊界要刪除
 					k++;
 				}
+				else if (_colliSystem.OnBoxCollision(pEUpdateGet->_transform->_mxTRS, pEUpdateGet->_colliderSize, _getPBoat->_transform->_mxTRS, _getPBoat->_colliderSize)) {
+
+					switch (pEUpdateGet->_type)
+					{
+					case 's':
+						ds++;
+						break;
+					case 'm':
+						dm++;
+						break;
+					}
+					Print("hurt!!!!!");
+					//DestroyEnemy();	//如果碰到邊界要刪除
+					//k++;
+				}
 				else {
 					pEUpdateGet->Action(dt,_getPBoat);	//攻擊、move
 					if (pEUpdateGet != pEUseTail)
