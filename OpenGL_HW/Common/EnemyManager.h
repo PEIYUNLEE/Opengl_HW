@@ -26,11 +26,10 @@ private:
 	int _useCount_b, _storeCount_b;
 
 	float _timer;
-	float _hurtTimer;
 	float _genDuration;
 	mat4 _genMat;
 
-	float RandomTime(float min = 3.0f, float max = 5.0f);
+	float RandomTime(float min = 1.5f, float max = 3.5f);
 	mat4 RandomPosition(float minX = -1.5f, float maxX = 1.5f , float Y = 2.55f);
 
 	PBoat *_getPBoat;

@@ -24,7 +24,7 @@ Enemy::~Enemy() {
 
 void Enemy::Action(float dt, PBoat *getPBoat) {
 	_ftottime += dt;
-	Attack(dt);
+	//Attack(dt);
 	AutoTranslate(dt);		
 
 	_bulletList->Update(dt, getPBoat);
@@ -36,9 +36,12 @@ void Enemy::Action(float dt, PBoat *getPBoat) {
 
 /////////EnemySmall
 EnemySmall::EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed, float attackDuration, int pointNum, char type) :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
-	_colliderSize[0] = 0.7f;
-	_colliderSize[1] = 0.7f;
-	_bulletList = new BulletList(mxView, mxProjection, 10, 'e', _COLOR_YELLOW, 1.0f);
+	_colliderSize[0] = 0.15f;
+	_colliderSize[1] = 0.17f;
+	_attackDuration = 0.8f;
+	_fspeed = -1.0f;
+	_pointNum = 64;
+	_bulletList = new BulletList(mxView, mxProjection, 15, 'e', _COLOR_YELLOW, 1.75f);
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
 };
@@ -47,48 +50,137 @@ void EnemySmall::SetPoint() {
 	_points = new vec4[_pointNum];
 	_colors = new vec4[_pointNum];
 
-	//Body
-	_points[0] = vec4(-0.15f, 0.225f, 0.0f, 1.0f);
-	_points[1] = vec4(-0.15f, -0.075f, 0.0f, 1.0f);
-	_points[2] = vec4(0.15f, 0.225f, 0.0f, 1.0f);
-	_points[3] = vec4(0.15f, -0.075f, 0.0f, 1.0f);
-
-	//pshoot
-	_points[4] = vec4(-0.15f, -0.075f, 0.0f, 1.0f);
-	_points[5] = vec4(0.15f, -0.075f, 0.0f, 1.0f);
-	_points[6] = vec4(-0.075f, -0.195f, 0.0f, 1.0f);
-	_points[7] = vec4(0.075f, -0.195f, 0.0f, 1.0f);
-
-	//cBody
-	_colors[0] = _COLOR_BLACK;
-	_colors[1] = _COLOR_BLACK;
-	_colors[2] = _COLOR_BLACK;
-	_colors[3] = _COLOR_BLACK;
-
-	//cshoot
-	_colors[4] = _COLOR_YELLOW;
-	_colors[5] = _COLOR_YELLOW;
-	_colors[6] = _COLOR_YELLOW;
-	_colors[7] = _COLOR_YELLOW;
-
 	//center
-	for (int i = 8; i < _pointNum; i++) {
-		_points[i].x = 0.07f * cosf(M_PI*2.0f*(float)i / 10.0f); //2拍乘以該點分之總點
-		_points[i].y = 0.07f * sinf(M_PI*2.0f*(float)i / 10.0f)+0.07f;
+	for (int i = 0; i < _pointNum; i++) {
+		_points[i].x = 0.17f * cosf(M_PI*2.0f*((float)i + 0.5f) / 20.0f); //2拍乘以該點分之總點
+		_points[i].y = 0.17f * sinf(M_PI*2.0f*((float)i + 0.5f) / 20.0f);
 		_points[i].w = 1.0f;
-		_colors[i] = _COLOR_YELLOW;
+		_colors[i] = _COLOR_WINDOW_1;
 	}
+
+	//WINDOW2
+	_points[10] = vec4(-0.17f, 0.0f, 0.0f, 1.0f);
+	_points[11] = vec4(-0.12f, 0.12f, 0.0f, 1.0f);
+	_points[12] = vec4(-0.13f, 0.0f, 0.0f, 1.0f);
+	_points[13] = vec4(-0.03f, 0.15f, 0.0f, 1.0f);
+
+	_colors[10] = _COLOR_WINDOW_2;
+	_colors[11] = _COLOR_WINDOW_2;
+	_colors[12] = _COLOR_WINDOW_2;
+	_colors[13] = _COLOR_WINDOW_2;
+
+	_points[14] = vec4(-0.08f, 0.0f, 0.0f, 1.0f);
+	_points[15] = vec4(0.03f, 0.15f, 0.0f, 1.0f);
+	_points[16] = vec4(0.01f, 0.0f, 0.0f, 1.0f);
+	_points[17] = vec4(0.1f, 0.15f, 0.0f, 1.0f);
+
+	_colors[14] = _COLOR_WINDOW_2;
+	_colors[15] = _COLOR_WINDOW_2;
+	_colors[16] = _COLOR_WINDOW_2;
+	_colors[17] = _COLOR_WINDOW_2;
+
+	_points[18] = vec4(0.05f, 0.0f, 0.0f, 1.0f);
+	_points[19] = vec4(0.12f, 0.11f, 0.0f, 1.0f);
+	_points[20] = vec4(0.16f, 0.0f, 0.0f, 1.0f);
+	_points[21] = vec4(0.08f, 0.15f, 0.0f, 1.0f);
+
+	_colors[18] = _COLOR_WINDOW_2;
+	_colors[19] = _COLOR_WINDOW_2;
+	_colors[20] = _COLOR_WINDOW_2;
+	_colors[21] = _COLOR_WINDOW_2;
+
+	//SHOOT
+	////////////////////////////////////////////////////shoot center 1
+	_points[22] = vec4(0.07f, -0.05f, 0.0f, 1.0f);
+	_points[23] = vec4(0.07f, -0.185f, 0.0f, 1.0f);
+	_points[24] = vec4(-0.07f, -0.05f, 0.0f, 1.0f);
+	_points[25] = vec4(-0.07f, -0.185f, 0.0f, 1.0f);
+
+	_colors[22] = _COLOR_GRAY;
+	_colors[23] = _COLOR_GRAY;
+	_colors[24] = _COLOR_GRAY;
+	_colors[25] = _COLOR_GRAY;
+
+
+	///////////////////////////////////////////////////////shoot center 2
+	_points[26] = vec4(-0.045f, -0.225f, 0.0f, 1.0f);
+	_points[27] = vec4(-0.045f, -0.175f, 0.0f, 1.0f);
+	_points[28] = vec4(-0.02f, -0.225f, 0.0f, 1.0f);
+	_points[29] = vec4(-0.02f, -0.175f, 0.0f, 1.0f);
+
+	_colors[26] = _COLOR_GRAY;
+	_colors[27] = _COLOR_GRAY;
+	_colors[28] = _COLOR_GRAY;
+	_colors[29] = _COLOR_GRAY;
+
+	//////////////////////////////////////////////////////shoot center 2
+	_points[30] = vec4(0.045f, -0.225f, 0.0f, 1.0f);
+	_points[31] = vec4(0.045f, -0.175f, 0.0f, 1.0f);
+	_points[32] = vec4(0.02f, -0.225f, 0.0f, 1.0f);
+	_points[33] = vec4(0.02f, -0.175f, 0.0f, 1.0f);
+
+	_colors[30] = _COLOR_GRAY;
+	_colors[31] = _COLOR_GRAY;
+	_colors[32] = _COLOR_GRAY;
+	_colors[33] = _COLOR_GRAY;
+
+	///////////////////////////////////////////////////////shoot center circle
+	for (int i = 34; i < 44; i++)
+	{
+		_points[i].x = 0.025f* cosf(M_PI*2.0f*(float)i / 10.0f) - 0.0325f;
+		_points[i].y = 0.025f* sinf(M_PI*2.0f*(float)i / 10.0f) - 0.235f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	///////////////////////////////////////////////////////shoot center circle
+	for (int i = 44; i < 54; i++)
+	{
+		_points[i].x = 0.025f* cosf(M_PI*2.0f*(float)i / 10.0f) + 0.0325f;
+		_points[i].y = 0.025f* sinf(M_PI*2.0f*(float)i / 10.0f) - 0.235f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	//////////////////////////////////////////////////////body
+	_points[54] = vec4(-0.3f, -0.0525f, 0.0f, 1.0f);
+	_points[55] = vec4(-0.17f, 0.025f, 0.0f, 1.0f);
+	_points[56] = vec4(-0.17f, -0.13f, 0.0f, 1.0f);
+	_points[57] = vec4(0.17f, 0.025f, 0.0f, 1.0f);
+	_points[58] = vec4(0.17f, -0.13f, 0.0f, 1.0f);
+	_points[59] = vec4(0.3f, -0.0525f, 0.0f, 1.0f);
+
+	_colors[54] = _COLOR_BLUEGREEN;
+	_colors[55] = _COLOR_BLUEGREEN;
+	_colors[56] = _COLOR_BLUEGREEN;
+	_colors[57] = _COLOR_BLUEGREEN;
+	_colors[58] = _COLOR_BLUEGREEN;
+	_colors[59] = _COLOR_BLUEGREEN;
+
+	//////////////////////////////////////////////////////YELLOW LINE
+	_points[60] = vec4(-0.3f, -0.0525f, 0.0f, 1.0f);
+	_points[61] = vec4(-0.3f, -0.065f, 0.0f, 1.0f);
+	_points[62] = vec4(0.3f, -0.0525f, 0.0f, 1.0f);
+	_points[63] = vec4(0.3f, -0.065f, 0.0f, 1.0f);
+
+	_colors[60] = _COLOR_YELLOW;
+	_colors[61] = _COLOR_YELLOW;
+	_colors[62] = _COLOR_YELLOW;
+	_colors[63] = _COLOR_YELLOW;
 }
 
 void EnemySmall::Attack(float dt){
+	mat4 mat = _transform->_mxTRS;
+	mat._m[1].w -= 0.2f;
 	_attackTimer += dt;
-	if (!_initFlag&&_attackTimer>=0.5f) {
-		_bulletList->BulletShoot(_transform->_mxTRS,0.0f,-1.0f);
+	if (!_initFlag && _attackTimer>=0.5f) {
+		_attackTimer = 0.0f;
+		_bulletList->BulletShoot(mat, 0.0f,-1.0f);
 		_initFlag = true;
 	}
 	if (_attackTimer >= _attackDuration) {
 		_attackTimer = 0.0f;
-		_bulletList->BulletShoot(_transform->_mxTRS, 0.0f, -1.0f);
+		_bulletList->BulletShoot(mat, 0.0f, -1.0f);
 	}
 }
 
@@ -106,9 +198,17 @@ void EnemySmall::Draw() {
 	_bulletList->BulletDraw();
 
 	_transform->Draw();
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
-	glDrawArrays(GL_TRIANGLE_FAN, 8, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 10);
+	glDrawArrays(GL_TRIANGLE_STRIP, 10, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 14, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 18, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 22, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 26, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 30, 4);
+	glDrawArrays(GL_TRIANGLE_FAN, 34, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 44, 10);
+	glDrawArrays(GL_TRIANGLE_STRIP, 54, 6);
+	glDrawArrays(GL_TRIANGLE_STRIP, 60, 4);
 }
 
 void EnemySmall::Hurt() {
@@ -385,8 +485,8 @@ void EnemyBoss::SetPoint() {
 	b = 0.16f;
 	for (int i = 12; i < 32; i++)
 	{
-		_points[i].x = a* cosf(M_PI*2.0f*i / 20);
-		_points[i].y = b* sinf(M_PI*2.0f*i / 20) + 0.09f;
+		_points[i].x = a* cosf(M_PI*2.0f*(float)i / 20.0f);
+		_points[i].y = b* sinf(M_PI*2.0f*(float)i / 20.0f) + 0.09f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_PURPLE;
 	}
@@ -405,8 +505,8 @@ void EnemyBoss::SetPoint() {
 	b = 0.08f;
 	for (int i = 35; i < 55; i++)
 	{
-		_points[i].x = a* cosf(M_PI*2.0f*i / 20);
-		_points[i].y = b* sinf(M_PI*2.0f*i / 20) + 0.13f;
+		_points[i].x = a* cosf(M_PI*2.0f*(float)i / 20.0f);
+		_points[i].y = b* sinf(M_PI*2.0f*(float)i / 20.0f) + 0.13f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_WHITE;
 	}
@@ -416,8 +516,8 @@ void EnemyBoss::SetPoint() {
 	b = 0.035f;
 	for (int i = 55; i < 65; i++)
 	{
-		_points[i].x = a* cosf(M_PI*2.0f*i / 10);
-		_points[i].y = b* sinf(M_PI*2.0f*i / 10) + 0.1275f;
+		_points[i].x = a* cosf(M_PI*2.0f*(float)i / 10.0f);
+		_points[i].y = b* sinf(M_PI*2.0f*(float)i / 10.0f) + 0.1275f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_BLACK;
 	}
@@ -471,8 +571,8 @@ void EnemyBoss::SetPoint() {
 	b = 0.35f;
 	for (int i = 81; i < 91; i++)
 	{
-		_points[i].x = a* cosf(M_PI*2.0f*(i - 80.5) / 20);
-		_points[i].y = b* sinf(M_PI*2.0f*(i - 80.5) / 20) + 0.285f;
+		_points[i].x = a* cosf(M_PI*2.0f*((float)i - 80.5f) / 20.0f);
+		_points[i].y = b* sinf(M_PI*2.0f*((float)i - 80.5f) / 20.0f) + 0.285f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_BLUEGREEN;
 	}
@@ -527,8 +627,8 @@ void EnemyBoss::SetPoint() {
 	b = 0.035f;
 	for (int i = 107; i < 117; i++)
 	{
-		_points[i].x = a* cosf(M_PI*2.0f*i / 10)-0.595f;
-		_points[i].y = b* sinf(M_PI*2.0f*i / 10)-0.52f;
+		_points[i].x = a* cosf(M_PI*2.0f*(float)i / 10.0f)-0.595f;
+		_points[i].y = b* sinf(M_PI*2.0f*(float)i / 10.0f)-0.52f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_GRAY;
 	}
@@ -538,8 +638,8 @@ void EnemyBoss::SetPoint() {
 	b = 0.035f;
 	for (int i = 117; i < 127; i++)
 	{
-		_points[i].x = a* cosf(M_PI*2.0f*i / 10) - 0.505f;
-		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.52f;
+		_points[i].x = a* cosf(M_PI*2.0f*(float)i / 10.0f) - 0.505f;
+		_points[i].y = b* sinf(M_PI*2.0f*(float)i / 10.0f) - 0.52f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_GRAY;
 	}
@@ -550,8 +650,8 @@ void EnemyBoss::SetPoint() {
 	b = 0.035f;
 	for (int i = 127; i < 137; i++)
 	{
-		_points[i].x = a* cosf(M_PI*2.0f*i / 10) + 0.595f;
-		_points[i].y = b* sinf(M_PI*2.0f*i / 10) - 0.52f;
+		_points[i].x = a* cosf(M_PI*2.0f*(float)i / 10.0f) + 0.595f;
+		_points[i].y = b* sinf(M_PI*2.0f*(float)i / 10.0f) - 0.52f;
 		_points[i].w = 1.0f;
 		_colors[i] = _COLOR_GRAY;
 	}
@@ -851,18 +951,18 @@ void EnemyBoss::Attack(float dt) {
 		}
 	}
 
-	//switch (_attackState) {
-	//	case Normal:
-	//		//進入Normal模式
-	//		AttackNormal();
-	//		break;
-	//	case Progressive:
-	//		AttackProgressive(k);
-	//		break;
-	//	case Explosion:
-	//		AttackExplosion();
-	//		break;
-	//}
+	switch (_attackState) {
+		case Normal:
+			//進入Normal模式
+			AttackNormal();
+			break;
+		case Progressive:
+			AttackProgressive(k);
+			break;
+		case Explosion:
+			AttackExplosion();
+			break;
+	}
 }
 
 void EnemyBoss::AttackNormal(){

@@ -43,7 +43,7 @@ void onFrameMove(float delta)
 //----------------------------------------------------------------------------
 
 void Win_MouseMotion(int x, int y) {
-	if (!g_MainScene->_pBoat->_isDead) {
+	if (g_MainScene->_pBoat->_playerState != PBoat::DEAD) {
 		mat4 mxGT, mxT;
 
 		g_fTx = 2.5f*(x - HALF_SIZE) / (HALF_SIZE);
@@ -53,7 +53,7 @@ void Win_MouseMotion(int x, int y) {
 	}
 }
 void Win_PassiveMotion(int x, int y) {
-	if (!g_MainScene->_pBoat->_isDead) {
+	if (g_MainScene->_pBoat->_playerState != PBoat::DEAD) {
 		mat4 mxGT, mxT;
 
 		g_fTx = 2.5f*(x - HALF_SIZE) / (HALF_SIZE);
@@ -67,11 +67,11 @@ void Win_Keyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
 	case 'q':
-		if(g_MainScene->_pBoat->_isDead)
+		if(g_MainScene->_pBoat->_playerState == PBoat::DEAD)
 			g_MainScene->_pBoat->Revival();
 		break;
 	case 'Q':
-		if (g_MainScene->_pBoat->_isDead)
+		if (g_MainScene->_pBoat->_playerState == PBoat::DEAD)
 			g_MainScene->_pBoat->Revival();
 		break;
 	case 033:
@@ -85,11 +85,11 @@ void Win_Mouse(int button, int state, int x, int y) {
 	switch (button) {
 	case GLUT_LEFT_BUTTON:   // 目前按下的是滑鼠左鍵
 		if (state == GLUT_DOWN) {
-			if(!g_MainScene->_pBoat->_isDead)
+			if(g_MainScene->_pBoat->_playerState != PBoat::DEAD)
 				g_MainScene->isBoatShoot=true;
 		}
 		else if (state == GLUT_UP) {
-			if (!g_MainScene->_pBoat->_isDead)
+			if (g_MainScene->_pBoat->_playerState != PBoat::DEAD)
 				g_MainScene->isBoatShoot = false;
 		}
 		break;

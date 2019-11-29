@@ -13,7 +13,7 @@ bool Collision::OnCircleCollision(mat4 mat_Object, float cObjectRadius, EnemyMan
 	for (int i = 0; i < (getEnemyList->_usetotCount); i++)
 	{
 		dx = dy = dsquare = radiusPlus = 0;
-		if (pGet != NULL) {
+		if (pGet != NULL && pGet->_ftottime > 0.0f) {
 			radiusPlus = pGet->_colliderSize[0] + cObjectRadius;
 			dx = (mat_Object._m[0].w - pGet->_transform->_mxTRS._m[0].w);
 			dy = (mat_Object._m[1].w - pGet->_transform->_mxTRS._m[1].w);
@@ -39,7 +39,7 @@ bool Collision::OnBoxCollision(mat4 mat_Object, float *cObjectRadius, EnemyManag
 	for (int i = 0; i < (getEnemyList->_usetotCount); i++)
 	{
 		dx = dy = radiusPlus_X = radiusPlus_Y = 0;
-		if (pGet != NULL) {
+		if (pGet != NULL && pGet->_ftottime >0.0f && pGet->_transform->_mxTRS._m[1].w <= 2.3f) {
 			radiusPlus_X = pGet->_colliderSize[0] + cObjectRadius[0];
 			radiusPlus_Y = pGet->_colliderSize[1] + cObjectRadius[1];
 

@@ -27,7 +27,7 @@ void Defense::SetPoint(float circlecollider) {
 		_points[i].x = circlecollider * cosf(M_PI*2.0f*(float)(i - 10) / POINT_NUM_CIRCLE); //2拍乘以該點分之總點
 		_points[i].y = circlecollider * sinf(M_PI*2.0f*(float)(i - 10) / POINT_NUM_CIRCLE)-0.035f;
 		_points[i].w = 1.0f;
-		_colors[i] = _COLOR_PBOATDEFENSE;
+		//_colors[i] = _COLOR_DEFENSE;
 	}
 }
 

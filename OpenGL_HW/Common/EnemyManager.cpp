@@ -18,8 +18,7 @@ EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int t
 	_useCount_b = 0;
 
 	_timer  = 0.0f;
-	_hurtTimer = 0.0f;
-	_genDuration = RandomTime();
+	_genDuration = RandomTime(1.0f,1.0f);
 	_genMat = RandomPosition();
 
 	//bulid Enemy
@@ -115,6 +114,7 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 	if (_usetotCount == 0)	//當目前use槽沒東西，跟子彈池要子彈
 	{
 		pNewEnemyGet = pHead;
+		pNewEnemyGet->_transform->_mxOri = mat;	//存取初始位置
 		pEUseHead = pNewEnemyGet;
 		if (*totCount != 1) {
 			pHead = pHead->_nextlink;
@@ -123,7 +123,6 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 
 		pNewEnemyGet->_prelink = NULL;
 		pNewEnemyGet->_nextlink = NULL;
-		pNewEnemyGet->_transform->_mxOri = mat;	//存取初始位置
 		pEUseTail = pNewEnemyGet;
 		(*useCount)++;
 		_usetotCount++;
@@ -133,6 +132,7 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 	{
 		if (*useCount < *totCount) {
 			pNewEnemyGet = pHead;	//跟子彈池要子彈
+			pNewEnemyGet->_transform->_mxOri = mat;	//存取初始位置
 			if (*useCount < *totCount - 1) {
 				pHead = pHead->_nextlink;
 				pHead->_prelink = NULL;	//子彈從子彈池移出
@@ -144,7 +144,6 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 			pEUseTail->_nextlink = pNewEnemyGet;
 			pNewEnemyGet->_prelink = pEUseTail;
 			pNewEnemyGet->_nextlink = NULL;
-			pNewEnemyGet->_transform->_mxOri = mat;	//存取初始位置
 			pEUseTail = pNewEnemyGet;
 			(*useCount)++;
 			_usetotCount++;
@@ -236,7 +235,7 @@ void EnemyManager::DestroyEnemy()
 	}
 	else if (pEUpdateGet == pEUseTail)
 	{
-		//如果消失的是顯示的最後一顆子彈(_nextlink==NULL)
+		//如果消失的是顯示的最後一個敵人(_nextlink==NULL)
 		//且一定是pUseHead != pUseTail 不只剩一顆
 		pGetPre = pEUpdateGet->_prelink;
 		pEUseTail = pGetPre;
@@ -298,18 +297,15 @@ void EnemyManager::Update(float dt) {
 					DestroyEnemy();	//如果碰到邊界要刪除
 					k++;
 				}
-				else if (_colliSystem.OnBoxCollision(pEUpdateGet->_transform->_mxTRS, pEUpdateGet->_colliderSize, _getPBoat->_transform->_mxTRS, _getPBoat->_colliderSize)) {
-					if (_hurtTimer == 0.0f) {
+				else if (pEUpdateGet->_ftottime > 0.0f && _colliSystem.OnBoxCollision(pEUpdateGet->_transform->_mxTRS, pEUpdateGet->_colliderSize, _getPBoat->_transform->_mxTRS, _getPBoat->_colliderSize)) {
+					
+					if (_getPBoat->_playerState == PBoat::NORMAL) {
 						_getPBoat->Hurt();
-						_hurtTimer += dt;
+						Print("enemy touch true");
 					}
-					else if (_hurtTimer >= 3.0f) {
-						_hurtTimer = 0.0f;
-					}
-					else {
-						_hurtTimer += dt;
-					}
+					
 					pEUpdateGet->Action(dt, _getPBoat);	//攻擊、move
+					
 					if (pEUpdateGet != pEUseTail)
 						pEUpdateGet = pEUpdateGet->_nextlink;
 				}
@@ -358,6 +354,12 @@ void EnemyManager::EGeneratorController(){
 	switch (_state)
 	{
 		case LEVEL1:
+			//TEST
+			//if (!flag) {
+			//	flag = true;
+			//	mat4 mattest;
+			//	EnemyGenerater('s', mattest);
+			//}
 			if (_timer > _genDuration) {
 				_timer = 0.0f;
 				EnemyGenerater('s', _genMat);

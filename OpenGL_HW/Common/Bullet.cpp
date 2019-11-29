@@ -95,6 +95,7 @@ void Bullet::Reset() {
 	_transform->Reset();
 
 	_ftottime = 0.0f;
+	_ftottime = 0.0f;
 	_fSpeed = _fSpeedInit;
 	_isSpecial = false;
 	_bStartRot = false;
@@ -103,7 +104,7 @@ void Bullet::Reset() {
 
 
 //BulletList
-BulletList::BulletList(mat4 &mxView, mat4 &mxProjection, int totCount, char character,const vec4 &color,float fspeed = 1.0f) {
+BulletList::BulletList(mat4 &mxView, mat4 &mxProjection, int totCount, char character,const vec4 &color,float fspeed = 2.0f) {
 	_totCount = totCount; //目前所有
 	_storeCount = _totCount;
 	_shootCount = 0;
@@ -329,7 +330,7 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager,Bullet *bulle
 					DestroyBullet();
 					k++;
 				}
-				else if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.5f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.5f) {
+				else if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.4f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.4f) {
 					DestroyBullet();
 					k++;
 				}
@@ -385,11 +386,12 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 						i = _shootCount;
 					}
 					else {
-						if(getPBoat->_isDefense)
-							result = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, *(pBUpdateGet->_colliderSize), getPBoat->_transform->_mxTRS, *(getPBoat->_defense->_colliderSize));
-						else
+						/*if(getPBoat->_isDefense)
+							result = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, *(pBUpdateGet->_colliderSize), getPBoat->_transform->_mxTRS, *(getPBoat->_defense->_colliderSize));*/
+						if(getPBoat->_playerState == PBoat::NORMAL && pBUpdateGet->_ftottime > 0.0f)
 							result = _colliSystem.OnBoxCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_colliderSize, getPBoat->_transform->_mxTRS, getPBoat->_colliderSize);
 						if (result == true) {
+							Print("aaaaaaaaaa   enemy bullet touch true");
 							getPBoat->Hurt();
 							DestroyBullet();
 							k++;
@@ -422,7 +424,7 @@ Bullet* BulletList::BulletVsBullet(mat4 &mat_Bullet, float cBulletRadius, PBoat 
 		pCGet = getPBoat->_bulletList->pBUseHead;
 		for (int i = 0; i < shootCount; i++)
 		{
-			if (pCGet != NULL) {
+			if (pCGet != NULL  && pCGet->_ftottime > 0.0f) {
 				result = _colliSystem.OnCircleCollision(mat_Bullet, cBulletRadius, pCGet->_transform->_mxTRS, *(pCGet->_colliderSize));
 				if (result == true){
 					return pCGet;

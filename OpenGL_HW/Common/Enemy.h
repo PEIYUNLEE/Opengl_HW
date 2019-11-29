@@ -17,7 +17,6 @@ protected:
 	vec4 *_points;
 	vec4 *_colors;
 	char _type;
-	float _ftottime;
 	float _fspeed;
 	float _attackTimer;
 	float _attackDuration;
@@ -25,7 +24,6 @@ protected:
 
 
 	bool _initFlag;
-
 public:
 	Transform *_transform;
 	BulletList *_bulletList;
@@ -33,6 +31,7 @@ public:
 	Enemy *_prelink;
 	Enemy *_nextlink;
 
+	float _ftottime;
 	float *_colliderSize;
 
 	Enemy(mat4 &_mxView, mat4 &_mxProjection, float fspeed,float attackDuration, int pointNum, char type);

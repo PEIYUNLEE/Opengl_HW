@@ -27,14 +27,24 @@ private:
 	vec4 *_colors;
 
 	float _timer;
+	float _hurtTimer;
 	EnemyManager *_getEnemyManager;
 	int _heart;
 public:
+
+	enum PLAYER_STATE
+	{
+		NORMAL,
+		HURT,
+		DEAD
+	};
+
+	int _playerState;
+
 	Transform *_transform;
 	BulletList *_bulletList;
-	Defense *_defense;
-	bool _isDefense;
-	bool _isDead;
+	//Defense *_defense;
+	//bool _isDefense;
 	float *_colliderSize;
 	Bullet * _bulletResult;
 
