@@ -4,7 +4,7 @@
 #include "Bullet.h"
 
 EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int totCount_m) {
-	_state = LEVEL3;
+	_state = LEVEL1;
 
 	srand((unsigned)time(NULL));
 
@@ -18,6 +18,7 @@ EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int t
 	_useCount_b = 0;
 
 	_timer  = 0.0f;
+	_hurtTimer = 0.0f;
 	_genDuration = RandomTime();
 	_genMat = RandomPosition();
 
@@ -258,7 +259,6 @@ void EnemyManager::DestroyEnemy()
 void EnemyManager::Update(float dt) {
 	_timer += dt;
 	//產生敵人
-
 	EGeneratorController();
 
 	//做畫面Enemy要做的事
@@ -299,19 +299,19 @@ void EnemyManager::Update(float dt) {
 					k++;
 				}
 				else if (_colliSystem.OnBoxCollision(pEUpdateGet->_transform->_mxTRS, pEUpdateGet->_colliderSize, _getPBoat->_transform->_mxTRS, _getPBoat->_colliderSize)) {
-
-					switch (pEUpdateGet->_type)
-					{
-					case 's':
-						ds++;
-						break;
-					case 'm':
-						dm++;
-						break;
+					if (_hurtTimer == 0.0f) {
+						_getPBoat->Hurt();
+						_hurtTimer += dt;
 					}
-					Print("hurt!!!!!");
-					//DestroyEnemy();	//如果碰到邊界要刪除
-					//k++;
+					else if (_hurtTimer >= 3.0f) {
+						_hurtTimer = 0.0f;
+					}
+					else {
+						_hurtTimer += dt;
+					}
+					pEUpdateGet->Action(dt, _getPBoat);	//攻擊、move
+					if (pEUpdateGet != pEUseTail)
+						pEUpdateGet = pEUpdateGet->_nextlink;
 				}
 				else {
 					pEUpdateGet->Action(dt,_getPBoat);	//攻擊、move

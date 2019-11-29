@@ -38,7 +38,7 @@ void Enemy::Action(float dt, PBoat *getPBoat) {
 EnemySmall::EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed, float attackDuration, int pointNum, char type) :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
 	_colliderSize[0] = 0.7f;
 	_colliderSize[1] = 0.7f;
-	_bulletList = new BulletList(mxView, mxProjection, 10, 'e', _COLOR_YELLOW, 1.25f);
+	_bulletList = new BulletList(mxView, mxProjection, 10, 'e', _COLOR_YELLOW, 1.0f);
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
 };
@@ -851,18 +851,18 @@ void EnemyBoss::Attack(float dt) {
 		}
 	}
 
-	switch (_attackState) {
-		case Normal:
-			//턨짫Normal소─
-			AttackNormal();
-			break;
-		case Progressive:
-			AttackProgressive(k);
-			break;
-		case Explosion:
-			AttackExplosion();
-			break;
-	}
+	//switch (_attackState) {
+	//	case Normal:
+	//		//턨짫Normal소─
+	//		AttackNormal();
+	//		break;
+	//	case Progressive:
+	//		AttackProgressive(k);
+	//		break;
+	//	case Explosion:
+	//		AttackExplosion();
+	//		break;
+	//}
 }
 
 void EnemyBoss::AttackNormal(){

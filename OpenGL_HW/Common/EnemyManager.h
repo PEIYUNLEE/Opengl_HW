@@ -26,6 +26,7 @@ private:
 	int _useCount_b, _storeCount_b;
 
 	float _timer;
+	float _hurtTimer;
 	float _genDuration;
 	mat4 _genMat;
 

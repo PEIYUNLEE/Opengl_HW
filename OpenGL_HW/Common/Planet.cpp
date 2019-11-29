@@ -1,7 +1,7 @@
 #include "Planet.h"
 
 Planet::Planet(mat4 &mxView, mat4 &mxProjection) {
-	_fspeed = -0.75f;
+	_fspeed = -1.0f;	//fase 1.5   slow	1.0
 	_radius = 0.04f;
 	_ftottime = 0.0f;
 	SetPoint();
