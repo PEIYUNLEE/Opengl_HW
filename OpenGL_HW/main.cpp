@@ -66,6 +66,15 @@ void Win_PassiveMotion(int x, int y) {
 void Win_Keyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
+	case '1':
+		g_MainScene->_enemyManager->GoLevel(LEVEL1);
+		break;
+	case '2':
+		g_MainScene->_enemyManager->GoLevel(LEVEL2);
+		break;
+	case '3':
+		g_MainScene->_enemyManager->GoLevel(LEVEL3);
+		break;
 	case 'q':
 		if(g_MainScene->_pBoat->_playerState == PBoat::DEAD)
 			g_MainScene->_pBoat->Revival();
@@ -121,7 +130,7 @@ int main(int argc, char **argv)
 	glutInitContextVersion(3, 2);
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 
-	glutCreateWindow("Color Shoot Game");
+	glutCreateWindow("Shoot Game");
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 

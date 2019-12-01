@@ -15,17 +15,20 @@ PBoat::PBoat(mat4 &mxView, mat4 &mxProjection) {
 	_colliderSize[0] = 0.13f;
 	_colliderSize[1] = 0.19f;
 	_timer = 0.0f;
+	_shootTimer = 0.0f;
 	_hurtTimer = 0.0f;
 	_heart = 3;
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, BTOTPOINT_NUM, _points,_colors);
 	//_defense = new Defense(mxView, mxProjection, 0.35f);
+	_smoke = new Smoke(mxView, mxProjection);
 	_bulletList = new BulletList(mxView, mxProjection, 50, 'p', _COLOR_RED ,1.0f);
 }
 
 PBoat::~PBoat() {
 	if(_transform != NULL) delete _transform;
 	//if (_defense != NULL) delete _defense;
+	if (_smoke != NULL) delete _smoke;
 	if (_bulletList != NULL) delete _bulletList;
 	if (_points != NULL) delete _points;
 	if (_colors != NULL) delete _colors;
@@ -143,42 +146,77 @@ void PBoat::Draw() {
 		glDrawArrays(GL_TRIANGLE_FAN, BSPOINT_NUM * 2 + BBPOINT_NUM + BCPOINT_NUM + BTPOINT_NUM, BPPOINT_NUM);
 		glDrawArrays(GL_TRIANGLE_FAN, BSPOINT_NUM * 2 + BBPOINT_NUM + BCPOINT_NUM + BTPOINT_NUM + BPPOINT_NUM, BPPOINT_NUM);
 	}
+	_smoke->Draw();
 }
 
-void PBoat::Update(float delta,bool isBoatShoot) {
+float atimer = 0.0f;
+void PBoat::Update(float dt,bool isBoatShoot) {
+	float a = 0.0f;
+	float aspeed = 1.0f;	// 1.0/1.0
+	_timer += dt;
 	if (_playerState == PBoat::HURT) {
-		_hurtTimer += delta;
-		if (_hurtTimer >= 3.0f) {
+		_hurtTimer += dt;
+		atimer += dt;
+		if ((_hurtTimer <= 1.0f  && _hurtTimer > 0.0f) || (_hurtTimer <= 3.0f && _hurtTimer > 2.0f)) {
+			a = aspeed*atimer;
+			if (a > 1.0f) {
+				atimer = 0.0f;
+				a = 1.0f;
+			}
+			_transform->SetColorA(1.0f - a, 0, BTOTPOINT_NUM - 1);
+		}
+		else if ((_hurtTimer <= 2.0f  && _hurtTimer > 1.0f))
+		{
+			a = -aspeed*atimer;
+			if (a < -1.0f) {
+				atimer = 0.0f;
+				a = -1.0f;
+			}
+			_transform->SetColorA(1.0f + a, 0, BTOTPOINT_NUM - 1);
+		}
+		else if (_hurtTimer > 3.0f) {
 			_hurtTimer = 0.0f;
+			atimer = 0.0f;
 			_playerState = PBoat::NORMAL;
+			_transform->SetColorA(1.0f, 0, BTOTPOINT_NUM - 1);
 		}
 	}
 	if (_playerState != PBoat::DEAD) {
-		_timer += delta;
+		_shootTimer += dt;
 		if (isBoatShoot == true) {
-			if (_timer >= 0.4f) {
-				_timer = 0.0f;
+			if (_shootTimer >= 0.4f) {
+				_shootTimer = 0.0f;
 				_bulletList->BulletShoot(_transform->_mxTRS, 0.0f , 1.0f); //player射出子彈，傳入player座標
 			}
 		}
 
 		//if (_isDefense == true)	_defense->_transform->SetTRSMatrix(_transform->_mxTRS);
 
-		_bulletList->Update(delta,_getEnemyManager,_bulletResult);
+		_bulletList->Update(dt,_getEnemyManager,_bulletResult);
 	}
+
+	_smoke->Update(dt,_transform->_mxTRS);
 }
 
 void PBoat::Hurt() {
 	if (_playerState != PBoat::DEAD) {
-		_heart--;
-		_playerState = PBoat::HURT;
-		//if (_isDefense)	_isDefense = false;
-		if (_heart <= 0) {
+		if (_heart == 1) {	//剩最後一命
+			_heart--;
+			_smoke->Show(0);
 			_transform->SetTRSMatrix(resetMat);
 			_playerState = PBoat::DEAD;
-			Print("_playerState");
+			printf("GAME OVER\n");
+			//test 玩家可以無限復活
+			//_getEnemyManager->_state = GameEnd;
 			_bulletList->ResetBulletList();
 		}
+		else {
+			_heart--;
+			printf("玩家血量 = %d\n", _heart);
+			_smoke->Show(1);
+			_playerState = PBoat::HURT;
+		}
+		//if (_isDefense)	_isDefense = false;
 	}
 }
 
@@ -188,5 +226,6 @@ void PBoat::Revival() {	//外掛
 	//_isDefense = true;
 	_heart = 3;
 	_hurtTimer = 0.0f;
+	_shootTimer = 0.0f;
 	_timer = 0.0f;
 }

@@ -209,7 +209,7 @@ void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY,bool isSpecial) {
 			_storeCount--;
 		}
 		else {
-			printf("%d", _shootCount);
+			printf("子彈用盡\n");
 		}
 	}
 }
@@ -260,7 +260,7 @@ void BulletList::BulletShoot(mat4 &mat, float bIX, float bIY,float fSpeed, bool 
 			_storeCount--;
 		}
 		else {
-			printf("%d", _shootCount);
+			printf("子彈用盡\n");
 		}
 	}
 }
@@ -340,7 +340,7 @@ void BulletList::Update(float delta, EnemyManager *getEnemyManager,Bullet *bulle
 						result = _colliSystem.OnBoxCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_colliderSize, getEnemyManager);
 					}
 					if (result == true) {
-						Print("enemyhurt");
+						printf("敵人Hurt\n");
 						DestroyBullet();
 						k++;
 					}
@@ -363,22 +363,23 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 	//enemy的bulletllist
 	//做每顆子彈要做的事
 
-	Bullet * bulletResult;
+	Bullet * bulletResult = NULL;
 	int index = 0;
 
 	if (_shootCount > 0) {
 		pBUpdateGet = pBUseHead;
 		int k = 0;
-		bool result = false;
 		for (int i = 0; i < _shootCount; i++)
 		{
+			bool result = false;
 			if (pBUpdateGet != NULL) {
 				if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.5f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.5f || pBUpdateGet->_transform->_mxTRS._m[0].w <= -2.5f || pBUpdateGet->_transform->_mxTRS._m[0].w >= 2.5f) {
 					DestroyBullet();
 					k++;
 				}
 				else {
-					bulletResult = BulletVsBullet(pBUpdateGet->_transform->_mxTRS, *(pBUpdateGet->_colliderSize),getPBoat);
+					if(pBUpdateGet->_ftottime> 0.0f)
+						bulletResult = BulletVsBullet(pBUpdateGet->_transform->_mxTRS, *(pBUpdateGet->_colliderSize),getPBoat);
 					if (bulletResult != NULL) {
 						DestroyBullet();
 						k++;
@@ -386,12 +387,9 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 						i = _shootCount;
 					}
 					else {
-						/*if(getPBoat->_isDefense)
-							result = _colliSystem.OnCircleCollision(pBUpdateGet->_transform->_mxTRS, *(pBUpdateGet->_colliderSize), getPBoat->_transform->_mxTRS, *(getPBoat->_defense->_colliderSize));*/
 						if(getPBoat->_playerState == PBoat::NORMAL && pBUpdateGet->_ftottime > 0.0f)
 							result = _colliSystem.OnBoxCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_colliderSize, getPBoat->_transform->_mxTRS, getPBoat->_colliderSize);
 						if (result == true) {
-							Print("aaaaaaaaaa   enemy bullet touch true");
 							getPBoat->Hurt();
 							DestroyBullet();
 							k++;
@@ -424,8 +422,9 @@ Bullet* BulletList::BulletVsBullet(mat4 &mat_Bullet, float cBulletRadius, PBoat 
 		pCGet = getPBoat->_bulletList->pBUseHead;
 		for (int i = 0; i < shootCount; i++)
 		{
-			if (pCGet != NULL  && pCGet->_ftottime > 0.0f) {
-				result = _colliSystem.OnCircleCollision(mat_Bullet, cBulletRadius, pCGet->_transform->_mxTRS, *(pCGet->_colliderSize));
+			if (pCGet != NULL) {
+				if(pCGet->_ftottime > 0.0f)
+					result = _colliSystem.OnCircleCollision(mat_Bullet, cBulletRadius, pCGet->_transform->_mxTRS, *(pCGet->_colliderSize));
 				if (result == true){
 					return pCGet;
 					}

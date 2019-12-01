@@ -35,4 +35,5 @@ public:
 	void SetTRSMatrix(mat4 &mat);
 	void Draw();
 	void Reset();
+	void SetColorA(float a, int startIndex, int endIndex);
 };

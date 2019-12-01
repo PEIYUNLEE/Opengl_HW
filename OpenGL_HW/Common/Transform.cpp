@@ -69,3 +69,12 @@ void Transform::Reset() {
 	_mxMVFinal = init;
 	_mxOri = init;
 }
+
+void Transform::SetColorA(float a,int startIndex, int endIndex) {
+	for (int i = startIndex; i <= endIndex; i++)
+	{
+		_colors[i].w = a;
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, _uiBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(*_points)*_pointNum + sizeof(*_colors)*startIndex, sizeof(*_colors)*(endIndex-startIndex)+1, _colors[startIndex]);
+}

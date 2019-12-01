@@ -11,12 +11,12 @@ private:
 	//«Å§iª«¥ó
 	
 	PlanetManager *_planetManager;
-	EnemyManager *_enemyManager;
 	mat4 _mxModelView, _mxProjection;
 
 	void CreateGameObject();
 	
 public:
+	EnemyManager *_enemyManager;
 	PBoat *_pBoat;
 	bool isBoatShoot=false;
 

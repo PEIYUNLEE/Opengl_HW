@@ -1,7 +1,7 @@
 #include "Planet.h"
 
 Planet::Planet(mat4 &mxView, mat4 &mxProjection) {
-	_fspeed = -1.0f;	//fase 1.5   slow	1.0
+	_fspeed = -1.2f;	//fase 1.5   slow	1.0
 	_radius = 0.04f;
 	_ftottime = 0.0f;
 	SetPoint();
@@ -167,5 +167,19 @@ void PlanetManager::SetPosition(float X,float Y) {
 	_pGet->_transform->_mxTRS = mat;
 	_pGet->_transform->SetTRSMatrix(mat);
 
+}
+
+
+
+void PlanetManager::SetSpeed(float fspeed) {
+	Planet *pSetSpeedGet;
+	pSetSpeedGet = _pHead;
+	for (int i = 0; i < _planetCount; i++)
+	{
+		if (pSetSpeedGet != NULL) {
+			pSetSpeedGet->_fspeed = fspeed;
+			pSetSpeedGet = pSetSpeedGet->_nextlink;
+		}
+	}
 }
 

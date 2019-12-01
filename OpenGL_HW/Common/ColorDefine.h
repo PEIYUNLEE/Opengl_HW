@@ -18,3 +18,14 @@
 #define _COLOR_BOATBODY_WIGHT vec4(0.94f, 0.91f, 0.94f, 1.0f)
 #define _COLOR_BOATFIRE_YELLOW vec4(0.87f, 0.58f, 0.22f, 1.0f)
 
+//smoke red
+#define _COLOR_SMOKE_RED_1 vec4(0.918f, 0.153f, 0.0f, 0.0f)
+#define _COLOR_SMOKE_RED_2 vec4(0.91f, 0.259f, 0.0f, 0.0f)
+#define _COLOR_SMOKE_RED_3 vec4(0.957f, 0.455f, 0.118f, 0.0f)
+#define _COLOR_SMOKE_RED_4 vec4(0.937f, 0.537f, 0.263f, 0.0f)
+//smoke GRAY
+#define _COLOR_SMOKE_GRAY_1 vec4(0.31f, 0.31f, 0.31f, 1.0f)
+#define _COLOR_SMOKE_GRAY_2 vec4(0.408f, 0.408f, 0.408f, 1.0f)
+#define _COLOR_SMOKE_GRAY_3 vec4(0.557f, 0.557f, 0.557f, 1.0f)
+#define _COLOR_SMOKE_GRAY_4 vec4(0.729f, 0.729f, 0.729f, 1.0f)
+

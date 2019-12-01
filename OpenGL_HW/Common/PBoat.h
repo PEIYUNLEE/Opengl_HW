@@ -5,7 +5,7 @@
 #include "../Header/Angel.h"
 #include "Transform.h"
 #include "ColorDefine.h"
-#include "Defense.h"
+#include "Smoke.h"
 class BulletList;
 class Bullet;
 class EnemyManager;
@@ -27,8 +27,10 @@ private:
 	vec4 *_colors;
 
 	float _timer;
+	float _shootTimer;
 	float _hurtTimer;
 	EnemyManager *_getEnemyManager;
+	Smoke *_smoke;
 	int _heart;
 public:
 
@@ -55,6 +57,7 @@ public:
 	void Draw();
 	void Update(float delta, bool isBoatShoot);
 	void Hurt();
+	void SetColorA(float a);
 
 	void Revival();
 };

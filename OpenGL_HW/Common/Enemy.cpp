@@ -12,6 +12,7 @@ Enemy::Enemy(mat4 &mxView, mat4 &mxProjection, float fspeed,float attackDuration
 	_fspeed = fspeed;
 	_isDead = false;
 	_initFlag = false;
+	_isDefaultEnemy = true;
 }
 
 Enemy::~Enemy() {
@@ -24,13 +25,11 @@ Enemy::~Enemy() {
 
 void Enemy::Action(float dt, PBoat *getPBoat) {
 	_ftottime += dt;
-	//Attack(dt);
+	Attack(dt);
 	AutoTranslate(dt);		
 
 	_bulletList->Update(dt, getPBoat);
 }
-
-
 
 
 
@@ -221,16 +220,30 @@ void EnemySmall::Reset() {
 	_attackTimer = 0;
 	_isDead = false;
 	_initFlag = false;
+	_isDefaultEnemy = true;
 }
 
 
 
 /////////EnemyMiddle
 EnemyMiddle::EnemyMiddle(mat4 &mxView, mat4 &mxProjection, float fspeed, float attackDuration, int pointNum, char type) :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
+	_fspeed = -0.8f;
 	_attackDuration = 0.5f;
-	_colliderSize[0] = 0.7f;
-	_colliderSize[1] = 0.7f;
+	_colliderSize[0] = 0.3f;
+	_colliderSize[1] = 0.3f;
+
+	_bIX = 0.0f;
+	_bIY = 1.0f;
+	_rotateDuration = 5.0f;
+	_rotateTimer = 0.0f;
+	_translateTimer = 0.0f;
+	_fZAngle = 0.0f;
+	_btx = 0.0f;
+	_bty = 0.0f;
+	_isStop = false;
+
 	_bulletList = new BulletList(mxView, mxProjection, 20, 'm',  _COLOR_YELLOW, 1.0f);
+	_pointNum = 344;
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
 };
@@ -239,113 +252,399 @@ void EnemyMiddle::SetPoint() {
 	_points = new vec4[_pointNum];
 	_colors = new vec4[_pointNum];
 
-	//Body
-	_points[0] = vec4(-0.15f, 0.15f, 0.0f, 1.0f);
-	_points[1] = vec4(-0.15f, -0.15f, 0.0f, 1.0f);
-	_points[2] = vec4(0.15f, 0.15f, 0.0f, 1.0f);
-	_points[3] = vec4(0.15f, -0.15f, 0.0f, 1.0f);
+	////SHOOT
+	//////////////////////////////////////////////////shoot center 1
+	_points[0] = vec4(0.09f, -0.285f, 0.0f, 1.0f);
+	_points[1] = vec4(0.09f, -0.4f, 0.0f, 1.0f);
+	_points[2] = vec4(-0.09f, -0.285f, 0.0f, 1.0f);
+	_points[3] = vec4(-0.09f, -0.4f, 0.0f, 1.0f);
 
-	//pshoot1
-	_points[4] = vec4(-0.14f, -0.15f, 0.0f, 1.0f);
-	_points[5] = vec4(0.14f, -0.15f, 0.0f, 1.0f);
-	_points[6] = vec4(-0.075f, -0.27f, 0.0f, 1.0f);
-	_points[7] = vec4(0.075f, -0.27f, 0.0f, 1.0f);
+	_colors[0] = _COLOR_GRAY;
+	_colors[1] = _COLOR_GRAY;
+	_colors[2] = _COLOR_GRAY;
+	_colors[3] = _COLOR_GRAY;
 
-	//pshoot2
-	_points[8] = vec4(0.15f, -0.149f, 0.0f, 1.0f);
-	_points[9] = vec4(0.15f, 0.149f, 0.0f, 1.0f);
-	_points[10] = vec4(0.27f, -0.075f, 0.0f, 1.0f);
-	_points[11] = vec4(0.27f, 0.075f, 0.0f, 1.0f);
+	///////////////////////////////////////////////////////shoot center 2
+	_points[4] = vec4(-0.05f, -0.435f, 0.0f, 1.0f);
+	_points[5] = vec4(-0.05f, -0.375f, 0.0f, 1.0f);
+	_points[6] = vec4(-0.02f, -0.435f, 0.0f, 1.0f);
+	_points[7] = vec4(-0.02f, -0.375f, 0.0f, 1.0f);
 
-	//pshoot3
-	_points[12] = vec4(-0.14f, 0.15f, 0.0f, 1.0f);
-	_points[13] = vec4(0.14f, 0.15f, 0.0f, 1.0f);
-	_points[14] = vec4(-0.075f, 0.27f, 0.0f, 1.0f);
-	_points[15] = vec4(0.075f, 0.27f, 0.0f, 1.0f);
+	_colors[4] = _COLOR_GRAY;
+	_colors[5] = _COLOR_GRAY;
+	_colors[6] = _COLOR_GRAY;
+	_colors[7] = _COLOR_GRAY;
 
-	//pshoot4
-	_points[16] = vec4(-0.15f, -0.149f, 0.0f, 1.0f);
-	_points[17] = vec4(-0.15f, 0.149f, 0.0f, 1.0f);
-	_points[18] = vec4(-0.27f, -0.075f, 0.0f, 1.0f);
-	_points[19] = vec4(-0.27f, 0.075f, 0.0f, 1.0f);
+	////////////////////////////////////////////////////////shoot center 2
+	_points[8] = vec4(0.05f, -0.435f, 0.0f, 1.0f);
+	_points[9] = vec4(0.05f, -0.375f, 0.0f, 1.0f);
+	_points[10] = vec4(0.02f, -0.435f, 0.0f, 1.0f);
+	_points[11] = vec4(0.02f, -0.375f, 0.0f, 1.0f);
 
-	//cBody
-	_colors[0] = _COLOR_BLACK;
-	_colors[1] = _COLOR_BLACK;
-	_colors[2] = _COLOR_BLACK;
-	_colors[3] = _COLOR_BLACK;
+	_colors[8] = _COLOR_GRAY;
+	_colors[9] = _COLOR_GRAY;
+	_colors[10] = _COLOR_GRAY;
+	_colors[11] = _COLOR_GRAY;
 
-	//cshoot
-	_colors[4] = _COLOR_YELLOW;
-	_colors[5] = _COLOR_YELLOW;
-	_colors[6] = _COLOR_YELLOW;
-	_colors[7] = _COLOR_YELLOW;
-
-	//cshoot
-	_colors[8] = _COLOR_YELLOW;
-	_colors[9] = _COLOR_YELLOW;
-	_colors[10] = _COLOR_YELLOW;
-	_colors[11] = _COLOR_YELLOW;
-
-	//cshoot
-	_colors[12] = _COLOR_YELLOW;
-	_colors[13] = _COLOR_YELLOW;
-	_colors[14] = _COLOR_YELLOW;
-	_colors[15] = _COLOR_YELLOW;
-
-	//cshoot
-	_colors[16] = _COLOR_YELLOW;
-	_colors[17] = _COLOR_YELLOW;
-	_colors[18] = _COLOR_YELLOW;
-	_colors[19] = _COLOR_YELLOW;
-
-	//center
-	for (int i = 20; i < _pointNum; i++) {
-		_points[i].x = 0.07f *cosf(M_PI*2.0f*(float)i / 10.0f); //2拍乘以該點分之總點
-		_points[i].y = 0.07f *sinf(M_PI*2.0f*(float)i / 10.0f);
+	/////////////////////////////////////////////////////////shoot center circle
+	for (int i = 12; i < 22; i++)
+	{
+		_points[i].x = 0.025f* cosf(M_PI*2.0f*(float)i / 10.0f) - 0.033f;
+		_points[i].y = 0.025f* sinf(M_PI*2.0f*(float)i / 10.0f) - 0.44f;
 		_points[i].w = 1.0f;
-		_colors[i] = _COLOR_YELLOW;
+		_colors[i] = _COLOR_GRAY;
 	}
+
+	/////////////////////////////////////////////////////////shoot center circle
+	for (int i = 22; i < 32; i++)
+	{
+		_points[i].x = 0.025f* cosf(M_PI*2.0f*(float)i / 10.0f) + 0.033f;
+		_points[i].y = 0.025f* sinf(M_PI*2.0f*(float)i / 10.0f) - 0.44f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	////SHOOT TOP
+	//////////////////////////////////////////////////shoot center 1
+	_points[32] = vec4(0.09f, 0.285f, 0.0f, 1.0f);
+	_points[33] = vec4(0.09f, 0.4f, 0.0f, 1.0f);
+	_points[34] = vec4(-0.09f, 0.285f, 0.0f, 1.0f);
+	_points[35] = vec4(-0.09f, 0.4f, 0.0f, 1.0f);
+
+	_colors[32] = _COLOR_GRAY;
+	_colors[33] = _COLOR_GRAY;
+	_colors[34] = _COLOR_GRAY;
+	_colors[35] = _COLOR_GRAY;
+
+	///////////////////////////////////////////////////////shoot center 2
+	_points[36] = vec4(-0.05f, 0.435f, 0.0f, 1.0f);
+	_points[37] = vec4(-0.05f, 0.375f, 0.0f, 1.0f);
+	_points[38] = vec4(-0.02f, 0.435f, 0.0f, 1.0f);
+	_points[39] = vec4(-0.02f, 0.375f, 0.0f, 1.0f);
+
+	_colors[36] = _COLOR_GRAY;
+	_colors[37] = _COLOR_GRAY;
+	_colors[38] = _COLOR_GRAY;
+	_colors[39] = _COLOR_GRAY;
+
+	////////////////////////////////////////////////////////shoot center 2
+	_points[40] = vec4(0.05f, 0.435f, 0.0f, 1.0f);
+	_points[41] = vec4(0.05f, 0.375f, 0.0f, 1.0f);
+	_points[42] = vec4(0.02f, 0.435f, 0.0f, 1.0f);
+	_points[43] = vec4(0.02f, 0.375f, 0.0f, 1.0f);
+
+	_colors[40] = _COLOR_GRAY;
+	_colors[41] = _COLOR_GRAY;
+	_colors[42] = _COLOR_GRAY;
+	_colors[43] = _COLOR_GRAY;
+
+	/////////////////////////////////////////////////////////shoot center circle
+	for (int i = 44; i < 54; i++)
+	{
+		_points[i].x = 0.025f* cosf(M_PI*2.0f*(float)i / 10.0f) - 0.033f;
+		_points[i].y = 0.025f* sinf(M_PI*2.0f*(float)i / 10.0f) + 0.44f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	/////////////////////////////////////////////////////////shoot center circle
+	for (int i = 54; i < 64; i++)
+	{
+		_points[i].x = 0.025f* cosf(M_PI*2.0f*(float)i / 10.0f) + 0.033f;
+		_points[i].y = 0.025f* sinf(M_PI*2.0f*(float)i / 10.0f) + 0.44f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	////SHOOT LEFT
+	//////////////////////////////////////////////////shoot center 1
+	_points[64] = vec4(-0.4f, -0.09f, 0.0f, 1.0f);
+	_points[65] = vec4(-0.4f, 0.09f, 0.0f, 1.0f);
+	_points[66] = vec4(-0.285f, -0.09f, 0.0f, 1.0f);
+	_points[67] = vec4(-0.285f, 0.09f, 0.0f, 1.0f);
+
+	_colors[64] = _COLOR_GRAY;
+	_colors[65] = _COLOR_GRAY;
+	_colors[66] = _COLOR_GRAY;
+	_colors[67] = _COLOR_GRAY;
+
+	///////////////////////////////////////////////////////shoot center 2
+	_points[68] = vec4(-0.435f, 0.02f, 0.0f, 1.0f);
+	_points[69] = vec4(-0.435f, 0.05f, 0.0f, 1.0f);
+	_points[70] = vec4(-0.375f, 0.02f, 0.0f, 1.0f);
+	_points[71] = vec4(-0.375f, 0.05f, 0.0f, 1.0f);
+
+	_colors[68] = _COLOR_GRAY;
+	_colors[69] = _COLOR_GRAY;
+	_colors[70] = _COLOR_GRAY;
+	_colors[71] = _COLOR_GRAY;
+
+	//////////////////////////////////////////////////////////shoot center 2
+	_points[72] = vec4(-0.435f, -0.02f, 0.0f, 1.0f);
+	_points[73] = vec4(-0.435f, -0.05f, 0.0f, 1.0f);
+	_points[74] = vec4(-0.375f, -0.02f, 0.0f, 1.0f);
+	_points[75] = vec4(-0.375f, -0.05f, 0.0f, 1.0f);
+
+	_colors[72] = _COLOR_GRAY;
+	_colors[73] = _COLOR_GRAY;
+	_colors[74] = _COLOR_GRAY;
+	_colors[75] = _COLOR_GRAY;
+
+	/////////////////////////////////////////////////////////shoot center circle
+	for (int i = 76; i < 86; i++)
+	{
+		_points[i].x = 0.025f* cosf(M_PI*2.0f*(float)i / 10.0f) - 0.44f;
+		_points[i].y = 0.025f* sinf(M_PI*2.0f*(float)i / 10.0f) + 0.035f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	/////////////////////////////////////////////////////////shoot center circle
+	for (int i = 86; i < 96; i++)
+	{
+		_points[i].x = 0.025f* cosf(M_PI*2.0f*(float)i / 10.0f) - 0.44f;
+		_points[i].y = 0.025f* sinf(M_PI*2.0f*(float)i / 10.0f) - 0.035f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	////SHOOT RIGHT
+	//////////////////////////////////////////////////shoot center 1
+	_points[96] = vec4(0.4f, -0.09f, 0.0f, 1.0f);
+	_points[97] = vec4(0.4f, 0.09f, 0.0f, 1.0f);
+	_points[98] = vec4(0.285f, -0.09f, 0.0f, 1.0f);
+	_points[99] = vec4(0.285f, 0.09f, 0.0f, 1.0f);
+
+	_colors[96] = _COLOR_GRAY;
+	_colors[97] = _COLOR_GRAY;
+	_colors[98] = _COLOR_GRAY;
+	_colors[99] = _COLOR_GRAY;
+
+	///////////////////////////////////////////////////////shoot center 2
+	_points[100] = vec4(0.435f, 0.02f, 0.0f, 1.0f);
+	_points[101] = vec4(0.435f, 0.05f, 0.0f, 1.0f);
+	_points[102] = vec4(0.375f, 0.02f, 0.0f, 1.0f);
+	_points[103] = vec4(0.375f, 0.05f, 0.0f, 1.0f);
+
+	_colors[100] = _COLOR_GRAY;
+	_colors[101] = _COLOR_GRAY;
+	_colors[102] = _COLOR_GRAY;
+	_colors[103] = _COLOR_GRAY;
+
+	//////////////////////////////////////////////////////////shoot center 2
+	_points[104] = vec4(0.435f, -0.02f, 0.0f, 1.0f);
+	_points[105] = vec4(0.435f, -0.05f, 0.0f, 1.0f);
+	_points[106] = vec4(0.375f, -0.02f, 0.0f, 1.0f);
+	_points[107] = vec4(0.375f, -0.05f, 0.0f, 1.0f);
+
+	_colors[104] = _COLOR_GRAY;
+	_colors[105] = _COLOR_GRAY;
+	_colors[106] = _COLOR_GRAY;
+	_colors[107] = _COLOR_GRAY;
+
+	/////////////////////////////////////////////////////////shoot center circle
+	for (int i = 108; i < 118; i++)
+	{
+		_points[i].x = 0.025f* cosf(M_PI*2.0f*(float)i / 10.0f) + 0.44f;
+		_points[i].y = 0.025f* sinf(M_PI*2.0f*(float)i / 10.0f) + 0.035f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	/////////////////////////////////////////////////////////shoot center circle
+	for (int i = 118; i < 128; i++)
+	{
+		_points[i].x = 0.025f* cosf(M_PI*2.0f*(float)i / 10.0f) + 0.44f;
+		_points[i].y = 0.025f* sinf(M_PI*2.0f*(float)i / 10.0f) - 0.035f;
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	/////////////////////////////////////////////////////////window1
+	for (int i = 128; i < 148; i++)
+	{
+		_points[i].x = 0.2f* cosf(M_PI*2.0f*(float)i / 20.0f);
+		_points[i].y = 0.2f* sinf(M_PI*2.0f*(float)i / 20.0f);
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_WINDOW_1;
+	}
+
+	/////////////////////////////////////////////////////////window1
+	for (int i = 148; i < 168; i++)
+	{
+		_points[i].x = 0.2f* cosf(M_PI*2.0f*(float)i / 20.0f);
+		_points[i].y = 0.2f* sinf(M_PI*2.0f*(float)i / 20.0f);
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_WINDOW_1;
+	}
+
+	///////////////////////////////////////////////////////window2 138~150
+
+	_points[168] = vec4(-0.22f, 0.05f, 0.0f, 1.0f);
+	_points[169] = vec4(-0.08f, 0.2f, 0.0f, 1.0f);
+	_points[170] = vec4(-0.19f, -0.02f, 0.0f, 1.0f);
+	_points[171] = vec4(-0.03f, 0.21f, 0.0f, 1.0f);
+
+	_colors[168] = _COLOR_WINDOW_2;
+	_colors[169] = _COLOR_WINDOW_2;
+	_colors[170] = _COLOR_WINDOW_2;
+	_colors[171] = _COLOR_WINDOW_2;
+
+	_points[172] = vec4(-0.17f, -0.08f, 0.0f, 1.0f);
+	_points[173] = vec4(0.04f, 0.21f, 0.0f, 1.0f);
+	_points[174] = vec4(-0.08f, -0.16f, 0.0f, 1.0f);
+	_points[175] = vec4(0.15f, 0.15f, 0.0f, 1.0f);
+
+	_colors[172] = _COLOR_WINDOW_2;
+	_colors[173] = _COLOR_WINDOW_2;
+	_colors[174] = _COLOR_WINDOW_2;
+	_colors[175] = _COLOR_WINDOW_2;
+
+	_points[176] = vec4(-0.02f, -0.18f, 0.0f, 1.0f);
+	_points[177] = vec4(0.18f, 0.1f, 0.0f, 1.0f);
+	_points[178] = vec4(0.12f, -0.15f, 0.0f, 1.0f);
+	_points[179] = vec4(0.22f, 0.0f, 0.0f, 1.0f);
+
+	_colors[176] = _COLOR_WINDOW_2;
+	_colors[177] = _COLOR_WINDOW_2;
+	_colors[178] = _COLOR_WINDOW_2;
+	_colors[179] = _COLOR_WINDOW_2;
+
+	///////////////////////////////////////////////////////GRAY CIRCLE
+	for (int i = 180; i < 222; i++)
+	{
+		if (i % 2 == 0) {
+			_points[i].x = 0.22f* cosf(M_PI*2.0f*(float)(i / 2) / 20.0f);
+			_points[i].y = 0.22f* sinf(M_PI*2.0f*(float)(i / 2)/ 20.0f);
+		}
+		else {
+			_points[i].x = 0.2f* cosf(M_PI*2.0f*(float)(i / 2) / 20.0f);
+			_points[i].y = 0.2f* sinf(M_PI*2.0f*(float)(i / 2) / 20.0f);
+		}
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_GRAY;
+	}
+
+	///////////////////////////////////////////////////////BLUEGREEN CIRCLE
+	for (int i = 222; i < 264; i++)
+	{
+		if (i % 2 == 0) {
+			_points[i].x = 0.22f* cosf(M_PI*2.0f*(float)(i / 2) / 20.0f);
+			_points[i].y = 0.22f* sinf(M_PI*2.0f*(float)(i / 2) / 20.0f);
+		}
+		else {
+			_points[i].x = 0.35f* cosf(M_PI*2.0f*(float)(i / 2) / 20.0f);
+			_points[i].y = 0.35f* sinf(M_PI*2.0f*(float)(i / 2) / 20.0f);
+		}
+		_points[i].w = 1.0f;
+		_colors[i] = _COLOR_BLUEGREEN;
+	}
+
+	///////////////////////////////////////////////////////YELLOW CIRCLE
+	for (int j = 0; j < 8; j++)
+	{
+		for (int i = 264+10*j; i < 274 + 10 * j; i++)
+		{
+			_points[i].x = 0.025f* cosf(M_PI*2.0f*(float)(i) / 10.0f) + 0.275f* cosf(M_PI*2.0f*(float)(j) / 8.0f);
+			_points[i].y = 0.025f* sinf(M_PI*2.0f*(float)(i) / 10.0f) + 0.275f* sinf(M_PI*2.0f*(float)(j) / 8.0f);
+			_points[i].w = 1.0f;
+			_colors[i] = _COLOR_YELLOW;
+		}
+	}
+
+}
+
+void EnemyMiddle::Draw() {
+	_bulletList->BulletDraw();
+
+	_transform->Draw();
+
+	//SHOOT
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
+	glDrawArrays(GL_TRIANGLE_FAN, 12, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 22, 10);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 32, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 36, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 40, 4);
+	glDrawArrays(GL_TRIANGLE_FAN, 44, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 54, 10);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 64, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 68, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 72, 4);
+	glDrawArrays(GL_TRIANGLE_FAN, 76, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 86, 10);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 96, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 100, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 104, 4);
+	glDrawArrays(GL_TRIANGLE_FAN, 108, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 118, 10);
+
+	//WINDOW
+	glDrawArrays(GL_TRIANGLE_FAN, 128, 20);
+	glDrawArrays(GL_TRIANGLE_FAN, 148, 20);
+	glDrawArrays(GL_TRIANGLE_STRIP, 168, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 172, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 176, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 180, 42);
+	glDrawArrays(GL_TRIANGLE_STRIP, 222, 42);
+
+	//YELLOW CIRCLE
+	glDrawArrays(GL_TRIANGLE_FAN, 264, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 274, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 284, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 294, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 304, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 314, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 324, 10);
+	glDrawArrays(GL_TRIANGLE_FAN, 334, 10);
 }
 
 void EnemyMiddle::Attack(float dt) {
 	if (!_isStop) {
+		//到定位開始攻擊
 		_attackTimer += dt;
 		if (_attackTimer >= _attackDuration) {
-			_attackDuration = 2.0f;
+			//開始第一種攻擊
+			_attackDuration = 1.5f;
 			_attackTimer = 0.0f;
-			_bulletList->BulletShoot(_transform->_mxTRS, _iX, _iY);
-			_bulletList->BulletShoot(_transform->_mxTRS, -_iX, -_iY);
+			_bulletList->BulletShoot(_transform->_mxTRS, _bIX, _bIY);
+			_bulletList->BulletShoot(_transform->_mxTRS, -_bIX, -_bIY);
 			mat4 mat = _transform->_mxTRS;
 			mat._m[0].w += 0.2f;
-			_bulletList->BulletShoot(mat, _iX, _iY);
-			_bulletList->BulletShoot(mat, -_iX, -_iY);
+			_bulletList->BulletShoot(mat, _bIX, _bIY);
+			_bulletList->BulletShoot(mat, -_bIX, -_bIY);
 			mat._m[0].w -= 0.4f;
-			_bulletList->BulletShoot(mat, _iX, _iY);
-			_bulletList->BulletShoot(mat, -_iX, -_iY);
+			_bulletList->BulletShoot(mat, _bIX, _bIY);
+			_bulletList->BulletShoot(mat, -_bIX, -_bIY);
 		}
 	}
 	else {
 		_attackTimer += dt;
 		_attackDuration = 3.0f;
 		if (_attackTimer >= _attackDuration) {
+			//開始第二種攻擊
 			_attackTimer = 0.0f;
 			mat4 mat = _transform->_mxTRS;
-			mat._m[1].w += 0.25f*_iY;
-			mat._m[0].w += 0.25f*_iX;
-			_bulletList->BulletShoot(mat, _iX, _iY);
+			mat._m[1].w += 0.25f*_bIY;
+			mat._m[0].w += 0.25f*_bIX;
+			_bulletList->BulletShoot(mat, _bIX, _bIY);
 			mat = _transform->_mxTRS;
-			mat._m[0].w += 0.25f*_iY;
-			mat._m[1].w -= 0.25f*_iX;
-			_bulletList->BulletShoot(mat, _iY, -_iX);
+			mat._m[0].w += 0.25f*_bIY;
+			mat._m[1].w -= 0.25f*_bIX;
+			_bulletList->BulletShoot(mat, _bIY, -_bIX);
 			mat = _transform->_mxTRS;
-			mat._m[1].w -= 0.25f*_iY;
-			mat._m[0].w -= 0.25f*_iX;
-			_bulletList->BulletShoot(mat, -_iX, -_iY);
+			mat._m[1].w -= 0.25f*_bIY;
+			mat._m[0].w -= 0.25f*_bIX;
+			_bulletList->BulletShoot(mat, -_bIX, -_bIY);
 			mat = _transform->_mxTRS;
-			mat._m[0].w -= 0.25f*_iY;
-			mat._m[1].w += 0.25f*_iX;
-			_bulletList->BulletShoot(mat, -_iY, _iX);
+			mat._m[0].w -= 0.25f*_bIY;
+			mat._m[1].w += 0.25f*_bIX;
+			_bulletList->BulletShoot(mat, -_bIY, _bIX);
 		}
 	}
 }
@@ -354,9 +653,12 @@ void EnemyMiddle::AutoTranslate(float dt) {
 	mat4 mxTra;
 	mat4 mxRot;
 
-	if (_transform->_mxTRS._m[1].w >= 0.0f) {
+	if (_transform->_mxTRS._m[0].w >= 1.5f || _transform->_mxTRS._m[0].w <= -1.5f) {
 		_translateTimer += dt;
-		_bty += dt*_fspeed;
+		if(_isDefaultEnemy)
+			_btx += dt*_fspeed;
+		else
+			_btx += dt*(-_fspeed);
 	}
 	else {
 		_isStop = true;
@@ -368,13 +670,13 @@ void EnemyMiddle::AutoTranslate(float dt) {
 				_fZAngle += 30.0f * dt;
 			else {
 				_rotateTimer = 0.0f;
-				if (_iX == 0.0f) {
-					_iX = 1.0f;
-					_iY = 1.0f;
+				if (_bIX == 0.0f) {
+					_bIX = 1.0f;
+					_bIY = 1.0f;
 				}
 				else {
-					_iX = 0.0f;
-					_iY = 1.0f;
+					_bIX = 0.0f;
+					_bIY = 1.0f;
 				}
 			}
 		}
@@ -386,18 +688,6 @@ void EnemyMiddle::AutoTranslate(float dt) {
 	mxTra = Translate(_btx, _bty, 0.0f);
 
 	_transform->SetTRSMatrix(mxTra*_transform->_mxOri*mxRot );
-}
-
-void EnemyMiddle::Draw() {
-	_bulletList->BulletDraw();
-
-	_transform->Draw();
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 16, 4);
-	glDrawArrays(GL_TRIANGLE_FAN, 20, 10);
 }
 
 void EnemyMiddle::Hurt() {
@@ -413,12 +703,13 @@ void EnemyMiddle::Reset() {
 	_attackTimer = 0;
 	_rotateTimer = 0.0f;
 	_translateTimer = 0.0f;
-	_iX = 0.0f;
-	_iY = 1.0f;
+	_bIX = 0.0f;
+	_bIY = 1.0f;
 	_isStop = false;
 	_fZAngle = 0.0f;
 	_btx = 0.0f;
 	_bty = 0.0f;
+	_isDefaultEnemy = true;
 }
 
 
@@ -428,14 +719,17 @@ EnemyBoss::EnemyBoss(mat4 &mxView, mat4 &mxProjection, float fspeed, float attac
 	_colliderSize[1] = 0.5f;
 	_attackState = Idle;
 	_attackDuration = 1.25f;
-	_iX = 0.0f;
-	_iY = 1.0f;
+
+	_bIX = 0.0f;
+	_bIY = 1.0f;
 	_translateTimer = 0.0f;
 	_btx = 0.0f;
 	_bty = 0.0f;
 	_isExploShoot = false;
+	_heart = 30;
+
 	_pointNum = 249;
-	_bulletList = new BulletList(mxView, mxProjection, 50, 'b', _COLOR_YELLOW, 1.0f);
+	_bulletList = new BulletList(mxView, mxProjection, 50, 'b', _COLOR_YELLOW, 1.2f);
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
 };
@@ -920,14 +1214,18 @@ void EnemyBoss::Attack(float dt) {
 
 	if (_attackTimer >= _attackDuration) {
 		_attackTimer = 0.0f;
-		if (_attackState == Idle) {
+		switch (_attackState) {
+		case Idle:
 			_attackDuration = 4.0f;
 			_attackState = Normal;
-		}
-		else if (_attackState == Normal) {
-			normalTime += 1;
-			k = 0;
-			switch (normalTime) {
+			break;
+		case Normal:
+			if (_heart <= 22) {
+				if (_heart <= 12)
+					normalTime += 1;
+				else normalTime = 1;
+				k = 0;
+				switch (normalTime) {
 				case 1:
 					_attackState = Progressive;
 					_attackDuration = 8.0f;
@@ -936,18 +1234,25 @@ void EnemyBoss::Attack(float dt) {
 					_attackState = Explosion;
 					_attackDuration = 8.0f;
 					normalTime = 0;
+				}
 			}
-		}
-		else if (_attackState == Progressive) {
+			else {
+				//_attackDuration = 4.0f;
+				k = 0;
+			}
+			break;
+		case Progressive:
 			_attackState = Normal;
 			_attackDuration = 4.0f;
 			k = 0;
-		}
-		else {
+			break;
+		case Explosion:
 			_attackState = Normal;
 			_attackDuration = 4.0f;
 			k = 0;
-			_isExploShoot = false;
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -974,45 +1279,44 @@ void EnemyBoss::AttackNormal(){
 
 		switch (k) {
 			case 1:
-				_bulletList->BulletShoot(mat, _iX, -_iY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY);
 				mat._m[0].w -= 0.8f;
-				_bulletList->BulletShoot(mat, _iX, -_iY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY);
 				mat = _transform->_mxTRS;
 				mat._m[1].w -= 0.3f;
 				mat._m[0].w += 0.8f;
-				_bulletList->BulletShoot(mat, _iX, -_iY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY);
 				break;
-
 			default:
-				_bulletList->BulletShoot(mat, _iX, -_iY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY);
 				mat._m[0].w -= 0.6f;
-				_bulletList->BulletShoot(mat, _iX, -_iY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY);
 				mat = _transform->_mxTRS;
 				mat._m[1].w -= 0.3f;
 				mat._m[0].w += 0.6f;
-				_bulletList->BulletShoot(mat, _iX, -_iY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY);
 				break;
 		}
 
-		_iX = 1.0f;
-		_iY = 1.75f;
+		_bIX = 1.0f;
+		_bIY = 1.75f;
 
 		for (int i = 0; i < 3; i++)
 		{
-			_iY -= 0.025f;
+			_bIY -= 0.025f;
 			mat = _transform->_mxTRS;
 			mat._m[1].w -= 0.3f;
 			mat._m[0].w -= 0.3f*i;
-			_bulletList->BulletShoot(mat, -_iX, -_iY, fBSpeed);
+			_bulletList->BulletShoot(mat, -_bIX, -_bIY, fBSpeed);
 			mat = _transform->_mxTRS;
 			mat._m[1].w -= 0.3f;
 			mat._m[0].w += 0.3f*i;
-			_bulletList->BulletShoot(mat, _iX, -_iY, fBSpeed);
+			_bulletList->BulletShoot(mat, _bIX, -_bIY, fBSpeed);
 			fBSpeed -= 0.001f;
 		}
 
-		_iX = 0.0f;
-		_iY = 1.0f;
+		_bIX = 0.0f;
+		_bIY = 1.0f;
 		k++;
 	}
 }
@@ -1022,7 +1326,7 @@ void EnemyBoss::AttackProgressive(int &k) {
 	mat._m[1].w -= 0.3f;
 
 	if (_attackTimer >= 0.5f*k+0.5f) {
-		_bulletList->BulletShoot(mat, _iX, -_iY);
+		_bulletList->BulletShoot(mat, _bIX, -_bIY);
 		k++;
 	}
 }
@@ -1033,7 +1337,7 @@ void EnemyBoss::AttackExplosion() {
 	if (_attackTimer >= 1.0f && !_isExploShoot) {
 		for (int i = 0; i < 30; i++)
 		{
-			_bulletList->BulletShoot(mat, _iX, -_iY,1.0f, true);
+			_bulletList->BulletShoot(mat, _bIX, -_bIY,1.0f, true);
 		}
 		_isExploShoot = true;
 	}
@@ -1077,14 +1381,29 @@ void EnemyBoss::AutoTranslate(float dt) {
 }
 
 void EnemyBoss::Hurt() {
-	//_isDead = true;
+	_heart--;
+	printf("boss heart = %d\n",_heart);
+	if (_heart <= 0) {
+		_isDead = true;
+		_bulletList->ResetBulletList();
+	}
 }
 
 void EnemyBoss::Reset() {
 	_transform->Reset();
 	_isDead = false;
 	_initFlag = false;
+	_isDefaultEnemy = true;
 
+	_attackState = Idle;
 	_ftottime = 0.0f;
 	_attackTimer = 0;
+	_attackDuration = 1.25f;
+	_bIX = 0.0f;
+	_bIY = 1.0f;
+	_translateTimer = 0.0f;
+	_btx = 0.0f;
+	_bty = 0.0f;
+	_isExploShoot = false;
+	_heart = 30;
 }

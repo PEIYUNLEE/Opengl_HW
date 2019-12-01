@@ -9,7 +9,8 @@ enum LEVEL_STATE
 {
 	LEVEL1,
 	LEVEL2,
-	LEVEL3
+	LEVEL3,
+	GameEnd
 };
 
 class EnemyManager {
@@ -29,15 +30,17 @@ private:
 	float _genDuration;
 	mat4 _genMat;
 
+
 	float RandomTime(float min = 1.5f, float max = 3.5f);
 	mat4 RandomPosition(float minX = -1.5f, float maxX = 1.5f , float Y = 2.55f);
 
 	PBoat *_getPBoat;
-	int _state;
 	Collision _colliSystem;
 public:
+	int _state;
 	Enemy *pEUseTail, *pEUseHead;
 	int _usetotCount;
+	int _killCount;
 
 	EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s=5, int totCount_m=5);
 	~EnemyManager();
@@ -49,4 +52,5 @@ public:
 	void PushTail();
 	void EnemyGenerater(char type, mat4 &mat);
 	void EGeneratorController();
+	void GoLevel(int level);
 };

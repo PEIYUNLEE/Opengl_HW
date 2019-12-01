@@ -31,6 +31,10 @@ void MainScene::Update(float delta) {
 	_planetManager->Update(delta);
 	_pBoat->Update(delta, isBoatShoot);
 	_enemyManager->Update(delta);
+
+	if (_enemyManager->_state == LEVEL3) {
+		_planetManager->SetSpeed(-1.5f);
+	}
 }
 
 MainScene::~MainScene() {

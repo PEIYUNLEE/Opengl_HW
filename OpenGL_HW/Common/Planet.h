@@ -50,4 +50,5 @@ public:
 
 	void Update(float dt);
 	void PlanetDraw();
+	void SetSpeed(float fspeed);
 };

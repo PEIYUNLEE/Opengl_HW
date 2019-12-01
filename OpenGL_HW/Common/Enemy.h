@@ -22,7 +22,6 @@ protected:
 	float _attackDuration;
 	bool _isDead;
 
-
 	bool _initFlag;
 public:
 	Transform *_transform;
@@ -30,6 +29,8 @@ public:
 
 	Enemy *_prelink;
 	Enemy *_nextlink;
+
+	bool _isDefaultEnemy;
 
 	float _ftottime;
 	float *_colliderSize;
@@ -67,15 +68,15 @@ public:
 class EnemyMiddle : public Enemy
 {
 private:
-	float _iX = 0.0f;
-	float _iY = 1.0f;
-	float _rotateDuration= 4.5f;
-	float _rotateTimer = 0.0f;
-	float _translateTimer = 0.0f;
-	GLfloat _fZAngle = 0.0f;
-	GLfloat _btx = 0.0f;
-	GLfloat _bty = 0.0f;
-	bool _isStop=false;
+	float _bIX; //子彈移動單位向量
+	float _bIY; //子彈移動單位向量
+	float _rotateDuration; //紀錄旋轉間隔時間
+	float _rotateTimer ; //紀錄旋轉時間
+	float _translateTimer ; //紀錄移動時間
+	GLfloat _fZAngle;
+	GLfloat _btx; //儲存移動
+	GLfloat _bty; //儲存移動
+	bool _isStop=false; //到定位
 
 	void Attack(float delta);
 	void AutoTranslate(float ftottime);
@@ -98,13 +99,14 @@ class EnemyBoss : public Enemy
 		Explosion
 	};
 private:
-	float _iX;
-	float _iY;
-	int _attackState;
-	float _translateTimer;
-	GLfloat _btx;
-	GLfloat _bty;
-	bool _isExploShoot;
+	float _bIX; //子彈移動單位向量
+	float _bIY; //子彈移動單位向量
+	int _attackState; //攻擊模式
+	float _translateTimer; //紀錄移動時間
+	GLfloat _btx; //儲存移動
+	GLfloat _bty; //儲存移動
+	bool _isExploShoot;	//第三種攻擊發射
+	int _heart;	//血量
 
 	void Attack(float delta);
 	void AutoTranslate(float ftottime);

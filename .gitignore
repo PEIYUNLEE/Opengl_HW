@@ -1,2 +1,24 @@
 
 OpenGL_HW.VC.VC.opendb
+*.obj
+*.obj
+OpenGL_HW/Debug/Bullet.obj
+OpenGL_HW/Debug/Collision.obj
+OpenGL_HW/Debug/Defense.obj
+OpenGL_HW/Debug/Enemy.obj
+OpenGL_HW/Debug/EnemyManager.obj
+OpenGL_HW/Debug/main.obj
+OpenGL_HW/Debug/MainScene.obj
+*.tlog
+*.tlog
+OpenGL_HW/Debug/OpenGL_HW.log
+OpenGL_HW/Debug/OpenGL_HW.tlog/CL.command.1.tlog
+OpenGL_HW/Debug/OpenGL_HW.tlog/CL.read.1.tlog
+OpenGL_HW/Debug/OpenGL_HW.tlog/CL.write.1.tlog
+OpenGL_HW/Debug/OpenGL_HW.tlog/link.command.1.tlog
+OpenGL_HW/Debug/OpenGL_HW.tlog/link.read.1.tlog
+OpenGL_HW/Debug/OpenGL_HW.tlog/link.write.1.tlog
+*.idb
+*.pdb
+*.vcxproj
+*.filters

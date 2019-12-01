@@ -17,6 +17,8 @@ EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int t
 	_useCount_m = 0;
 	_useCount_b = 0;
 
+	_killCount = 0;
+
 	_timer  = 0.0f;
 	_genDuration = RandomTime(1.0f,1.0f);
 	_genMat = RandomPosition();
@@ -80,6 +82,9 @@ void EnemyManager::Clear() {
 	if (pEHead_b != NULL) delete pEHead_b;
 }
 
+
+bool isLeftEnemyDead = true;
+bool isRightEnemyDead = true;
 void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 
 	Enemy *pNewEnemyGet,*pHead,*pTail;
@@ -111,14 +116,14 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 		break;
 	}
 
-	if (_usetotCount == 0)	//當目前use槽沒東西，跟子彈池要子彈
+	if (_usetotCount == 0)	//當目前use槽沒東西，跟敵人池要敵人
 	{
 		pNewEnemyGet = pHead;
 		pNewEnemyGet->_transform->_mxOri = mat;	//存取初始位置
 		pEUseHead = pNewEnemyGet;
 		if (*totCount != 1) {
 			pHead = pHead->_nextlink;
-			pHead->_prelink = NULL;	//子彈從子彈池移出
+			pHead->_prelink = NULL;	//敵人從敵人池移出
 		}
 
 		pNewEnemyGet->_prelink = NULL;
@@ -131,15 +136,18 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 	else
 	{
 		if (*useCount < *totCount) {
-			pNewEnemyGet = pHead;	//跟子彈池要子彈
+			pNewEnemyGet = pHead;	//跟敵人池要敵人
+			if (type == 'm' && isLeftEnemyDead && !isRightEnemyDead) {
+				pNewEnemyGet->_isDefaultEnemy = false;
+			}
 			pNewEnemyGet->_transform->_mxOri = mat;	//存取初始位置
 			if (*useCount < *totCount - 1) {
 				pHead = pHead->_nextlink;
-				pHead->_prelink = NULL;	//子彈從子彈池移出
+				pHead->_prelink = NULL;	//敵人從敵人池移出
 			}
 			else if (pHead == pTail) {
 				//store剩最後一個
-				pHead = pTail = NULL;	//子彈從子彈池移出
+				pHead = pTail = NULL;	//敵人從敵人池移出
 			}
 			pEUseTail->_nextlink = pNewEnemyGet;
 			pNewEnemyGet->_prelink = pEUseTail;
@@ -150,7 +158,7 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 			(*storeCount)--;
 		}
 		else {
-			printf("%d", _usetotCount);
+			printf("敵人子彈用盡\n");
 		}
 	}
 
@@ -273,13 +281,23 @@ void EnemyManager::Update(float dt) {
 					{
 					case 's':
 						ds++;
+						_killCount++;
+						Print(_killCount);
 						break;
 					case 'm':
 						dm++;
+						if (pEUpdateGet->_isDefaultEnemy)
+							isRightEnemyDead = true;
+						else
+							isLeftEnemyDead = true;
+						break;
+					case 'b':
+						_state = GameEnd;
+						printf("GameWin\n");
 						break;
 					}
 
-					DestroyEnemy(); 
+					DestroyEnemy();
 					k++;
 				}
 				else if (pEUpdateGet->_type != 'b' && (pEUpdateGet->_transform->_mxTRS._m[1].w >= 2.6f || pEUpdateGet->_transform->_mxTRS._m[1].w <= -2.6f)) {
@@ -350,43 +368,135 @@ mat4 EnemyManager::RandomPosition(float minX, float maxX, float Y) {
 }
 
 bool flag=false;
+
 void EnemyManager::EGeneratorController(){
 	switch (_state)
 	{
 		case LEVEL1:
-			//TEST
-			//if (!flag) {
-			//	flag = true;
-			//	mat4 mattest;
-			//	EnemyGenerater('s', mattest);
-			//}
 			if (_timer > _genDuration) {
 				_timer = 0.0f;
 				EnemyGenerater('s', _genMat);
 				_genDuration = RandomTime();
 				_genMat = RandomPosition();
 			}
+
+			if (_killCount >= 5) {
+				GoLevel(LEVEL2);
+			}
 			break;
 		case LEVEL2:
 			if (_timer > _genDuration && !flag) {
 				flag = true;
-				_genMat._m[0].w = 1.5f;
-				_genMat._m[1].w = 2.55f;
+				_genMat._m[0].w = 2.5f;
+				_genMat._m[1].w = 0.0f;
 				EnemyGenerater('m', _genMat);
-				_genMat._m[0].w = -1.5f;
-				_genMat._m[1].w = 2.55f;
+				isRightEnemyDead = false;
+				_genMat._m[0].w = -2.5f;
+				_genMat._m[1].w = 0.0f;
 				EnemyGenerater('m', _genMat);
+				isLeftEnemyDead = false;
+				_genDuration = 8.0f;
 			}
+			else if (_useCount_m < 2 && flag) {
+				if(isLeftEnemyDead){
+					_genMat._m[0].w = -4.0f;
+					_genMat._m[1].w = 0.0f;
+					EnemyGenerater('m', _genMat);
+					isLeftEnemyDead = false;
+				}
+				else if(isRightEnemyDead) {
+					_genMat._m[0].w = 4.0f;
+					_genMat._m[1].w = 0.0f;
+					EnemyGenerater('m', _genMat);
+					isRightEnemyDead = false;
+				}
+			}
+
+			if (_timer > _genDuration && flag) {
+				_timer = 0.0f;
+				_genDuration = 4.0f;
+				_genMat = RandomPosition(-0.8f,0.8f);
+				EnemyGenerater('s', _genMat);
+			}
+
+			if (_killCount >= 5) {
+				GoLevel(LEVEL3);
+			}
+
 			break;
 		case LEVEL3:
-			if (!flag) {
+			if (_timer > _genDuration && !flag) {
 				flag = true;
 				_genMat = RandomPosition(0.0f,0.0f,3.0f);
 				EnemyGenerater('b', _genMat);
 			}
 			break;
+		case GameEnd:
+			//清掉畫面上的敵人
+			if (_usetotCount > 0) {
+				pEUpdateGet = pEUseHead;
+				int k = 0, ds = 0, dm = 0;
+				for (int i = 0; i < _usetotCount; i++)
+				{
+					if (pEUpdateGet != NULL) {
+						switch (pEUpdateGet->_type)
+						{
+						case 's':
+							ds++;
+							break;
+						case 'm':
+							dm++;
+							if (pEUpdateGet->_isDefaultEnemy)
+								isRightEnemyDead = true;
+							else
+								isLeftEnemyDead = true;
+							break;
+						}
+
+						DestroyEnemy();
+						k++;
+
+						if (pEUpdateGet != pEUseTail)
+							pEUpdateGet = pEUpdateGet->_nextlink;
+					}
+				}
+
+				_usetotCount -= k;
+				_useCount_s -= ds;
+				_useCount_m -= dm;
+				_storetotCount += k;
+				_storeCount_s += ds;
+				_storeCount_m += dm;
+			}
+			break;
 		default:
 			break;
 		}
+}
 
+void EnemyManager::GoLevel(int level) {
+
+	_killCount = 0;
+	flag = false;
+	_timer = 0.0f;
+
+	switch (level)
+	{
+	case LEVEL1:
+		_state = LEVEL1;
+		_genDuration = 1.0f;
+		break;
+	case LEVEL2:
+		_state = LEVEL2;
+		_genDuration = 2.0f;
+		isRightEnemyDead = true;
+		isLeftEnemyDead = true;
+		break;
+	case LEVEL3:
+		_state = LEVEL3;
+		_genDuration = 2.0f;
+		break;
+	default:
+		break;
+	}
 }
