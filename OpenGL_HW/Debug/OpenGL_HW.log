@@ -1,35 +1,7 @@
-﻿  Enemy.cpp
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(55): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(56): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(130): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(131): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(139): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(140): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(304): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(305): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(488): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(489): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(508): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(509): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(519): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(520): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(574): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(575): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(630): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(631): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(641): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(642): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(653): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(654): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(664): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(665): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(687): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(688): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(744): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(745): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(755): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(756): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(768): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
-d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\enemy.cpp(769): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+﻿  PBoat.cpp
+d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\pboat.cpp(80): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\pboat.cpp(81): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\pboat.cpp(88): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
+d:\users\course\大三\計算機圖學\opengl_hw\opengl_hw\common\pboat.cpp(89): warning C4244: '引數': 將 'double' 轉換為 'float'，由於類型不同，可能導致資料遺失
   OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.exe
   OpenGL_HW.vcxproj -> D:\Users\Course\大三\計算機圖學\OpenGL_HW\Debug\OpenGL_HW.pdb (Full PDB)
