@@ -374,22 +374,28 @@ void BulletList::Update(float delta, PBoat *getPBoat) {
 			bool result = false;
 			if (pBUpdateGet != NULL) {
 				if (pBUpdateGet->_transform->_mxTRS._m[1].w >= 2.5f || pBUpdateGet->_transform->_mxTRS._m[1].w <= -2.5f || pBUpdateGet->_transform->_mxTRS._m[0].w <= -2.5f || pBUpdateGet->_transform->_mxTRS._m[0].w >= 2.5f) {
+					//子彈碰到邊界
 					DestroyBullet();
 					k++;
 				}
 				else {
+					//子彈對消偵測
 					if(pBUpdateGet->_ftottime> 0.0f)
 						bulletResult = BulletVsBullet(pBUpdateGet->_transform->_mxTRS, *(pBUpdateGet->_colliderSize),getPBoat);
 					if (bulletResult != NULL) {
+						//子彈對消，清除敵方的子彈
 						DestroyBullet();
 						k++;
+						//子彈對消，設定清除玩家子彈
 						getPBoat->_bulletResult = bulletResult;
 						i = _shootCount;
 					}
 					else {
-						if(getPBoat->_playerState == PBoat::NORMAL && pBUpdateGet->_ftottime > 0.0f)
+						//子彈玩家碰撞，DEFENSE跟NORMAL情況都可
+						if(getPBoat->_playerState <= PBoat::DEFENSE  && pBUpdateGet->_ftottime > 0.0f)
 							result = _colliSystem.OnBoxCollision(pBUpdateGet->_transform->_mxTRS, pBUpdateGet->_colliderSize, getPBoat->_transform->_mxTRS, getPBoat->_colliderSize);
 						if (result == true) {
+							//玩家那邊會自動判斷是否是DEFENSE不扣寫
 							getPBoat->Hurt();
 							DestroyBullet();
 							k++;

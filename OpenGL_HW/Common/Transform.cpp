@@ -8,6 +8,10 @@ Transform::Transform(mat4 &mxView, mat4 &mxProjection, int pointNum, vec4 *point
 	SetShader(mxView, mxProjection);
 }
 
+Transform::~Transform()
+{
+}
+
 void Transform::CreateBufferObject() {
 
 	glGenVertexArrays(1, &_uiVao);

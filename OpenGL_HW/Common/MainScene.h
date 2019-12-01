@@ -1,6 +1,7 @@
 #pragma once
 #include "../Header/Angel.h"
 #include "Planet.h"
+#include "Defense.h"
 
 class PBoat;
 class EnemyManager;
@@ -12,7 +13,6 @@ private:
 	
 	PlanetManager *_planetManager;
 	mat4 _mxModelView, _mxProjection;
-
 	void CreateGameObject();
 	
 public:

@@ -10,19 +10,6 @@ typedef Angel::vec4  point4;
 
 class Smoke
 {
-	enum TYPE
-	{
-		RED,
-		GRAY
-	};
-	enum STATE
-	{
-		NONE = 0,
-		FIRST,
-		SECOND,
-		THIRD,
-		FOURTH
-	};
 private:
 	vec4 *_points;
 	vec4 *_colors;
@@ -31,14 +18,30 @@ private:
 
 	float _timer;
 	int _showCount;
-	void SetPoint();
+	void SetPoint(int type);
 public:
+	enum STATE
+	{
+		NONE = 0,
+		FIRST,
+		SECOND,
+		THIRD,
+		FOURTH
+	};
+	enum TYPE
+	{
+		DEAD = 0,
+		HURT1,
+		HURT2
+	};
+
 	int _smokeState;
 
-	Smoke(mat4 &mxView, mat4 &mxProjection);
+	Smoke(mat4 &mxView, mat4 &mxProjection,int type);
 	~Smoke();
 
 	void Update(float dt, mat4 mat);
 	void Draw();
-	void Show(int type);	//red:1 gray:0
+	void Show(int type);	//red:0 gray:1
+	void Reset(int type);
 };

@@ -29,8 +29,8 @@ void Planet::SetPoint() {
 
 void Planet::AutoTranslate(float dt) {
 	mat4 mxTra;
-	GLfloat tx = 0.0f;
-	GLfloat ty = 0.0f;
+	float tx = 0.0f;
+	float ty = 0.0f;
 
 	_ftottime += dt;
 	ty = _ftottime*_fspeed;
@@ -44,7 +44,6 @@ void Planet::AutoTranslate(float dt) {
 	else {
 		_transform->SetTRSMatrix(mxTra*_transform->_mxOri);
 	}
-	
 }
 
 void Planet::Draw() {
@@ -52,8 +51,6 @@ void Planet::Draw() {
 
 	glDrawArrays(GL_TRIANGLE_FAN, 0, CPOINT_NUM);
 }
-
-
 
 
 ///////////PlanetManager

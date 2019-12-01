@@ -1,6 +1,7 @@
 #pragma once
 #include "../Header/Angel.h"
 #include "Collision.h"
+#include "Smoke.h"
 class Enemy;
 class PBoat;
 class BulletList;
@@ -42,11 +43,18 @@ public:
 	int _usetotCount;
 	int _killCount;
 
+	Smoke *_smokeHurt[5];
+	Smoke *_smokeDead[5];
+	bool _isSmokeHurtUse[5];
+	bool _isSmokeDeadUse[5];
+	mat4 _smokeHurtPosition[5];
+	mat4 _smokeDeadPosition[5];
+
 	EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s=5, int totCount_m=5);
 	~EnemyManager();
 	void GetComponent(PBoat *getPBoat);
 	void Clear();	// §â¾ã¦êlist§R°£
-	void EnemyDraw();
+	void Draw();
 	void Update(float delta);
 	void DestroyEnemy();
 	void PushTail();

@@ -16,13 +16,15 @@ protected:
 	int _pointNum;
 	vec4 *_points;
 	vec4 *_colors;
-	char _type;
 	float _fspeed;
 	float _attackTimer;
 	float _attackDuration;
-	bool _isDead;
+	int _state;
 
 	bool _initFlag;
+
+	//Smoke *_smokeHurt;
+	//Smoke *_smokeDead;
 public:
 	Transform *_transform;
 	BulletList *_bulletList;
@@ -30,6 +32,8 @@ public:
 	Enemy *_prelink;
 	Enemy *_nextlink;
 
+	bool _isDead;
+	char _type;
 	bool _isDefaultEnemy;
 
 	float _ftottime;

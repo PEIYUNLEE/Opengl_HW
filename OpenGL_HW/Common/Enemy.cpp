@@ -10,9 +10,9 @@ Enemy::Enemy(mat4 &mxView, mat4 &mxProjection, float fspeed,float attackDuration
 	_attackDuration = attackDuration;
 	_pointNum = pointNum;
 	_fspeed = fspeed;
-	_isDead = false;
 	_initFlag = false;
 	_isDefaultEnemy = true;
+	_isDead = false;
 }
 
 Enemy::~Enemy() {
@@ -208,6 +208,7 @@ void EnemySmall::Draw() {
 	glDrawArrays(GL_TRIANGLE_FAN, 44, 10);
 	glDrawArrays(GL_TRIANGLE_STRIP, 54, 6);
 	glDrawArrays(GL_TRIANGLE_STRIP, 60, 4);
+
 }
 
 void EnemySmall::Hurt() {
@@ -218,9 +219,9 @@ void EnemySmall::Reset() {
 	_transform->Reset();
 	_ftottime = 0.0f;
 	_attackTimer = 0;
-	_isDead = false;
 	_initFlag = false;
 	_isDefaultEnemy = true;
+	_isDead = false;
 }
 
 
@@ -696,8 +697,8 @@ void EnemyMiddle::Hurt() {
 
 void EnemyMiddle::Reset() {
 	_transform->Reset();
-	_isDead = false;
 	_initFlag = false;
+	_isDead = false;
 
 	_ftottime = 0.0f;
 	_attackTimer = 0;
@@ -1391,9 +1392,9 @@ void EnemyBoss::Hurt() {
 
 void EnemyBoss::Reset() {
 	_transform->Reset();
-	_isDead = false;
 	_initFlag = false;
 	_isDefaultEnemy = true;
+	_isDead = false;
 
 	_attackState = Idle;
 	_ftottime = 0.0f;

@@ -4,7 +4,7 @@
 #include "Bullet.h"
 
 EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int totCount_m) {
-	_state = LEVEL1;
+	_state = LEVEL3;
 
 	srand((unsigned)time(NULL));
 
@@ -46,6 +46,14 @@ EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int t
 	}
 
 	pEHead_b = new EnemyBoss(mxView, mxProjection);
+
+	for (int i = 0; i < 5; i++)
+	{
+		_smokeDead[i] = new Smoke(mxView, mxProjection, Smoke::DEAD);
+		_smokeHurt[i] = new Smoke(mxView, mxProjection, Smoke::HURT2);
+		_isSmokeDeadUse[i] = false;
+		_isSmokeHurtUse[i] = false;
+	}
 }
 
 EnemyManager::~EnemyManager() {
@@ -80,6 +88,14 @@ void EnemyManager::Clear() {
 	}
 
 	if (pEHead_b != NULL) delete pEHead_b;
+
+	for (int i = 0; i < 5; i++)
+	{
+		if(_smokeDead[i]!=NULL)
+			delete _smokeDead[i];
+		if (_smokeHurt[i] != NULL)
+			delete _smokeHurt[i];
+	}
 }
 
 
@@ -174,7 +190,7 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 	}
 }
 
-void EnemyManager::EnemyDraw() {
+void EnemyManager::Draw() {
 	if (_usetotCount > 0) {
 		Enemy *pDrawGet;
 		pDrawGet = pEUseHead;
@@ -182,6 +198,18 @@ void EnemyManager::EnemyDraw() {
 		{
 			pDrawGet->Draw();
 			pDrawGet = pDrawGet->_nextlink;
+		}
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (_state != GameEnd) {
+			if (_isSmokeHurtUse[i]) {
+				_smokeHurt[i]->Draw();
+			}
+		}
+		if (_isSmokeDeadUse[i]) {
+			_smokeDead[i]->Draw();
 		}
 	}
 }
@@ -228,6 +256,15 @@ void EnemyManager::DestroyEnemy()
 {
 	Enemy *pGetPre, *pGetNext;
 	pEUpdateGet->_bulletList->ResetBulletList();
+	for (int i = 0; i < 5; i++)
+	{
+		if (!_isSmokeDeadUse[i]) {
+			_isSmokeDeadUse[i] = true;
+			_smokeDeadPosition[i] = pEUpdateGet->_transform->_mxTRS;
+			_smokeDead[i]->Show(Smoke::DEAD);
+			i = 5;
+		}
+	}
 	if (pEUpdateGet == pEUseHead) {
 		//如果消失的是顯示的第一個敵人(_prelink==NULL)
 		if (pEUseHead == pEUseTail) //只剩一顆
@@ -275,8 +312,8 @@ void EnemyManager::Update(float dt) {
 		for (int i = 0; i < _usetotCount; i++)
 		{
 			if (pEUpdateGet != NULL) {
-				if (pEUpdateGet->_isDead == true) {
-
+				if (pEUpdateGet->_isDead) {
+					//如果敵人死了，清除敵人
 					switch (pEUpdateGet->_type)
 					{
 					case 's':
@@ -301,7 +338,7 @@ void EnemyManager::Update(float dt) {
 					k++;
 				}
 				else if (pEUpdateGet->_type != 'b' && (pEUpdateGet->_transform->_mxTRS._m[1].w >= 2.6f || pEUpdateGet->_transform->_mxTRS._m[1].w <= -2.6f)) {
-
+					//如果敵人非BOSS且碰到邊界，清除敵人
 					switch (pEUpdateGet->_type)
 					{
 					case 's':
@@ -316,8 +353,9 @@ void EnemyManager::Update(float dt) {
 					k++;
 				}
 				else if (pEUpdateGet->_ftottime > 0.0f && _colliSystem.OnBoxCollision(pEUpdateGet->_transform->_mxTRS, pEUpdateGet->_colliderSize, _getPBoat->_transform->_mxTRS, _getPBoat->_colliderSize)) {
-					
-					if (_getPBoat->_playerState == PBoat::NORMAL) {
+					//如果敵人碰到玩家，NORMAL或DEFENSE都可以
+					if (_getPBoat->_playerState <= PBoat::DEFENSE) {
+						//玩家那邊會自動判斷是否是DEFENSE不扣血
 						_getPBoat->Hurt();
 						Print("enemy touch true");
 					}
@@ -341,8 +379,26 @@ void EnemyManager::Update(float dt) {
 		_storetotCount += k;
 		_storeCount_s += ds;
 		_storeCount_m += dm;
+
 	}
 
+	for (int i = 0; i < 5; i++)
+	{
+		if (_state != GameEnd) {
+			if (_isSmokeHurtUse[i]) {
+				_smokeHurt[i]->Update(dt, _smokeHurtPosition[i]);
+				if (_smokeHurt[i]->_smokeState == Smoke::NONE) {
+					_isSmokeHurtUse[i] = false;
+				}
+			}
+		}
+		if (_isSmokeDeadUse[i]) {
+			_smokeDead[i]->Update(dt, _smokeDeadPosition[i]);
+			if (_smokeDead[i]->_smokeState == Smoke::NONE) {
+				_isSmokeDeadUse[i] = false;
+			}
+		}
+	}
 }
 
 float EnemyManager::RandomTime(float min, float max) {
@@ -469,6 +525,12 @@ void EnemyManager::EGeneratorController(){
 				_storeCount_m += dm;
 			}
 			break;
+
+			for (int i = 0; i < 5; i++)
+			{
+				_isSmokeHurtUse[i] = false;
+				_smokeHurt[i]->Reset(Smoke::HURT2);
+			}
 		default:
 			break;
 		}

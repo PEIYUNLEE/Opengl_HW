@@ -21,7 +21,7 @@ void MainScene::CreateGameObject() {
 void MainScene::Draw() {
 	
 	_planetManager->PlanetDraw();
-	_enemyManager->EnemyDraw();
+	_enemyManager->Draw();
 	_pBoat->Draw();
 }
 
@@ -33,7 +33,7 @@ void MainScene::Update(float delta) {
 	_enemyManager->Update(delta);
 
 	if (_enemyManager->_state == LEVEL3) {
-		_planetManager->SetSpeed(-1.5f);
+		_planetManager->SetSpeed(-1.4f);
 	}
 }
 

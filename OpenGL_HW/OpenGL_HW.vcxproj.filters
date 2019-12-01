@@ -27,13 +27,10 @@
     <None Include="fsVtxColor.glsl">
       <Filter>原始程式檔\Shader</Filter>
     </None>
-    <None Include="vsPlanet2.glsl">
+    <None Include="fsPlanetColor.glsl">
       <Filter>原始程式檔\Shader</Filter>
     </None>
-    <None Include="vsPlanet1.glsl">
-      <Filter>原始程式檔\Shader</Filter>
-    </None>
-    <None Include="vsPlanet3.glsl">
+    <None Include="vsPlanetColor.glsl">
       <Filter>原始程式檔\Shader</Filter>
     </None>
   </ItemGroup>

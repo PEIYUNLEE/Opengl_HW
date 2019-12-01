@@ -30,7 +30,7 @@ public:
 	mat4 _mxMVFinal;
 
 	Transform(mat4 &mxView, mat4 &mxProjection, int pointNum,vec4 *points,vec4 *colors);
-	//~Transform();
+	~Transform();
 
 	void SetTRSMatrix(mat4 &mat);
 	void Draw();

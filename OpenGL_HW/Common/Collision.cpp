@@ -50,6 +50,17 @@ bool Collision::OnBoxCollision(mat4 mat_Object, float *cObjectRadius, EnemyManag
 
 			if (dx <= radiusPlus_X && dy <= radiusPlus_Y) {
 				pGet->Hurt(); //Enemy反應
+				if (pGet->_type == 'b' && !pGet->_isDead) {
+					for (int i = 0; i < 5; i++)
+					{
+						if (!getEnemyList->_isSmokeHurtUse[i] && getEnemyList->_smokeHurt[i]->_smokeState == Smoke::NONE) {
+							getEnemyList->_isSmokeHurtUse[i] = true;
+							getEnemyList->_smokeHurt[i]->Show(Smoke::HURT2);
+							getEnemyList->_smokeHurtPosition[i] = pGet->_transform->_mxTRS;
+							i = 5;
+						}
+					}
+				}
 				return true; //銷毀物件
 			}
 			else pGet = pGet->_nextlink;

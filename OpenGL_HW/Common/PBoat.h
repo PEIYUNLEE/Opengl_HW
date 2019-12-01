@@ -6,6 +6,7 @@
 #include "Transform.h"
 #include "ColorDefine.h"
 #include "Smoke.h"
+#include "Defense.h"
 class BulletList;
 class Bullet;
 class EnemyManager;
@@ -29,16 +30,24 @@ private:
 	float _timer;
 	float _shootTimer;
 	float _hurtTimer;
+	float _animTimer;
+	float _defenseTimer;
+	float _defenseDurationTimer;
 	EnemyManager *_getEnemyManager;
-	Smoke *_smoke;
+	Smoke *_smokeHurt;
+	Smoke *_smokeDead;
 	int _heart;
+
+	Defense *_defense;
 public:
 
 	enum PLAYER_STATE
 	{
 		NORMAL,
+		DEFENSE,
 		HURT,
-		DEAD
+		DEAD,
+		DEADANIMFIN
 	};
 
 	int _playerState;
@@ -50,6 +59,9 @@ public:
 	float *_colliderSize;
 	Bullet * _bulletResult;
 
+
+	bool _showDefense;
+
 	PBoat(mat4 &mxView, mat4 &mxProjection);
 	~PBoat();
 	void GetComponent(EnemyManager *getEnemyManager);
@@ -57,7 +69,6 @@ public:
 	void Draw();
 	void Update(float delta, bool isBoatShoot);
 	void Hurt();
-	void SetColorA(float a);
 
 	void Revival();
 };
