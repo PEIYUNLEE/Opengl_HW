@@ -4,7 +4,7 @@
 #include "Bullet.h"
 
 EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int totCount_m) {
-	_state = LEVEL3;
+	_state = LEVEL1;
 
 	srand((unsigned)time(NULL));
 
@@ -354,13 +354,15 @@ void EnemyManager::Update(float dt) {
 				}
 				else if (pEUpdateGet->_ftottime > 0.0f && _colliSystem.OnBoxCollision(pEUpdateGet->_transform->_mxTRS, pEUpdateGet->_colliderSize, _getPBoat->_transform->_mxTRS, _getPBoat->_colliderSize)) {
 					//如果敵人碰到玩家，NORMAL或DEFENSE都可以
-					if (_getPBoat->_playerState <= PBoat::DEFENSE) {
+					if (_getPBoat->_playerState < PBoat::DEFENSE) {
 						//玩家那邊會自動判斷是否是DEFENSE不扣血
 						_getPBoat->Hurt();
+						pEUpdateGet->Action(dt, _getPBoat);	//攻擊、move
+					}
+					else if (_getPBoat->_playerState == PBoat::DEFENSE) {
+						pEUpdateGet->Hurt();
 						Print("enemy touch true");
 					}
-					
-					pEUpdateGet->Action(dt, _getPBoat);	//攻擊、move
 					
 					if (pEUpdateGet != pEUseTail)
 						pEUpdateGet = pEUpdateGet->_nextlink;

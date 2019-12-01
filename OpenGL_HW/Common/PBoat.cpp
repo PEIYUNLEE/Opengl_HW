@@ -183,6 +183,7 @@ void PBoat::Update(float dt,bool isBoatShoot) {
 			_hurtTimer = 0.0f;
 			atimer = 0.0f;
 			_playerState = PBoat::NORMAL;
+			_showDefense = true;
 			_transform->SetColorA(1.0f, 0, BTOTPOINT_NUM - 1);
 		}
 	}
@@ -209,8 +210,6 @@ void PBoat::Update(float dt,bool isBoatShoot) {
 			mat._m[1].w -= 0.02f;
 			_defense->_transform->SetTRSMatrix(mat);
 			if (_playerState == PBoat::DEFENSE) {
-				//_colliderSize[0] = 0.13f;
-				//_colliderSize[1] = 0.19f;
 				_colliderSize[0] = _defense->_colliderSize[0];
 				_colliderSize[1] = _defense->_colliderSize[1];
 				_defense->AutoRotation(dt);
@@ -220,6 +219,8 @@ void PBoat::Update(float dt,bool isBoatShoot) {
 					_showDefense = false;
 					_defenseDurationTimer = 0.0f;
 					_playerState = PBoat::NORMAL;
+					_colliderSize[0] = 0.13f;
+					_colliderSize[1] = 0.19f;
 				}
 				else if (_defenseTimer >= 6.0f) {
 					_defense->Reset();
@@ -231,7 +232,7 @@ void PBoat::Update(float dt,bool isBoatShoot) {
 		}
 		else {
 			_defenseDurationTimer += dt;
-			if (_defenseDurationTimer >= 10.0f) {
+			if (_defenseDurationTimer >= 10.0f && _playerState == NORMAL) {
 				_showDefense = true;
 			}
 		}
@@ -249,6 +250,7 @@ void PBoat::Hurt() {
 			if (_heart == 1) {	//剩最後一命
 				_heart--;
 				_smokeDead->Show(Smoke::DEAD);
+				_showDefense = false;
 				_playerState = PBoat::DEAD;
 				printf("GAME OVER\n");
 				//test 玩家可以無限復活
@@ -259,6 +261,7 @@ void PBoat::Hurt() {
 				_heart--;
 				printf("玩家血量 = %d\n", _heart);
 				_smokeHurt->Show(Smoke::HURT2);
+				_showDefense = false;
 				_playerState = PBoat::HURT;
 			}
 		}
