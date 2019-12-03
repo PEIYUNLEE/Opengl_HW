@@ -40,7 +40,7 @@ EnemySmall::EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed, float att
 	_attackDuration = 0.8f;
 	_fspeed = -1.0f;
 	_pointNum = 64;
-	_bulletList = new BulletList(mxView, mxProjection, 15, 'e', _COLOR_YELLOW, 1.75f);
+	_bulletList = new BulletList(mxView, mxProjection, 15, 'e', _COLOR_YELLOW, 2.0f);
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
 };
@@ -174,12 +174,12 @@ void EnemySmall::Attack(float dt){
 	_attackTimer += dt;
 	if (!_initFlag && _attackTimer>=0.5f) {
 		_attackTimer = 0.0f;
-		_bulletList->BulletShoot(mat, 0.0f,-1.0f);
+		_bulletList->BulletShoot(mat, 0.0f,-1.0f,0.0f);
 		_initFlag = true;
 	}
 	if (_attackTimer >= _attackDuration) {
 		_attackTimer = 0.0f;
-		_bulletList->BulletShoot(mat, 0.0f, -1.0f);
+		_bulletList->BulletShoot(mat, 0.0f, -1.0f,0.0f);
 	}
 }
 
@@ -229,15 +229,17 @@ void EnemySmall::Reset() {
 /////////EnemyMiddle
 EnemyMiddle::EnemyMiddle(mat4 &mxView, mat4 &mxProjection, float fspeed, float attackDuration, int pointNum, char type) :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
 	_fspeed = -0.8f;
-	_attackDuration = 0.5f;
+	_attackDuration = 1.5f;	//相同攻擊間隔
 	_colliderSize[0] = 0.3f;
 	_colliderSize[1] = 0.3f;
 
 	_bIX = 0.0f;
 	_bIY = 1.0f;
-	_rotateDuration = 5.0f;
+	_rotateDuration = 1.5f;
 	_rotateTimer = 0.0f;
 	_translateTimer = 0.0f;
+	_eachAttackDuration = 1.0f;	//每次攻擊間隔
+	_eachRotateDuration = 3.0f;
 	_fZAngle = 0.0f;
 	_btx = 0.0f;
 	_bty = 0.0f;
@@ -609,43 +611,76 @@ void EnemyMiddle::Attack(float dt) {
 	if (!_isStop) {
 		//到定位開始攻擊
 		_attackTimer += dt;
-		if (_attackTimer >= _attackDuration) {
+		if (_attackTimer >= _eachAttackDuration) {
 			//開始第一種攻擊
-			_attackDuration = 1.5f;
+			_eachAttackDuration = 1.5f;
 			_attackTimer = 0.0f;
-			_bulletList->BulletShoot(_transform->_mxTRS, _bIX, _bIY);
-			_bulletList->BulletShoot(_transform->_mxTRS, -_bIX, -_bIY);
+			_bulletList->BulletShoot(_transform->_mxTRS, _bIX, _bIY, 0.0f);
+			_bulletList->BulletShoot(_transform->_mxTRS, -_bIX, -_bIY,0.0f);
 			mat4 mat = _transform->_mxTRS;
 			mat._m[0].w += 0.2f;
-			_bulletList->BulletShoot(mat, _bIX, _bIY);
-			_bulletList->BulletShoot(mat, -_bIX, -_bIY);
+			_bulletList->BulletShoot(mat, _bIX, _bIY, 0.0f);
+			_bulletList->BulletShoot(mat, -_bIX, -_bIY, 0.0f);
 			mat._m[0].w -= 0.4f;
-			_bulletList->BulletShoot(mat, _bIX, _bIY);
-			_bulletList->BulletShoot(mat, -_bIX, -_bIY);
+			_bulletList->BulletShoot(mat, _bIX, _bIY, 0.0f);
+			_bulletList->BulletShoot(mat, -_bIX, -_bIY, 0.0f);
 		}
+		Print(_ri);
 	}
 	else {
 		_attackTimer += dt;
-		_attackDuration = 3.0f;
-		if (_attackTimer >= _attackDuration) {
+		if (_attackTimer >= _eachAttackDuration && _bIX==0.0f && _ri<8){
+			_enterflag = true;
 			//開始第二種攻擊
 			_attackTimer = 0.0f;
 			mat4 mat = _transform->_mxTRS;
 			mat._m[1].w += 0.25f*_bIY;
 			mat._m[0].w += 0.25f*_bIX;
-			_bulletList->BulletShoot(mat, _bIX, _bIY);
+			_bulletList->BulletShoot(mat, _bIX, _bIY, 0.0f+ 90.0f*(_ri/4));
 			mat = _transform->_mxTRS;
 			mat._m[0].w += 0.25f*_bIY;
 			mat._m[1].w -= 0.25f*_bIX;
-			_bulletList->BulletShoot(mat, _bIY, -_bIX);
+			_bulletList->BulletShoot(mat, _bIY, -_bIX, 90.0f + 90.0f*(_ri / 4));
 			mat = _transform->_mxTRS;
 			mat._m[1].w -= 0.25f*_bIY;
 			mat._m[0].w -= 0.25f*_bIX;
-			_bulletList->BulletShoot(mat, -_bIX, -_bIY);
+			_bulletList->BulletShoot(mat, -_bIX, -_bIY, 0.0f + 90.0f*(_ri / 4));
 			mat = _transform->_mxTRS;
 			mat._m[0].w -= 0.25f*_bIY;
 			mat._m[1].w += 0.25f*_bIX;
-			_bulletList->BulletShoot(mat, -_bIY, _bIX);
+			_bulletList->BulletShoot(mat, -_bIY, _bIX, 90.0f + 90.0f*(_ri / 4));
+			_ri++;
+		}
+		else if (_attackTimer >= _eachAttackDuration && _bIX != 0.0f && _ri<8) {
+			//開始第二種攻擊
+			_attackTimer = 0.0f;
+			mat4 mat = _transform->_mxTRS;
+			mat._m[1].w += 0.25f*_bIY;
+			mat._m[0].w += 0.25f*_bIX;
+			_bulletList->BulletShoot(mat, _bIX, _bIY, 90.0f+ 90.0f*(_ri / 4));
+			mat = _transform->_mxTRS;
+			mat._m[0].w += 0.25f*_bIY;
+			mat._m[1].w -= 0.25f*_bIX;
+			_bulletList->BulletShoot(mat, _bIY, -_bIX, 0.0f + 90.0f*(_ri / 4));
+			mat = _transform->_mxTRS;
+			mat._m[1].w -= 0.25f*_bIY;
+			mat._m[0].w -= 0.25f*_bIX;
+			_bulletList->BulletShoot(mat, -_bIX, -_bIY, 90.0f + 90.0f*(_ri / 4));
+			mat = _transform->_mxTRS;
+			mat._m[0].w -= 0.25f*_bIY;
+			mat._m[1].w += 0.25f*_bIX;
+			_bulletList->BulletShoot(mat, -_bIY, _bIX, 0.0f + 90.0f*(_ri / 4));
+			_ri++;
+		}
+		if (_ri == 2 || _ri == 4 || _ri == 6 || (_ri == 0 && _enterflag)) {
+			_eachAttackDuration = 3.0f;	//轉
+		}
+		else{
+			_eachAttackDuration = _attackDuration;
+			if (_ri == 8) {
+				_ri = 0;
+				_eachAttackDuration = 3.0f;
+			}
 		}
 	}
 }
@@ -654,20 +689,22 @@ void EnemyMiddle::AutoTranslate(float dt) {
 	mat4 mxTra;
 	mat4 mxRot;
 
-	if (_transform->_mxTRS._m[0].w >= 1.5f || _transform->_mxTRS._m[0].w <= -1.5f) {
+	if (_transform->_mxTRS._m[0].w > 1.5f || _transform->_mxTRS._m[0].w < -1.5f) {
 		_translateTimer += dt;
 		if(_isDefaultEnemy)
-			_btx += dt*_fspeed;
+			_btx = _translateTimer*_fspeed;
 		else
-			_btx += dt*(-_fspeed);
+			_btx = -_translateTimer*_fspeed;
 	}
 	else {
 		_isStop = true;
 		_rotateTimer += dt;
 
-		if (_rotateTimer >= _rotateDuration) {
+		if (_rotateTimer >= _eachRotateDuration) {
+
+			_eachRotateDuration = 3.0f;
 			//開始轉
-			if (_rotateTimer <= 1.5f + _rotateDuration)
+			if (_rotateTimer <= _rotateDuration + _eachRotateDuration)
 				_fZAngle += 30.0f * dt;
 			else {
 				_rotateTimer = 0.0f;
@@ -704,6 +741,8 @@ void EnemyMiddle::Reset() {
 	_attackTimer = 0;
 	_rotateTimer = 0.0f;
 	_translateTimer = 0.0f;
+	_eachAttackDuration = 6.0f;
+	_eachRotateDuration = 3.0f;
 	_bIX = 0.0f;
 	_bIY = 1.0f;
 	_isStop = false;
@@ -711,6 +750,8 @@ void EnemyMiddle::Reset() {
 	_btx = 0.0f;
 	_bty = 0.0f;
 	_isDefaultEnemy = true;
+	_enterflag = false;
+	_ri = 0;
 }
 
 
@@ -727,10 +768,10 @@ EnemyBoss::EnemyBoss(mat4 &mxView, mat4 &mxProjection, float fspeed, float attac
 	_btx = 0.0f;
 	_bty = 0.0f;
 	_isExploShoot = false;
-	_heart = 30;
+	_heart = 20;
 
 	_pointNum = 249;
-	_bulletList = new BulletList(mxView, mxProjection, 50, 'b', _COLOR_YELLOW, 1.2f);
+	_bulletList = new BulletList(mxView, mxProjection, 50, 'b', _COLOR_YELLOW, 1.5f);
 	SetPoint();
 	_transform = new Transform(mxView, mxProjection, _pointNum, _points, _colors);
 };
@@ -1218,11 +1259,12 @@ void EnemyBoss::Attack(float dt) {
 		switch (_attackState) {
 		case Idle:
 			_attackDuration = 4.0f;
+			//_attackState = Explosion;
 			_attackState = Normal;
 			break;
 		case Normal:
-			if (_heart <= 22) {
-				if (_heart <= 12)
+			if (_heart <= 15) {
+				if (_heart <= 10)
 					normalTime += 1;
 				else normalTime = 1;
 				k = 0;
@@ -1274,28 +1316,28 @@ void EnemyBoss::Attack(float dt) {
 void EnemyBoss::AttackNormal(){
 	mat4 mat = _transform->_mxTRS;
 	mat._m[1].w -= 0.3f;
-	float fBSpeed = 0.65f;
+	float fBSpeed = 1.0f;
 
-	if (_attackTimer >= 1.5f*k+0.5f && k<=2) {
+	if (_attackTimer >= 1.0f*k+0.5f && k<=2) {
 
 		switch (k) {
 			case 1:
-				_bulletList->BulletShoot(mat, _bIX, -_bIY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY,0.0f);
 				mat._m[0].w -= 0.8f;
-				_bulletList->BulletShoot(mat, _bIX, -_bIY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY, 0.0f);
 				mat = _transform->_mxTRS;
 				mat._m[1].w -= 0.3f;
 				mat._m[0].w += 0.8f;
-				_bulletList->BulletShoot(mat, _bIX, -_bIY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY, 0.0f);
 				break;
 			default:
-				_bulletList->BulletShoot(mat, _bIX, -_bIY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY, 0.0f);
 				mat._m[0].w -= 0.6f;
-				_bulletList->BulletShoot(mat, _bIX, -_bIY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY, 0.0f);
 				mat = _transform->_mxTRS;
 				mat._m[1].w -= 0.3f;
 				mat._m[0].w += 0.6f;
-				_bulletList->BulletShoot(mat, _bIX, -_bIY);
+				_bulletList->BulletShoot(mat, _bIX, -_bIY, 0.0f);
 				break;
 		}
 
@@ -1308,11 +1350,11 @@ void EnemyBoss::AttackNormal(){
 			mat = _transform->_mxTRS;
 			mat._m[1].w -= 0.3f;
 			mat._m[0].w -= 0.3f*i;
-			_bulletList->BulletShoot(mat, -_bIX, -_bIY, fBSpeed);
+			_bulletList->BulletShoot(mat, -_bIX, -_bIY,145.0f, fBSpeed);
 			mat = _transform->_mxTRS;
 			mat._m[1].w -= 0.3f;
 			mat._m[0].w += 0.3f*i;
-			_bulletList->BulletShoot(mat, _bIX, -_bIY, fBSpeed);
+			_bulletList->BulletShoot(mat, _bIX, -_bIY, -145.0f, fBSpeed);
 			fBSpeed -= 0.001f;
 		}
 
@@ -1327,7 +1369,12 @@ void EnemyBoss::AttackProgressive(int &k) {
 	mat._m[1].w -= 0.3f;
 
 	if (_attackTimer >= 0.5f*k+0.5f) {
-		_bulletList->BulletShoot(mat, _bIX, -_bIY);
+		mat._m[0].w += 0.3f;
+		_bulletList->BulletShoot(mat, _bIX, -_bIY, 0.0f);
+		mat._m[0].w -= 0.3f;
+		_bulletList->BulletShoot(mat, _bIX, -_bIY,0.0f);
+		mat._m[0].w -= 0.3f;
+		_bulletList->BulletShoot(mat, _bIX, -_bIY, 0.0f);
 		k++;
 	}
 }
@@ -1338,7 +1385,8 @@ void EnemyBoss::AttackExplosion() {
 	if (_attackTimer >= 1.0f && !_isExploShoot) {
 		for (int i = 0; i < 30; i++)
 		{
-			_bulletList->BulletShoot(mat, _bIX, -_bIY,1.0f, true);
+			float angle = 90.0f+36.0f*i;
+			_bulletList->BulletShoot(mat, _bIX, -_bIY, angle, 1.0f, true);
 		}
 		_isExploShoot = true;
 	}
@@ -1406,5 +1454,5 @@ void EnemyBoss::Reset() {
 	_btx = 0.0f;
 	_bty = 0.0f;
 	_isExploShoot = false;
-	_heart = 30;
+	_heart = 20;
 }

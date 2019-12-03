@@ -33,7 +33,7 @@ void MainScene::Update(float delta) {
 	_enemyManager->Update(delta);
 
 	if (_enemyManager->_state == LEVEL3) {
-		_planetManager->SetSpeed(-1.4f);
+		_planetManager->SetSpeed(-1.7f);
 	}
 }
 

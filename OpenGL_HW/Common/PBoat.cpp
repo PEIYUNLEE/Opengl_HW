@@ -25,7 +25,7 @@ PBoat::PBoat(mat4 &mxView, mat4 &mxProjection) {
 	_defense = new Defense(mxView, mxProjection, 0.35f);
 	_smokeDead = new Smoke(mxView, mxProjection, Smoke::DEAD);
 	_smokeHurt = new Smoke(mxView, mxProjection, Smoke::HURT2);
-	_bulletList = new BulletList(mxView, mxProjection, 50, 'p', _COLOR_RED ,1.0f);
+	_bulletList = new BulletList(mxView, mxProjection, 50, 'p', _COLOR_RED, 1.5f);
 }
 
 PBoat::~PBoat() {
@@ -189,7 +189,7 @@ void PBoat::Update(float dt,bool isBoatShoot) {
 	}
 	else if (_playerState == PBoat::DEAD) {
 		_animTimer += dt;
-		if (_animTimer >= 10.0f) {
+		if (_animTimer >= 2.5f) {
 			_animTimer = 0.0f;
 			_playerState = PBoat::DEADANIMFIN;	//死亡動畫播完
 			_transform->SetTRSMatrix(resetMat);
@@ -199,9 +199,9 @@ void PBoat::Update(float dt,bool isBoatShoot) {
 	if (_playerState < PBoat::DEAD) {
 		_shootTimer += dt;
 		if (isBoatShoot == true) {
-			if (_shootTimer >= 0.4f) {
+			if (_shootTimer >= 0.5f) {
 				_shootTimer = 0.0f;
-				_bulletList->BulletShoot(_transform->_mxTRS, 0.0f, 1.0f); //player射出子彈，傳入player座標
+				_bulletList->BulletShoot(_transform->_mxTRS, 0.0f, 1.0f,0.0f); //player射出子彈，傳入player座標
 			}
 		}
 

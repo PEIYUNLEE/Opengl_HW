@@ -74,13 +74,17 @@ class EnemyMiddle : public Enemy
 private:
 	float _bIX; //子彈移動單位向量
 	float _bIY; //子彈移動單位向量
-	float _rotateDuration; //紀錄旋轉間隔時間
+	float _rotateDuration; //紀錄旋轉時間
+	float _eachRotateDuration;
 	float _rotateTimer ; //紀錄旋轉時間
 	float _translateTimer ; //紀錄移動時間
+	float _eachAttackDuration;
+	bool _enterflag = false;
 	GLfloat _fZAngle;
 	GLfloat _btx; //儲存移動
 	GLfloat _bty; //儲存移動
 	bool _isStop=false; //到定位
+	int _ri;
 
 	void Attack(float delta);
 	void AutoTranslate(float ftottime);

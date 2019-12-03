@@ -1,7 +1,7 @@
 #include "Planet.h"
 
 Planet::Planet(mat4 &mxView, mat4 &mxProjection) {
-	_fspeed = -1.2f;	//fase 1.5   slow	1.0
+	_fspeed = -1.3f;	//fase 1.5   slow	1.0
 	_radius = 0.04f;
 	_ftottime = 0.0f;
 	SetPoint();
@@ -23,7 +23,7 @@ void Planet::SetPoint() {
 		_points[i].x = _radius * cosf(M_PI*2.0f*i / CPOINT_NUM); //2拍乘以該點分之總點
 		_points[i].y = _radius * sinf(M_PI*2.0f*i / CPOINT_NUM);
 		_points[i].w = 1.0f;
-		_colors[i] = _COLOR_WHITE;
+		_colors[i] = _COLOR_WHITE2;
 	}
 }
 

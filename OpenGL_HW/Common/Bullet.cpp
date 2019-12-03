@@ -28,9 +28,11 @@ void Bullet::SetPoint(const vec4 &color) {
 	_points = new vec4[BULLET_POINT_NUM];
 	_colors = new vec4[BULLET_POINT_NUM];
 
+	float a = 0.07f;
+	float b = 0.05f;
 	for (int i = 0; i < BULLET_POINT_NUM; i++) {
-		_points[i].x = 0.07f * cosf(M_PI*2.0f*(float)(i - 10) / BULLET_POINT_NUM); //2拍乘以該點分之總點
-		_points[i].y = 0.07f * sinf(M_PI*2.0f*(float)(i - 10) / BULLET_POINT_NUM);
+		_points[i].x = b * cosf(M_PI*2.0f*(float)(i - 10) / BULLET_POINT_NUM); //2拍乘以該點分之總點
+		_points[i].y = a * sinf(M_PI*2.0f*(float)(i - 10) / BULLET_POINT_NUM);
 		_points[i].w = 1.0f;
 		_colors[i] = color;
 	}
@@ -39,8 +41,7 @@ void Bullet::SetPoint(const vec4 &color) {
 
 void Bullet::AutoTranslate(float dt) {
 	mat4 mxTra;
-	GLfloat btx = 0.0f;
-	GLfloat bty = 0.0f;
+	GLfloat btx,bty = 0.0f;
 	
 	_ftottime += dt;
 	
@@ -60,7 +61,7 @@ void Bullet::AutoTranslate(float dt,int index) {
 
 	_ftottime += dt;
 
-	if (_ftottime<=1.75f && !_bStartRot) {
+	if (_ftottime<= 1.75f && !_bStartRot) {
 		//正常向下發射
 		bty = _ftottime*_fSpeed*_bIY;
 		btx = _ftottime*_fSpeed*_bIX;
@@ -73,7 +74,7 @@ void Bullet::AutoTranslate(float dt,int index) {
 			_bStartRot = true;
 			_bIX = cosf(M_PI*2.0f*(float)(index - 10) / 10);
 			_bIY = sinf(M_PI*2.0f*(float)(index - 10) / 10);
-			_transform->_mxOri = mxTra;
+			_transform->_mxOri = _mxRot*mxTra;
 		}
 	}
 	else if (_bStartRot) {
@@ -92,6 +93,7 @@ void Bullet::Draw() {
 }
 
 void Bullet::Reset() {
+	mat4 init;
 	_transform->Reset();
 
 	_ftottime = 0.0f;
@@ -99,6 +101,7 @@ void Bullet::Reset() {
 	_fSpeed = _fSpeedInit;
 	_isSpecial = false;
 	_bStartRot = false;
+	_mxRot = init;
 }
 
 
@@ -165,7 +168,7 @@ void BulletList::BulletDraw() {
 	}
 }
 
-void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY,bool isSpecial) {
+void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY, float angle,bool isSpecial) {
 	Bullet *pNewBulletGet;
 	if (_shootCount == 0)	//當目前use槽沒東西，跟子彈池要子彈
 	{
@@ -177,9 +180,12 @@ void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY,bool isSpecial) {
 
 		pNewBulletGet-> _prelink = NULL;
 		pNewBulletGet-> _nextlink = NULL;
-		pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
+
+		pNewBulletGet->_mxRot = RotateZ(angle);
+		pNewBulletGet->_transform->_mxOri = mat*pNewBulletGet->_mxRot;	//存取初始位置
 		pNewBulletGet->_bIX = bIX;
 		pNewBulletGet->_bIY = bIY;
+
 		pNewBulletGet->_isSpecial = isSpecial;
 		pBUseTail = pNewBulletGet;
 		_shootCount++;
@@ -200,9 +206,12 @@ void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY,bool isSpecial) {
 			pBUseTail->_nextlink = pNewBulletGet;
 			pNewBulletGet->_prelink = pBUseTail;
 			pNewBulletGet->_nextlink = NULL;
-			pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
+
+			pNewBulletGet->_mxRot = RotateZ(angle);
+			pNewBulletGet->_transform->_mxOri = mat*pNewBulletGet->_mxRot;	//存取初始位置
 			pNewBulletGet->_bIX = bIX;
 			pNewBulletGet->_bIY = bIY;
+
 			pNewBulletGet->_isSpecial = isSpecial;
 			pBUseTail = pNewBulletGet;
 			_shootCount++;
@@ -214,7 +223,7 @@ void BulletList::BulletShoot(mat4 &mat, float bIX,float bIY,bool isSpecial) {
 	}
 }
 
-void BulletList::BulletShoot(mat4 &mat, float bIX, float bIY,float fSpeed, bool isSpecial) {
+void BulletList::BulletShoot(mat4 &mat, float bIX, float bIY, float angle,float fSpeed, bool isSpecial) {
 	Bullet *pNewBulletGet;
 	if (_shootCount == 0)	//當目前use槽沒東西，跟子彈池要子彈
 	{
@@ -226,7 +235,9 @@ void BulletList::BulletShoot(mat4 &mat, float bIX, float bIY,float fSpeed, bool 
 
 		pNewBulletGet->_prelink = NULL;
 		pNewBulletGet->_nextlink = NULL;
-		pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
+
+		pNewBulletGet->_mxRot = RotateZ(angle);
+		pNewBulletGet->_transform->_mxOri = mat*pNewBulletGet->_mxRot;	//存取初始位置
 		pNewBulletGet->_bIX = bIX;
 		pNewBulletGet->_bIY = bIY;
 		pNewBulletGet->_fSpeed = fSpeed;
@@ -250,7 +261,9 @@ void BulletList::BulletShoot(mat4 &mat, float bIX, float bIY,float fSpeed, bool 
 			pBUseTail->_nextlink = pNewBulletGet;
 			pNewBulletGet->_prelink = pBUseTail;
 			pNewBulletGet->_nextlink = NULL;
-			pNewBulletGet->_transform->_mxOri = mat;	//存取初始位置
+
+			pNewBulletGet->_mxRot = RotateZ(angle);
+			pNewBulletGet->_transform->_mxOri = mat*pNewBulletGet->_mxRot;	//存取初始位置
 			pNewBulletGet->_bIX = bIX;
 			pNewBulletGet->_bIY = bIY;
 			pNewBulletGet->_fSpeed = fSpeed;

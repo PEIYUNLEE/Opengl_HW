@@ -4,7 +4,7 @@
 #include "Bullet.h"
 
 EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int totCount_m) {
-	_state = LEVEL1;
+	_state = LEVEL2;
 
 	srand((unsigned)time(NULL));
 
@@ -101,6 +101,9 @@ void EnemyManager::Clear() {
 
 bool isLeftEnemyDead = true;
 bool isRightEnemyDead = true;
+float leftKillTimer = 0.0f;
+float rightKillTimer = 0.0f;
+
 void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 
 	Enemy *pNewEnemyGet,*pHead,*pTail;
@@ -256,15 +259,6 @@ void EnemyManager::DestroyEnemy()
 {
 	Enemy *pGetPre, *pGetNext;
 	pEUpdateGet->_bulletList->ResetBulletList();
-	for (int i = 0; i < 5; i++)
-	{
-		if (!_isSmokeDeadUse[i]) {
-			_isSmokeDeadUse[i] = true;
-			_smokeDeadPosition[i] = pEUpdateGet->_transform->_mxTRS;
-			_smokeDead[i]->Show(Smoke::DEAD);
-			i = 5;
-		}
-	}
 	if (pEUpdateGet == pEUseHead) {
 		//如果消失的是顯示的第一個敵人(_prelink==NULL)
 		if (pEUseHead == pEUseTail) //只剩一顆
@@ -302,6 +296,10 @@ void EnemyManager::DestroyEnemy()
 
 void EnemyManager::Update(float dt) {
 	_timer += dt;
+	if(isLeftEnemyDead)
+		leftKillTimer += dt;
+	if (isRightEnemyDead)
+		rightKillTimer += dt;
 	//產生敵人
 	EGeneratorController();
 
@@ -334,6 +332,16 @@ void EnemyManager::Update(float dt) {
 						break;
 					}
 
+					for (int i = 0; i < 5; i++)
+					{
+						if (!_isSmokeDeadUse[i]) {
+							_isSmokeDeadUse[i] = true;
+							_smokeDeadPosition[i] = pEUpdateGet->_transform->_mxTRS;
+							_smokeDead[i]->Show(Smoke::DEAD);
+							i = 5;
+						}
+					}
+
 					DestroyEnemy();
 					k++;
 				}
@@ -349,21 +357,32 @@ void EnemyManager::Update(float dt) {
 						break;
 					}
 
+					for (int i = 0; i < 5; i++)
+					{
+						if (!_isSmokeDeadUse[i]) {
+							_isSmokeDeadUse[i] = true;
+							_smokeDeadPosition[i] = pEUpdateGet->_transform->_mxTRS;
+							_smokeDead[i]->Show(Smoke::DEAD);
+							i = 5;
+						}
+					}
+
 					DestroyEnemy();	//如果碰到邊界要刪除
 					k++;
 				}
 				else if (pEUpdateGet->_ftottime > 0.0f && _colliSystem.OnBoxCollision(pEUpdateGet->_transform->_mxTRS, pEUpdateGet->_colliderSize, _getPBoat->_transform->_mxTRS, _getPBoat->_colliderSize)) {
 					//如果敵人碰到玩家，NORMAL或DEFENSE都可以
-					if (_getPBoat->_playerState < PBoat::DEFENSE) {
+					if (_getPBoat->_playerState == PBoat::NORMAL) {
 						//玩家那邊會自動判斷是否是DEFENSE不扣血
 						_getPBoat->Hurt();
-						pEUpdateGet->Action(dt, _getPBoat);	//攻擊、move
 					}
-					else if (_getPBoat->_playerState == PBoat::DEFENSE) {
-						pEUpdateGet->Hurt();
-						Print("enemy touch true");
-					}
-					
+					//else if (_getPBoat->_playerState == PBoat::DEFENSE && pEUpdateGet->_type != 'b') {
+					//	pEUpdateGet->Hurt();
+					//	Print("enemy touch true");
+					//}
+
+					pEUpdateGet->Action(dt, _getPBoat);	//攻擊、move
+
 					if (pEUpdateGet != pEUseTail)
 						pEUpdateGet = pEUpdateGet->_nextlink;
 				}
@@ -456,17 +475,19 @@ void EnemyManager::EGeneratorController(){
 				_genDuration = 8.0f;
 			}
 			else if (_useCount_m < 2 && flag) {
-				if(isLeftEnemyDead){
-					_genMat._m[0].w = -4.0f;
+				if(isLeftEnemyDead && leftKillTimer>= 3.0f){
+					_genMat._m[0].w = -2.5f;
 					_genMat._m[1].w = 0.0f;
 					EnemyGenerater('m', _genMat);
 					isLeftEnemyDead = false;
+					leftKillTimer = 0.0f;
 				}
-				else if(isRightEnemyDead) {
-					_genMat._m[0].w = 4.0f;
+				else if(isRightEnemyDead && rightKillTimer >= 3.0f) {
+					_genMat._m[0].w = 2.5f;
 					_genMat._m[1].w = 0.0f;
 					EnemyGenerater('m', _genMat);
 					isRightEnemyDead = false;
+					rightKillTimer = 0.0f;
 				}
 			}
 
@@ -509,6 +530,16 @@ void EnemyManager::EGeneratorController(){
 							else
 								isLeftEnemyDead = true;
 							break;
+						}
+
+						for (int i = 0; i < 5; i++)
+						{
+							if (!_isSmokeDeadUse[i]) {
+								_isSmokeDeadUse[i] = true;
+								_smokeDeadPosition[i] = pEUpdateGet->_transform->_mxTRS;
+								_smokeDead[i]->Show(Smoke::DEAD);
+								i = 5;
+							}
 						}
 
 						DestroyEnemy();

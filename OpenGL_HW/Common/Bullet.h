@@ -32,6 +32,7 @@ public:
 	bool _isSpecial;
 	float _fSpeed,_fSpeedInit;
 	float _bIX, _bIY; //BULLET單位向量
+	mat4 _mxRot;
 	float *_colliderSize;
 	Transform *_transform;
 
@@ -72,8 +73,8 @@ public:
 
 	void PushTail();		// 在list的尾巴新增node
 	void Clear();					// 把整串list刪除
-	void BulletShoot(mat4 &mat, float bIX, float bIY, bool isSpecial = false);
-	void BulletShoot(mat4 &mat, float bIX, float bIY, float fSpeed, bool isSpecial = false);
+	void BulletShoot(mat4 &mat, float bIX, float bIY, float angle,bool isSpecial = false);
+	void BulletShoot(mat4 &mat, float bIX, float bIY, float angle, float fSpeed, bool isSpecial = false);
 	void BulletDraw();
 	void Update(float delta, PBoat *getPBoat);
 	void Update(float delta, EnemyManager *getEnemyManager, Bullet *bulletResult);

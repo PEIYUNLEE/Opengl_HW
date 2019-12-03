@@ -31,7 +31,6 @@ private:
 	float _genDuration;
 	mat4 _genMat;
 
-
 	float RandomTime(float min = 1.5f, float max = 3.5f);
 	mat4 RandomPosition(float minX = -1.5f, float maxX = 1.5f , float Y = 2.55f);
 
