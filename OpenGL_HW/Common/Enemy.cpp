@@ -37,7 +37,7 @@ void Enemy::Action(float dt, PBoat *getPBoat) {
 EnemySmall::EnemySmall(mat4 &mxView, mat4 &mxProjection, float fspeed, float attackDuration, int pointNum, char type) :Enemy(mxView, mxProjection, fspeed, attackDuration, pointNum, type) {
 	_colliderSize[0] = 0.15f;
 	_colliderSize[1] = 0.17f;
-	_attackDuration = 0.8f;
+	_attackDuration = 0.85f;
 	_fspeed = -1.0f;
 	_pointNum = 64;
 	_bulletList = new BulletList(mxView, mxProjection, 15, 'e', _COLOR_YELLOW, 2.0f);
@@ -692,9 +692,9 @@ void EnemyMiddle::AutoTranslate(float dt) {
 	if (_transform->_mxTRS._m[0].w > 1.5f || _transform->_mxTRS._m[0].w < -1.5f) {
 		_translateTimer += dt;
 		if(_isDefaultEnemy)
-			_btx = _translateTimer*_fspeed;
+			_btx += dt*_fspeed;
 		else
-			_btx = -_translateTimer*_fspeed;
+			_btx += dt*(-_fspeed);
 	}
 	else {
 		_isStop = true;
@@ -749,9 +749,9 @@ void EnemyMiddle::Reset() {
 	_fZAngle = 0.0f;
 	_btx = 0.0f;
 	_bty = 0.0f;
-	_isDefaultEnemy = true;
 	_enterflag = false;
 	_ri = 0;
+	_isDefaultEnemy = true;
 }
 
 

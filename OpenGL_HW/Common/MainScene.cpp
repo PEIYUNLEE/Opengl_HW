@@ -25,15 +25,16 @@ void MainScene::Draw() {
 	_pBoat->Draw();
 }
 
-
+bool setspeedflag = false;
 void MainScene::Update(float delta) {
 
 	_planetManager->Update(delta);
 	_pBoat->Update(delta, isBoatShoot);
 	_enemyManager->Update(delta);
 
-	if (_enemyManager->_state == LEVEL3) {
-		_planetManager->SetSpeed(-1.7f);
+	if (_enemyManager->_state == LEVEL3 && !setspeedflag) {
+		_planetManager->SetSpeed(-1.6f);
+		setspeedflag = true;
 	}
 }
 

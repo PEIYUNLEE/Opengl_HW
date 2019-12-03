@@ -4,7 +4,7 @@
 #include "Bullet.h"
 
 EnemyManager::EnemyManager(mat4 &mxView, mat4 &mxProjection,int totCount_s,int totCount_m) {
-	_state = LEVEL2;
+	_state = LEVEL1;
 
 	srand((unsigned)time(NULL));
 
@@ -138,6 +138,9 @@ void EnemyManager::EnemyGenerater(char type, mat4 &mat) {
 	if (_usetotCount == 0)	//當目前use槽沒東西，跟敵人池要敵人
 	{
 		pNewEnemyGet = pHead;
+		if (type == 'm' && isLeftEnemyDead && !isRightEnemyDead) {
+			pNewEnemyGet->_isDefaultEnemy = false;
+		}
 		pNewEnemyGet->_transform->_mxOri = mat;	//存取初始位置
 		pEUseHead = pNewEnemyGet;
 		if (*totCount != 1) {
@@ -482,7 +485,7 @@ void EnemyManager::EGeneratorController(){
 					isLeftEnemyDead = false;
 					leftKillTimer = 0.0f;
 				}
-				else if(isRightEnemyDead && rightKillTimer >= 3.0f) {
+				if(isRightEnemyDead && rightKillTimer >= 3.0f) {
 					_genMat._m[0].w = 2.5f;
 					_genMat._m[1].w = 0.0f;
 					EnemyGenerater('m', _genMat);
